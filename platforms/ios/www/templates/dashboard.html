@@ -1,0 +1,94 @@
+<div id="wrapper">
+        <!-- Page Content -->
+
+
+        
+
+
+        <div id="page-content-wrapper " class="main_div index_page ">
+
+            
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-xs-12 paddingnone index-mainsec">
+                        <div class="col-lg-12 col-sm-12 col-xs-12 headersec_main">
+                           <div style="
+    position: absolute;
+    right: 12px;
+    top: 12px; z-index :99999999;
+" ng-click="logoutBtn()"><img src="images/logout.svg" alt="logout" style="width:26px" /></div>
+                            <div class="haderdiv">
+                                <div class="header_sec"><img src="images/logo.png"></div>
+                                <h2>DASHBOARD</h2>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 paddingnone index-mainsec1" ng-init="getDashboardDetails()">
+                            <div class="col-md-12 col-sm-12 col-xs-12 first_sec">
+                               <div class="col-xs-7 graph_div">
+                                <div style="position: absolute; left: -55px; top:12px">
+                                <canvas id="doughnut" class="chart chart-doughnut"   
+                                  chart-data="data" chart-colors="colors" chart-labels="labels">
+                                </canvas> 
+                            </div>
+                               </div>
+                                <div class="col-xs-5 car_conatiner">
+                                    <div class="car_info col-xs-12">
+                                        <div class="car_status">
+                                            <p>MOVING</p>
+                                            <img src="images/icn_moving.png" class="img-responsive">
+                                        </div>
+                                        <div class="car_status_info  moving">
+                                            <h4>{{moving}}</h4>
+                                        </div>
+                                    </div>
+                                    <div class="car_info col-xs-12">
+                                        <div class="car_status">
+                                            <p>STOPPED</p>
+                                            <img src="images/icn_stopped.png" class="img-responsive">
+                                        </div>
+                                        <div class="car_status_info  stopped">
+                                            <h4>{{stopped}}</h4>
+                                        </div>
+                                    </div>
+                                    <div class="car_info col-xs-12 bordernone">
+                                        <div class="car_status">
+                                            <p>IDLING</p>
+                                            <img src="images/icn_idling.png" style="width:30px" class="img-responsive">
+                                        </div>
+                                        <div class="car_status_info  idling">
+                                            <h4>{{idle}}</h4>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>   
+                                               
+                            <div class="col-lg-12 col-sm-12 col-xs-12 second_sec paddingnone">
+                                <ul class="col-lg-12 col-sm-12 col-xs-12">
+                                    <li class="col-lg-6 col-sm-6 col-xs-6" style="border-right: 1px solid #4881ca;" ng-click="goToPage('vehicles')">
+                                        <a style="font-weight:400"><img src="images/live.svg">LIVE VIEW</a>
+                                    </li>
+                                    <li class="col-lg-6 col-sm-6 col-xs-6" ng-click="goToPage('tripVehicles')">
+                                        <a style="font-weight:400"><img src="images/trips.svg">TRIPS</a>
+                                    </li>
+                                    <li class="col-lg-6 col-sm-6 col-xs-6" style="border-right: 1px solid #4881ca;border-top: 1px solid #4881ca;" ng-click="goToPage('report')">
+                                        <a style="font-weight:400"><img src="images/reports.svg">REPORTS</a>
+                                    </li>
+                                    <li class="col-lg-6 col-sm-6 col-xs-6" style="border-top: 1px solid #4881ca;" ng-click="goToPage('summary')">
+                                        <a style="font-weight:400"><img src="images/summary.svg">SUMMARY</a>
+                                    </li>           
+                                </ul>
+                            </div>
+                        </div>
+                    </div>                 
+                    <div class="col-lg-12 col-sm-12 col-xs-12 paddingnone footersec">
+                        <ul>
+                            <li><a ui-sref="dashboard"><img src="images/icn_home.png" style="width:30px" class="img-responsive"></a></li>
+                            <li><a ng-click="goToPage('live')"><img src="images/map.svg" style="width:30px" class="img-responsive"></a></li>
+                            <li><a ng-click="refresh()"><img src="images/icn_refresh.png" style="width:30px" class="img-responsive"></a></li>
+                            <li><a ui-sref="alert"><img src="images/icn_notification.png" style="width:30px" class="img-responsive"></a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>       
+        </div><!-- /#page-content-wrapper -->
+</div><!-- /#wrapper -->

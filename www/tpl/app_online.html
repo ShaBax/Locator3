@@ -1,0 +1,608 @@
+<style>
+    [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-    ng-cloak {
+        display: none !important;
+    }
+</style>
+
+<div id="preloader">
+      <div class="loadWrapper" >
+          <div class="loader"></div>         
+      </div>
+</div>
+ 
+<div class="wrap-fluid" ng-controller="OnlineCtrl as vm" id="onlineCtrl" ng-cloak>
+  <div class="container-fluid paper-wrap bevel tlbr rightSide" style="top:-8px;">
+    <div class="col-md-12 paddingnone">
+      <div class="slider" ng-show="tripFlag && track.length>0">
+        <div class="col-md-2">
+          <ul class="icon_set" style="width:100%; margin:10px 0">
+            <li><a ng-click="fight()"><i class="fa fa-play" aria-hidden="true"></i></a></li>
+            <li><a ng-click="pause()"><i class="fa fa-pause" aria-hidden="true"></i></a></li>
+          </ul> 
+        </div>
+        <div class="col-md-9" style="margin-top:20px">
+          <div id="slider"></div>
+        </div>
+        <div class="col-md-1"  style="margin-top:14px; cursor: pointer" >
+          <img src="assets/images/close_icon_1.png" ng-click="hideTrack()">
+        </div>
+      </div>
+      <div id="iWindow"></div>
+      <div id="paper-middle" ng-show="googlemap">       
+        <div ng-show="tooltip " class="mapToolTip"  >
+            <div style="float: left; vertical-align: middle; padding: 10px 0px; width: 50px;">
+              <img src="http://findicons.com/files/icons/2625/google_plus_interface_icons/128/location.png" style="float: left; width: 40px; "> 
+            </div>
+            <div style="float: left;">
+              Time : <b>{{vm.time}}</b><br>
+              Date : <b>{{vm.trackDate}}</b><br>
+              Speed : <b>{{vm.speed}}</b> KM/Hour           
+            </div>
+        </div> 
+        <div  ng-show="tooltipStatus "   class="mapToolTip" style="    top: 6px;    left: calc(27%);    width: 375px;" >
+            <div style="float: left; vertical-align: middle; padding: 10px 0px; width: 50px;">
+              <img src="http://findicons.com/files/icons/2625/google_plus_interface_icons/128/location.png" style="float: left; width: 40px; "> 
+            </div>
+            <div style="float: left;">
+              Status : <b>{{vm.idling.status_status}}</b><br>
+              Date  : <b>{{vm.idling.status_start_date}}</b><br>
+              Start : <b>{{vm.idling.status_start_time}} - {{vm.idling.status_end_time}}</b><br>
+              Duration : <b>{{vm.idling.status_duration | limitTo:8}}</b><br>
+              {{vm.idling.status_address}}             
+            </div>
+        </div> 
+        <div  ng-show="tooltipStatusIgnition"   class="mapToolTip" style="    top: 6px;    left: calc(27%);    width: 375px;" >
+            <div style="float: left; vertical-align: middle; padding: 10px 0px; width: 50px;">
+              <img src="http://findicons.com/files/icons/2625/google_plus_interface_icons/128/location.png" style="float: left; width: 40px; "> 
+            </div>
+            <div style="float: left;" ng-if="vm.event.event_status == 0">
+              Status : <b>{{vm.event.event_type}} : OFF</b><br>
+              Time  : <b>{{vm.event.event_time}}</b><br>
+               
+              {{vm.event.event_place}}             
+            </div>
+            <div style="float: left;" ng-if="vm.event.event_status == 1">
+              Status : <b>{{vm.event.event_type}} : ON</b><br>
+              Time  : <b>{{vm.event.event_time}}</b><br>
+               
+              {{vm.event.event_place}}             
+            </div>
+        </div> 
+        <div id="streetview" ng-if="streetViewcenter!=''"></div>  
+        <ng-map style="height:100%" center="{{center}}" zoom="{{finder.zoom}}"  pan-control="true" street-view-control-options='{position:"right_center"}' zoom-control-options='{position:"right_center"}' gesture-handling="greedy">
+          <street-view-panorama ng-if="streetViewcenter!=''"
+            click-to-go="false"
+            disable-default-u-i="false"
+            disable-double-click-zoom="false"
+            position="{{streetViewcenter}}"
+            pov="90,0"
+            scrollwheel="false"
+            enable-close-button="{{showStreetView}}"
+            visible="true">
+          </street-view-panorama> 
+          <custom-control id="home" position="TOP_RIGHT" index="1" on-click="vm.click()"  >
+            <div style="background-color: white; color:#000;cursor:pointer" class="bg-light lter b-b wrapper-md googleTraffic">
+              <input class="form-control " id="traffic"  type="checkbox" ng-model="traffic" ng-true-value="true" ng-false-value="false" ng-change="checkTraffic()" />
+              <label for="traffic"><span></span></label>Traffic
+            </div>
+            <div style="background-color: white; color:#000;cursor:pointer" class="printButton" onclick="window.print();" >
+              <i class="fa fa-print" aria-hidden="true"></i>
+            </div>
+            <div style="background-color: white; color:#000;cursor:pointer;right:119px;" class="printButton" ng-click="refreshNGMap()">
+              <i class="fa fa-refresh" aria-hidden="true"></i>
+            </div>
+            <div style="background-color: white; color:#000;cursor:pointer" class="printButton" style="right:25%;" ng-if="showStreetView" ng-click="closeStreetView()">
+              <i class="fa fa-close" aria-hidden="true"></i>Close Streetview 
+            </div>
+          </custom-control>
+ 
+
+         <marker class="markerlabels"  title="{{onlineMarker.label}}" ng-if="(selectedLiveDisplayOption =='all' || selectedLiveDisplayOption == onlineMarker.status || secondOption == onlineMarker.status)" ng-repeat="onlineMarker in onlineMarkers"   animation="{{onlineMarker.animation}}" icon="{{onlineMarker.icon}}" on-click="vm.getCurrentLocation(onlineMarker)"  position="{{onlineMarker.latitude}}, {{onlineMarker.longitude}}" ></marker>
+          <custom-marker   ng-repeat="onlineMarker in onlineMarkers"  ng-if="onlineMarker.latitude" position="{{onlineMarker.latitude}}, {{onlineMarker.longitude}}">
+            <div class="cmarkerlabels" title="cc-{{onlineMarker.label}}"  style="width: {{onlineMarker.label.length*10}}px; left:-{{onlineMarker.label.length*5}}px;padding: 5px;     
+    border: 0px solid;
+    overflow: hidden;
+    background: blue;
+    color: #fff;
+    opacity: .5;
+    font-size: 14px;
+    border-radius: 5px;
+    top: 12px;
+    position: absolute;    
+    text-align: center;
+    height:24px;" ng-if="selectedLiveDisplayOption =='all' || selectedLiveDisplayOption == onlineMarker.status || secondOption == onlineMarker.status">{{onlineMarker.label}}</div>
+          </custom-marker>
+
+
+          <marker ng-if="tripFlag==true" position="{{vm.marlatlong}}" icon="{{pointerImage}}" optimized="false"></marker>
+          <marker ng-show="movingPoints.length>0" ng-if="tripFlag && i.status_status == 'Parking'" ng-repeat="i in idlingMarkers[0]" icon="{{imagePath}}/bus.png" on-click="vm.getIdlingDetails(i)" position="{{i.track_vehicles_veh_latitude}}, {{i.track_vehicles_veh_longitude}}"></marker>
+          <marker id="ignitionOnMarker" ng-show="movingPoints.length>0" ng-if="tripFlag && e.event_status==1" ng-repeat="e in eventMarkers[0]" icon="{{imagePath}}/ignON.png" on-click="vm.getEventDetails(e)" position="{{e.event_latitude}}, {{e.event_longitude}}"></marker>
+          <marker id="ignitionOffMarker" ng-show="movingPoints.length>0" ng-if="tripFlag && e.event_status==0" ng-repeat="e in eventMarkers[0]" icon="{{imagePath}}/ignOFF.png" on-click="vm.getEventDetails(e)" position="{{e.event_latitude}}, {{e.event_longitude}}"></marker>
+          <marker ng-repeat="i in idlingMarkers[0]" ng-show="movingPoints.length>0" ng-if="tripFlag && i.status_status=='Idling'"  icon="{{imagePath}}/idling.png" on-click="vm.getIdlingDetails(i)" position="{{i.track_vehicles_veh_latitude}}, {{i.track_vehicles_veh_longitude}}"></marker>
+          <shape id="path" name="polyline" ng-show="movingPoints.length>0" ng-if="tripFlag" data-placement="left" title="{{vm.marlatlong}}"
+            path="{{movingPoints}}"
+            stroke-color="grey"
+            stroke-opacity="1"
+            stroke-weight="10"
+            z-index= "2"
+            icons="">             
+          </shape>
+          <shape id="path" name="polyline" ng-show="movingPoints.length>0" ng-if="tripFlag" data-placement="left" title="{{vm.marlatlong}}"
+            path="{{movingPoints}}"
+            stroke-color="white"
+            stroke-opacity="1"
+            stroke-weight="8"
+            z-index= "3"
+            icons="">             
+          </shape>
+          <shape id="path" name="polyline" ng-repeat="polylinePoint in polylinePoints" ng-if="tripFlag"
+            on-mousemove="vm.getPoint(polylinePoint.speed, polylinePoint.time,polylinePoint.trackDate)" 
+            on-mouseout="vm.normalImg(this)"
+            data-toggle="tooltip" 
+            data-placement="left" 
+            title="{{vm.marlatlong}}"
+            path="{{polylinePoint.point}}"
+            geodesic="true"
+            stroke-color="{{polylinePoint.color}}"
+            stroke-opacity="1.0"
+            stroke-weight="3"
+            z-index= "6"
+            geodesic="true"
+            icons="[{
+              icon: {
+                path: 'FORWARD_CLOSED_ARROW',
+                strokeOpacity: 1,
+                scale: 1
+              },
+              offset: '0%'
+            }]">             
+          </shape>
+          <shape id="mover" name="polyline" ng-show="movingPoints.length>0" ng-if="tripFlag"
+            path="{{movingPoints}}"
+            geodesic="true"
+            stroke-color="{{polylinePoint.color}}"
+            stroke-opacity="0"
+            stroke-weight=".8"
+            offfset="5"
+            z-index="9"
+             icons="[{
+              icon: {{iconCar}}
+                
+            }]">              
+          </shape> 
+          <marker ng-repeat="marker in zoneMarker" position="{{marker}}"></marker>
+          <shape id="geozonePolygon" name="polygon" ng-repeat="geoZone in geoZoneDetails"
+            paths="[{{geoZone.gz_points}}]"
+            stroke-color="#168BD1"
+            stroke-opacity="0.5"
+            stroke-weight="2"
+            fill-color="#168BD1"
+            fill-opacity="0.35"
+            ng-if="edit==0"
+            on-click="vm.showZoneLabel(geoZone)">
+          </shape>          
+          <!--common points-->
+          <marker ng-if="types=='bunk'" icon="https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png"   ng-repeat="commonpoint in commonzoneLatLng" position="{{commonpoint.gz_points}}" title="{{commonpoint.gz_name}}" ></marker>
+          <marker ng-if="types=='salik'" icon="https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png"   ng-repeat="commonpoint in commonzoneLatLng" position="{{commonpoint.gz_points}}" title="{{commonpoint.gz_name}}" ></marker> 
+          <!--common points-->
+          <marker icon="{{base}}final/img/poi_icons/{{geoZone.gz_group_color ? geoZone.gz_group_color : 'red'}}.png" ng-if="edit==2"  draggable="true"  ng-repeat="geoZone in geoZoneDetails" position="{{geoZone.gz_points}}" title="{{geoZone.gz_name}}" on-click="vm.showLabel(geoZone.gz_name)" on-dragend="editGeoPoint()"></marker>
+          <marker icon="{{base}}final/img/poi_icons/{{geoZone.gz_group_color ? geoZone.gz_group_color : 'red'}}.png" ng-if="edit==0" ng-repeat="geoZone in geoZoneDetails" position="{{geoZone.gz_points}}" title="{{geoZone.gz_name}}" on-click="vm.showLabel(geoZone.gz_name)"></marker> 
+          <info-window id="foo-label">
+            <div ng-non-bindable="">
+              {{vm.gzName}}
+            </div>
+          </info-window>
+           
+        </ng-map> 
+      </div>
+
+      <!--new code-->
+
+      <div   ng-show="report">
+        <div class="tab-pane active reports" ng-if="reportID == ''"><div data-ng-include=" 'tpl/blocks/reports/Report.html' "></div></div>
+        <div class="tab-pane active reports" ng-if="reportID == 1"><div data-ng-include=" 'tpl/blocks/reports/Mileage.html' "></div></div>
+        <div class="tab-pane active reports" ng-if="reportID == 7"><div data-ng-include=" 'tpl/blocks/reports/Speed.html' "></div></div>
+        <div class="tab-pane active reports" ng-if="reportID == 2"><div data-ng-include=" 'tpl/blocks/reports/TripsandParkings.html' "></div></div>
+        <div class="tab-pane active reports" ng-if="reportID == 3"><div data-ng-include=" 'tpl/blocks/reports/Consolidated.html' "></div></div>
+        <div class="tab-pane active reports" ng-if="reportID == 12"><div data-ng-include=" 'tpl/blocks/reports/Equipment.html' "></div></div>
+        <div class="tab-pane active reports" ng-if="reportID == 4"><div data-ng-include=" 'tpl/blocks/reports/SummaryMileage.html' "></div></div>
+        <div class="tab-pane active reports" ng-if="reportID == 5"><div data-ng-include=" 'tpl/blocks/reports/Trip.html' "></div></div>   
+        <div class="tab-pane active reports" ng-if="reportID == 6"><div data-ng-include=" 'tpl/blocks/reports/Parking.html' "></div></div>  
+        <div class="tab-pane active reports" ng-if="reportID == 13"><div data-ng-include=" 'tpl/blocks/reports/Detailed.html' "></div></div> 
+        <div class="tab-pane active reports" ng-if="reportID == 14"><div data-ng-include=" 'tpl/blocks/reports/Distance.html' "></div></div>  
+        <div class="tab-pane active reports" ng-if="reportID == 15"><div data-ng-include=" 'tpl/blocks/reports/Idling.html' "></div></div> 
+        <div class="tab-pane active reports" ng-if="reportID == 19"><div data-ng-include=" 'tpl/blocks/reports/Drivers.html' "></div></div>         
+        <div class="tab-pane active reports" ng-if="reportID == 16"><div data-ng-include=" 'tpl/blocks/reports/Machine.html' "></div></div>       
+        <div class="tab-pane active reports" ng-if="reportID == 17 || reportID == 25 "><div data-ng-include=" 'tpl/blocks/reports/Geozone.html' "></div></div>
+        <div class="tab-pane active reports" ng-if="reportID == 18"><div data-ng-include=" 'tpl/blocks/reports/Ignition.html' "></div></div>
+        <div class="tab-pane active reports" ng-if="reportID == 8"><div data-ng-include=" 'tpl/blocks/reports/DocumentRemainder.html' "></div></div>
+        <div class="tab-pane active reports" ng-if="reportID == 9"><div data-ng-include=" 'tpl/blocks/reports/ServiceRemainder.html' "></div></div>
+        <div class="tab-pane active reports" ng-if="reportID == 10"><div data-ng-include=" 'tpl/blocks/reports/ServiceEntry.html' "></div></div>
+        <div class="tab-pane active reports" ng-if="reportID == 11"><div data-ng-include=" 'tpl/blocks/reports/FuelEntry.html' "></div></div>
+        <div class="tab-pane active reports" ng-if="reportID == 21"><div data-ng-include=" 'tpl/blocks/reports/WorkingHours.html' "></div></div>
+        <div class="tab-pane active reports" ng-if="reportID == 22"><div data-ng-include=" 'tpl/blocks/reports/MostOperatedVehicle.html' "></div></div>
+        <div class="tab-pane active reports" ng-if="reportID == 23"><div data-ng-include=" 'tpl/blocks/reports/MostDrivedDriver.html' "></div></div>
+        <div class="tab-pane active reports" ng-if="reportID == 26"><div data-ng-include=" 'tpl/blocks/reports/Salik.html' "></div></div>
+        <div class="tab-pane active reports" ng-if="reportID == 27"><div data-ng-include=" 'tpl/blocks/reports/FuelExpense.html' "></div></div>
+        <div class="tab-pane active reports" ng-if="reportID == 28"><div data-ng-include=" 'tpl/blocks/reports/SalesDailyReport.html' "></div></div>
+        <div class="tab-pane active reports" ng-if="reportID == 29"><div data-ng-include=" 'tpl/blocks/reports/Temperature.html' "></div></div>
+      </div>
+
+      <div  id="paper-middle" ng-show="analytics">
+        <div class="tab-pane active"><div data-ng-include=" 'tpl/blocks/rightside/app_dashboard.html' "></div></div>
+      </div>
+      <div  id="paper-middle" ng-if="maintenance">
+        <div class="tab-pane active"><div data-ng-include=" 'tpl/blocks/rightside/app_maintenance.html' "></div></div>
+      </div>
+      <div  id="paper-middle" ng-if="ServiceReminderFlag">
+        <div class="tab-pane active "><div data-ng-include=" 'tpl/blocks/rightside/app_remainder.html' "></div></div>
+      </div>
+      <div  id="paper-middle" ng-if="showFuelFlag">
+        <div class="tab-pane active "><div data-ng-include=" 'tpl/blocks/rightside/app_fuelentry.html' "></div></div>
+      </div>
+      <div  id="paper-middle" ng-if="showDocFlag">
+        <div class="tab-pane active "><div data-ng-include=" 'tpl/blocks/rightside/app_documents.html' "></div></div>
+      </div> 
+
+      <!--newcode!-->
+    </div>
+  </div>
+
+  <div class="modal fade" id="notificationModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+  <div class="modal-dialog" style="width:800px !important;" role="document">
+    <div class="modal-content"  >
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Notify a Customer</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <div class="alert alert-success" style="width:100%;text-align:center;" ng-show="successMessageNotification">
+        <span class="entypo-thumbs-up"></span>
+        {{successMessageNotification}}
+      </div>
+      <div class="alert alert-danger" style="width:100%;text-align:center;" ng-show="errorMessageNotification">
+        <span class="entypo-thumbs-up"></span>
+        {{errorMessageNotification}}
+      </div>
+
+      <form class="form-validation ng-pristine ng-invalid ng-invalid-required ng-valid-email ng-valid-url" name="formGeozone">
+        <div class="modal-body" style="overflow:hidden">
+          <div style="float:right;margin-bottom:10px;" ng-show="showaddNotfnButton">
+            <button type="button" class="btn btn-primary" ng-click="addNewNotification()" style="padding:6px;">Create New</button>
+          </div>    
+          <div class="col-sm-12">
+            <div class="col-sm-6" style="padding: 10px 15px;">
+              <label class="col-sm-12 control-label">Email(s) (seperate with commas)</label>
+              <div class="col-sm-12" >
+                <input style="padding: 1px !important;width: 313px;" required class="form-control"  ng-model="notificationDetails.customer_notification_emails">
+              </div>
+            </div>
+            <div class="col-sm-6"  style="margin-top:10px;">
+              <label class="col-sm-6 control-label">Geozone / POI</label>
+              <div class="col-sm-12">
+                <label>
+                  <input type="radio" id="online_zone_selecter" ng-model="notificationDetails.customer_noitification_geozone_shape" value="polygon" ng-change="changeNotificationGeozoneOption()">
+                  Geozone
+                  <label for="online_zone_selecter"><span></span></label>
+                </label>
+                <label>
+                  <input type="radio" id="online_poi_selecter" ng-model="notificationDetails.customer_noitification_geozone_shape" value="marker" ng-change="changeNotificationGeozoneOption()">
+                  POI
+                  <label for="online_poi_selecter"><span></span></label>
+                </label>                           
+              </div>
+            </div>
+            <div class="col-sm-6" style="margin-top:23px;">
+              <label class="col-sm-6 control-label">{{selectedShape}}</label>
+              <div class="col-sm-12">              
+                <select style="padding:1px !important;width:316px;" class="form-control" ng-model="notificationDetails.customer_notification_geozone_id" ng-options="zonepoint.gz_id as zonepoint.gz_name for zonepoint in zonePoints">
+                </select>
+              </div>
+            </div>            
+            <div class="col-sm-6" style="padding: 10px 0 10px 15px;margin-top:-60px; ">
+              <label class="col-sm-6 control-label">Message</label>
+              <div class="col-sm-12" >
+                <textarea style="height:65px !important;"  required class="form-control" type="text" ng-model="notificationDetails.customer_notification_message"></textarea>
+              </div> 
+            </div>
+          </div>  
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-success" ng-disabled='formGeozone.$invalid'  style="padding:6px;"  ng-click="saveNotification()">Submit</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" style="padding:7px;">Close</button>
+      </div>
+    </form> 
+    <div ng-show="notifications.length > 0" style="min-height:50px;max-height:150px;overflow-y:scroll;padding-bottom:100px;margin-bottom:30px;margin-left:30px;">
+      <div style="background:#354f74;padding:0px;border-radius:5px;color:black;">
+       <table class="table table-bordered   cf" style="border:none !important;">
+         <thead >
+           <tr>
+              <th style="border:none !important;width:6%;color:White;padding-left: 12px !important;">Sl</th>
+              <th style="border:none !important;width:20%;color:White;padding-left: 12px !important;">Location</th>  
+              <th style="border:none !important;width:15%;color:White;padding-left: 12px !important;">Date</th>     
+              <th style="border:none !important;width:21%;color:White;padding-left: 12px !important;">Email(s)</th>
+              <th style="border:none !important;width:28%;color:White;padding-left: 12px !important;">Message</th>       
+              <th style="border:none !important;width:17%;color:White;padding-left: 12px !important;"></th>
+        </tr>
+        </thead>
+              <tbody style="background-color:#fffffd;"> 
+                  <tr  ng-repeat="customerNotify in notifications">
+                    <td style="padding-left: 12px !important;" >{{$index+1}}</td>
+                    <td ng-if="customerNotify.customer_noitification_geozone_shape=='polygon'" style="padding-left: 12px !important;" >  
+                              <span class="label label-warning">G</span>
+                                  {{customerNotify.gz_name | limitTo:12}}
+                    </td>
+                    <td ng-if="customerNotify.customer_noitification_geozone_shape=='marker'" style="padding-left: 12px !important;" >  
+                                        <span class="label label-info">P</span>
+                                    {{customerNotify.gz_name | limitTo:12}} 
+                    </td>
+                 <td style="padding-left: 12px !important;">{{customerNotify.createdTime}}</td>
+                    <td style="padding-left: 12px !important;">{{customerNotify.customer_notification_emails | limitTo:18}}<span ng-if="customerNotify.customer_notification_emails.length>18">...</span></td>
+                    <td style="padding-left: 12px !important;">{{customerNotify.customer_notification_message | limitTo:20 }}<span ng-if="customerNotify.customer_notification_message.length>20">...</span></td>    
+                     <td style="padding: 5px !important;">
+                      <button type="button" class="btn btn-info" ng-click="editNotification(customerNotify.customer_notification_id)"><i class="fa fa-eye" aria-hidden="true"></i>
+</button>
+ <button type="button" class="btn btn-danger" ng-click="deleteNotification(customerNotify.customer_notification_id)"><i class="fa fa-trash-o" aria-hidden="true"></i>
+</button>
+                    </td>  
+                  </tr> 
+              </tbody>
+        </table>
+      </div>
+      </div>
+</div>
+</div>
+</div>
+
+
+
+
+<div class="modal fade" id="shareModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+  <div class="modal-dialog" style="width:800px !important;" role="document">
+    <div class="modal-content"  >
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Share Location</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <div class="alert alert-success" style="width:100%;text-align:center;" ng-show="successMessageSharelocation">
+        <span class="entypo-thumbs-up"></span>
+        {{successMessageSharelocation}}
+      </div>
+      <div class="alert alert-danger" style="width:100%;text-align:center;" ng-show="errorMessageSharelocation">
+        <span class="entypo-thumbs-up"></span>
+        {{errorMessageSharelocation}}
+      </div>
+
+      <form class="form-validation ng-pristine ng-invalid ng-invalid-required ng-valid-email ng-valid-url" name="formShareLocation">
+        <div class="modal-body" style="overflow:hidden">
+
+          <div class="col-sm-12">
+
+
+            <label class="col-sm-3 control-label">Email(s)</label>
+            <div class="col-sm-12" >
+              <input style="padding:1px !important;" required class="form-control" type="text" ng-model="sharelocationemails">
+            </div>
+            <label class="col-sm-3 control-label">Valid To</label>
+            <div class="col-sm-12" >
+             <select style="padding:1px !important;" class="form-control" ng-model="tokenvalidity" >
+              <option ng-selected="tokenvalidity==15" value="15">15 Minutes</option>
+              <option value="30">30 Minutes</option>
+              <option value="60">1 Hour</option>
+              <option value="120">2 Hours</option>
+              <option value="180">3 Hours</option>
+              <option value="360">6 Hours</option>
+            </select>
+          </div>
+        </div>  
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-success"   style="padding:6px;" ng-disabled='formShareLocation.$invalid'   ng-click="saveShareLocation()">Share Location</button>
+
+      </div>
+    </form>
+
+
+
+
+
+
+    <div ng-show="shareLocations.length > 0" style="min-height:50px;max-height:150px;overflow-y:scroll;padding-bottom:100px;margin-bottom:30px;margin-left:30px;">
+      <div style="background:#354f74;padding:0px;border-radius:5px;color:black;">
+       <table class="table table-bordered   cf" style="border:none !important;">
+         <thead >
+           <tr>
+              <th style="border:none !important;width:8%;color:White;padding-left: 12px !important;">Sl</th>
+               
+              <th style="border:none !important;width:32%;color:White;padding-left: 12px !important;">Email(s)</th>
+              <th style="border:none !important;width:16%;color:White;padding-left: 12px !important;">Created Time</th>
+              <th style="border:none !important;width:20%;color:White;padding-left: 12px !important;">Valid To</th>       
+              <th style="border:none !important;width:20%;color:White;padding-left: 12px !important;">Status</th>
+        </tr>
+        </thead>
+              <tbody style="background-color:#fffffd;"> 
+                  <tr  ng-repeat="sharelocation in shareLocations">
+                    <td style="padding-left: 12px !important;" >{{$index+1}}</td>
+                    <td style="padding-left: 12px !important;">{{sharelocation.share_location_emails | limitTo:20}}<span ng-if="sharelocation.share_location_emails.length>20">&nbsp;...</span></td>
+                     <td style="padding-left: 12px !important;">{{sharelocation.createdTime }}</td>
+                    <td ng-if="sharelocation.share_location_validto==360" style="padding-left: 12px !important;">6 Hours</td>  
+                    <td ng-if="sharelocation.share_location_validto==15" style="padding-left: 12px !important;">15 Minutes</td> 
+                    <td ng-if="sharelocation.share_location_validto==30" style="padding-left: 12px !important;">30 Minutes</td> 
+                    <td ng-if="sharelocation.share_location_validto==60" style="padding-left: 12px !important;">1 Hour</td> 
+                    <td ng-if="sharelocation.share_location_validto==120" style="padding-left: 12px !important;">2 Hours</td> 
+                    <td ng-if="sharelocation.share_location_validto==180" style="padding-left: 12px !important;">3 Hours</td> 
+
+  <td ng-if="sharelocation.share_location_status=='expired'" style="padding-left: 12px !important;"><span class="label label-warning">Expired</span></td> 
+  <td ng-if="sharelocation.share_location_status=='active'" style="padding-left: 12px !important;"> <span class="label label-success">Active</span></td> 
+
+
+        <td style="padding: 5px !important;">
+                      
+ <button type="button" class="btn btn-danger" ng-click="DeleteShareLocation(sharelocation.share_location_id)"><i class="fa fa-trash-o" aria-hidden="true"></i>
+</button>
+                    </td>
+
+                   
+                    
+                  </tr> 
+              </tbody>
+        </table>
+      </div>
+      </div>
+ 
+
+
+
+  </div>
+</div>
+</div>
+
+
+
+
+
+
+
+
+
+<div class="modal fade" id="navigateModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+  <div class="modal-dialog" style="width:800px !important;" role="document">
+    <div class="modal-content"  >
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Navigate Location</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <form class="form-validation ng-pristine ng-invalid ng-invalid-required ng-valid-email ng-valid-url" name="formNavigation">
+        <div class="modal-body" style="overflow:hidden">
+
+          <div class="col-sm-12">
+
+
+            <label class="col-sm-3 control-label">Enter Location</label>
+            <div class="col-sm-12" >
+              <input style="padding:1px !important;" required class="form-control" type="text" ng-model="shareLocation.emails">
+            </div>
+
+
+
+
+
+          </div>  
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-success" ng-disabled='formNavigation.$invalid' style="padding:6px;" ng-click="vm.NGnavigateToLocation()">Show</button>
+
+        </div>
+      </form> 
+    </div>
+  </div>
+</div>
+
+
+<div class="modal fade" id="navigateModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+  <div class="modal-dialog" style="width:800px !important;" role="document">
+    <div class="modal-content"  >
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Navigate Location</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <form class="form-validation ng-pristine ng-invalid ng-invalid-required ng-valid-email ng-valid-url" name="form">
+        <div class="modal-body" style="overflow:hidden">
+
+          <div class="col-sm-12">
+
+
+            <label class="col-sm-3 control-label">Enter Location</label>
+            <div class="col-sm-12" >
+              <input style="padding:1px !important;" required class="form-control" type="text" ng-model="shareLocation.emails">
+            </div>
+
+
+
+
+
+          </div>  
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-success" ng-disabled='form.$invalid' style="padding:6px;"  ng-click="vm.NGnavigateToLocation()">Show</button>
+
+        </div>
+      </form> 
+    </div>
+  </div>
+</div>
+
+</div>
+<!-- <script src="http://code.jquery.com/ui/1.12.1/jquery-ui.js"></script> -->
+
+<script type="text/javascript">
+  $('#datetimepicker1').datetimepicker({
+    language: 'pt-BR'
+  });
+  $('#dp1').datepicker()
+  $('#dpYears').datepicker();
+  $('#timepicker1').timepicker();
+  $('#t1').clockface();
+  $('#t2').clockface({
+    format: 'HH:mm',
+    trigger: 'manual'
+  });
+
+  $('#toggle-btn').click(function(e) {
+    e.stopPropagation();
+    $('#t2').clockface('toggle');
+  });
+  $('.ttip').tooltip({
+
+  });
+
+  function showCurrentTrack(deviceID,tripID)
+  {
+    angular.element(document.getElementById('onlineCtrl')).scope().showCurrentTrack(deviceID,tripID);
+  }
+  function flight()
+  {
+    angular.element(document.getElementById('onlineCtrl')).scope().fight();
+  }
+
+  function pause()
+  {
+    angular.element(document.getElementById('onlineCtrl')).scope().pause();
+  }
+  function addNotification(deviceID)
+  {
+    $('#notificationModel').modal('show');
+    angular.element(document.getElementById('onlineCtrl')).scope().customerNotification('polygon',deviceID);
+
+  }
+  function shareLocation(deviceID)
+  {
+    $('#shareModel').modal('show');
+    angular.element(document.getElementById('onlineCtrl')).scope().getAllShareLocations(deviceID);
+    
+  }
+  function navigateToLocation()
+  {
+    $('#navigateModel').modal('show');
+  }
+  function enableStreetView()
+  {
+    angular.element(document.getElementById('onlineCtrl')).scope().enableStreetView();
+  }
+</script>
+<script type="text/javascript">
+  var height = $(window).height();
+  var rightSide_height = height-55;
+  $(".rightSide").height(rightSide_height);
+</script>

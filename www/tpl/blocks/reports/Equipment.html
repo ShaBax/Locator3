@@ -1,0 +1,86 @@
+<div class="title-alt" style="height: 50px; border-radius: 4px 4px 0px 0px; background: rgb(255, 255, 255) none repeat scroll 0% 0%; border-bottom: 1px dotted rgb(221, 221, 221); padding: 12px;">
+
+	<h6 style="font-size: 15px;">Equipment Work on Days Report</h6>	
+
+	
+<div ng-init="getUserOrgLogo()" style="text-align: right;margin-top: -52px;">
+	<img class="reportlogo"    src="{{basePath}}/assets/organizationLogos/{{userOrgLogo}}"></div>
+</div>
+
+</div>
+
+<div class="body-nest">
+
+	<section id="flip-scroll">
+
+		<div style="background : #00638f none repeat scroll 0 0; color : #fff; font-size : 14px; padding : 5px 15px;">
+			Date: &nbsp;{{ fromDate | date : "fullDate" }} - {{ toDate | date : "fullDate" }}
+		</div>
+		
+<div class="equipmentheight" style="height: 350px; overflow-y: scroll;padding-right: 10px;margin-bottom: 10px;margin-top: 12px;">
+		<table class="table table-bordered table-striped cf" ng-repeat="data in report" ng-if="data.name.length>0" >
+			<thead class="cf">
+				<tr style="background: #eef5ff none repeat scroll 0 0;">
+					<td colspan="9">Object: &nbsp;&nbsp;{{data.name}}</td>	
+				</tr>
+				<tr>
+					<th>Date</th>				
+					<th>Duration of Moving(h)</th>
+					<th>Duration of Parking(h)</th>	
+					<th>Duration of Work</th>	
+					<th>Duration of Parking in Work Time(h)</th>
+					<th>Time the Ignition(h)</th>	
+					<th>Vacation Time(h)</th>	
+					<th>Mileage(km)</th>	
+					<th>Avg. Speed(km/h)</th>				
+				</tr>
+			</thead>
+			<tbody>									
+				<tr ng-repeat="report in data.vehicles.one">
+					<td>{{report.day}}</td>
+					<td>{{report.days.trip}}</td>	
+					<td>{{report.days.parking}}</td>	
+					<td>{{report.durWork}}</td>
+					<td>{{report.durParkingWork}}</td>	
+					<td>{{report.ignition}}</td>
+					<td>{{report.vacation}}</td>						
+					<td>{{report.milage | number:2}}</td>
+					<td>{{report.avgspeed}}</td>				
+				</tr>
+				<tr ng-if="data.vehicles.one.length == 0">
+					<td colspan="9">
+						<p>No data available for the selected time</p>
+					</td>					
+				</tr>												
+			</tbody>
+		</table>
+	</div>
+<!-- Print and PDF form -->
+ 
+<form action="../Api/public/PrintReportCreator" method="POST" target="_blank" >   
+    <input type="hidden" name="vehIDs" value="{{report.vehicleIdsForPDF}}">
+    <input type="hidden" name="fromDate" value="{{fromDate}}">
+    <input type="hidden" name="toDate" value="{{toDate}}">
+    <input type="hidden" name="reportID" value="12">
+    <input type="hidden" name="toPDF" value="1">
+     <input type="hidden" name="toExcel" value="{{reportID}}">
+    <button     name="printButton" value="1" class="btn btn-warning dropdown-toggle printreport" type="submit"> <span><i class="fa fa-print" aria-hidden="true"></i></span>&nbsp;Print</button>
+    <button   name="pdfButton" value="1" class="btn btn-info dropdown-toggle savepdf "   type="submit"> <span><i class="fa fa-file-pdf-o" aria-hidden="true"></i></span>  &nbsp;Save As PDF</button>
+</form>
+
+<!-- Print and PDF form -->
+
+    </section>
+
+</div>
+
+<script type="text/javascript">
+
+var height = $(window).height();
+var equipmentheight_height = height-215;
+
+$(".equipmentheight").height(equipmentheight_height);
+$(".equipmentheight").css("overflow-y","scroll");
+
+</script>
+

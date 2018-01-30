@@ -1,0 +1,1525 @@
+.main_div
+{
+	
+	
+	font-family: 'Roboto', sans-serif !important;
+	font-weight: lighter;
+     
+            background-size: contain;
+}
+input, select, button 
+{
+    outline:none
+}
+input[type="checkbox"] {
+    display:none;
+}
+
+input[type="checkbox"] + label {
+    color:#f2f2f2;
+}
+
+input[type="checkbox"] + label span {
+    display:inline-block;
+    width:19px;
+    height:19px;
+    margin:-2px 10px 0 0;
+    vertical-align:middle;
+    background:url(../images/check_radio_sheet.png) left top no-repeat;
+    cursor:pointer;
+}
+
+input[type="checkbox"]:checked + label span {
+    background:url(../images/check_radio_sheet.png) -19px top no-repeat;
+}
+input[type="radio"] {
+    display:none;
+}
+
+input[type="radio"] + label {
+    color:#f2f2f2;
+    font-family:Arial, sans-serif;
+}
+
+input[type="radio"] + label span {
+    display:inline-block;
+    width:19px;
+    height:19px;
+    margin:-2px 10px 0 0;
+    vertical-align:middle;
+    background:url(../images/check_radio_sheet.png) -38px top no-repeat;
+    cursor:pointer;
+}
+
+input[type="radio"]:checked + label span {
+    background:url(../images/check_radio_sheet.png) -57px top no-repeat;
+}
+.loginbody
+{
+    overflow-y: auto;
+}
+.loginbody:hover
+{
+    overflow-y: auto;
+}
+body
+{
+    overflow: hidden;
+    background-attachment: fixed;
+    background-clip: border-box;
+    background-color: rgba(0, 0, 0, 0);
+    background-image: url("../images/dashboard_bg.jpg");
+    background-origin: padding-box;
+    background-repeat: repeat;
+    background-size: 100% auto;
+}
+.summery_page
+{
+ background: url(../images/summary_bg.jpg); 
+ font-family: 'Roboto', sans-serif !important;
+    font-weight: lighter;
+          height: 100%;
+              overflow-y: auto;
+            background-size: contain;
+                margin-bottom: 45px;
+            
+} 
+.summery_page:hover
+{
+    overflow-y: auto;
+    }
+.summery_page .first_sec {
+    padding: 16px 15px 0px;
+}
+.summery_page  {
+    padding: 0px 0px 0px !important;
+}
+.report_type
+{
+    background: transparent;
+    border: none;
+    font-size: 16px;
+}
+.report_tab li a
+{
+        background: #158EE9;
+    color: #fff;
+    border-radius: 0px;
+    text-align: center;
+    font-size: 17px;
+    font-weight: 500;
+    vertical-align: middle;
+    padding: 8px 5px;
+        border: 0px !important;
+}
+.report_tab li 
+{
+  background: transparent;
+}
+.report_tab {
+    border-bottom:0px;
+}
+   
+.report_tab>li.active>a, .report_tab>li.active>a:focus, .report_tab>li.active>a:hover
+{
+        background: #158EE9;
+    color: #fff;
+    border-radius: 0px;
+    text-align: center;
+    font-size: 17px;
+    font-weight: 500;
+    vertical-align: middle;
+    padding: 8px 5px;
+    border-top: 0px !important;
+        border-bottom: 4px solid #003069 !important;
+}
+
+.index-mainsec1
+{
+        overflow-y: auto;
+        margin-top: 18vh;
+        height: 82vh;
+   
+}
+.index-mainsec1:hover
+{
+    overflow-y: auto;
+}
+.report_type option
+{
+    background: #2096f0;
+    color: #fff;
+    font-size: 14px;
+}
+::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+  color: #fff !important;
+  font-size: 17px;
+}
+::-moz-placeholder { /* Firefox 19+ */
+  color: #fff !important;
+  font-size: 17px;
+}
+:-ms-input-placeholder { /* IE 10+ */
+   color: #fff !important;
+   font-size: 17px;
+}
+:-moz-placeholder { /* Firefox 18- */
+  color: #fff !important;
+  font-size: 17px;
+}
+.footersec img
+{
+     width: 30px;   
+}
+.paddingnone
+{
+	padding: 0px;
+}
+.graph_div img
+{
+	       width: 90%;
+    margin: 0px auto;
+    display: block;
+}
+.leftbar
+{
+	    display: inline-block;
+    float: left;
+}
+.haderdiv {
+    /* display: inline-block; */
+    text-align: center;
+    /*padding-right: 20px;*/
+}
+.leftbar i
+{
+    color: #fff;
+    font-size: 16px;
+}
+.carname
+{
+        text-align: center;
+    color: #005993;
+    font-size: 25px;
+    font-weight: bold;
+}
+#page-content-wrapper {
+    width: 100%;
+    position: absolute;
+      padding: 0px !important;
+      .padding: 20px 15px 10px 25px;
+}
+.summerygraph_div
+{
+ padding: 0px 20%;  
+}
+.haderdiv h2
+{
+	font-size: 20px;
+    margin: 10px 0px 0px;
+    padding-left: 15px;
+    color: #fff;
+    font-family: 'Roboto', sans-serif !important;
+	font-weight: lighter;
+}
+.footersec
+{
+	        background: #0786e7;
+   padding-top: 0px;
+
+        position: fixed;
+    bottom: 0px;
+        left: 0px;
+}
+.index-mainfirst:hover
+{
+    overflow-y: auto;
+}
+.index-mainfirst
+{
+    overflow-y: auto;
+}
+.footersec ul
+{
+	        list-style-type: none;
+    padding: 0px;
+    text-align: center;
+        margin-bottom: 0px;
+}
+.footersec ul li
+{
+	        display: inline-block;
+    padding: 8px 25px;
+}
+.headersec_main
+{padding: 10px 15px;
+    position: fixed;
+    top: 0;
+    background-color: #2096F0;
+    z-index: 3;
+    box-shadow: 1px 0px 2px;
+	}
+	.second_sec ul li
+	{
+		    
+    display: inline-block;
+    text-align: center;
+         padding: 23px;
+	}
+	.second_sec ul
+	{
+		list-style-type: none;
+        padding: 12px 40px;
+    margin-bottom: 0px;
+   
+    background: rgba(6, 6, 6, 0.14);
+	}
+	.second_sec img	{
+		    display: block;
+    margin: 0px auto;
+    margin-bottom: 10px;
+    width: 75px;
+	}
+ 
+    .summery_page .second_sec ul li {
+   
+    padding: 5px 5px 5px 5px !important;
+  
+}
+  .summery_page .second_sec ul {
+  
+        padding: 10px 20px 20px !important;
+  
+}
+.distance_travelled{
+    
+    font-size: 36px;
+    font-weight: bold;
+}
+
+.KM
+{
+    font-size: 13px;padding-left: 5px;
+}
+.summery_subhead {
+    font-size: 20px;
+    display: block;
+    color: #1f96f0;
+    font-weight: bold;
+}
+	.second_sec a
+	{
+		    color: #fff;
+    text-decoration: none;
+    font-size: 16px;
+	}
+	.graph_div
+	{
+		
+	}
+	.car_status p
+	{
+    font-size: 13px;
+    margin-bottom: 3px;
+     
+    font-family: 'Roboto', sans-serif !important;
+	font-weight: 400;
+    color: #fff;
+	}
+	.car_status_info
+	{
+		
+   display: inline-block;
+    padding: 0px 0px 0px 10px;
+	}
+	.car_status
+	{
+	display: inline-block;
+    float: left;
+    width: 55%;
+	}
+	.car_conatiner
+	{
+		
+		   border-left: 1px solid #579af1;
+               padding-left: 6px;
+	}
+	.moving h4
+	{
+		      margin: 0px;
+    color: #54d025;
+    font-size: 40px;
+    font-family: 'Roboto', sans-serif !important;
+    font-weight: bold;
+	}
+	.stopped h4
+	{
+	 margin: 0px;
+    color: #ed0054;
+    font-size: 40px;
+    font-family: 'Roboto', sans-serif !important;
+	font-weight: bold;	
+	}
+	.idling h4
+	{
+	 margin: 0px;
+    color: #dd8725;
+    font-size: 40px;
+    font-family: 'Roboto', sans-serif !important;
+	font-weight: bold;	
+	}
+	.car_info
+	{
+	    padding: 10px 0px 10px;
+    border-bottom: 1px solid #579af1;
+
+	}
+	.first_sec
+	{
+		    padding: 45px 15px 50px;
+	}
+	.bordernone
+	{
+		border-bottom: 0px !important;
+	}
+	.haderdiv_inner {
+    /* display: inline-block; */
+    text-align: left;
+    padding-left: 32px;
+    color: #fff;
+}
+#imaginary_container{
+    margin-top:20%; /* Don't copy this */
+}
+.stylish-input-group .input-group-addon{
+        background: transparent;
+    border: 0px;
+    border-bottom: 1px solid #2a68b7;
+    color: #fff !important;
+    color: #fff;
+}
+.stylish-input-group .form-control{
+	    border-right: 0;
+    box-shadow: 0 0 0;
+    border-color: transparent;
+    background: transparent;
+    border-bottom: 1px solid #2a68b7;
+    border-radius: 0px !important;
+    color: #fff;
+}
+.stylish-input-group button{
+    border:0;
+    background:transparent;
+}
+.first_sec_vechicle {
+        padding: 0px 0px 50px;
+        margin-top: 50px;
+}
+.vechicles_page
+{
+      padding: 0px 0px 0px !important;
+      margin-top: 50px;
+}
+.header_sec
+{
+	font-size: 21px;
+    text-transform: capitalize;
+}
+.bckbtn
+{
+	    font-size: 22px !important;
+	    font-weight: normal;
+}
+.car_icon
+{
+	   /*  width: 16%; For iOS it is 53px */
+    width: 53px;
+    height: 45px;
+    background-repeat: no-repeat !important;
+    float: left;
+}
+.alert_icon
+{
+    background-repeat: no-repeat !important;
+    float: left;
+    width: 6%;
+}
+.idle_ico
+{
+	background: url(../images/idle_ico.png);
+	border-left: 5px solid #00CCFF;
+}
+.moving_ico
+{
+	background: url(../images/moving_ico.png);
+	border-left: 5px solid #20C200;
+}
+.stoped_ico
+{
+	background: url(../images/stop_ico.png);
+	border-left: 5px solid #ED0054;
+}
+.vechicle_list
+{
+	      padding: 0px;
+    list-style-type: none;
+    margin-bottom: 45px;
+    overflow-y: auto;
+}
+.vechicle_list:hover
+{
+overflow-y: auto;
+}
+.main_ul
+{
+          padding: 0px;
+    list-style-type: none;
+    margin-bottom: 0px;
+    background: #1F96F0 !important;
+   
+}
+.main_ul li
+{
+background: #1F96F0 !important;
+   
+}
+
+.vechicle_list_info h5
+{
+	          font-size: 17px;
+    margin: 0px 0px 2px;
+    color: #1A5AA4;
+    padding-left: 10px;
+    font-weight: 600;
+}
+
+.vechicle_list_info p
+{
+	       font-size: 16px;
+    color: #1A5AA4;
+    padding-left: 11px;
+    margin-bottom: 0px;
+    font-weight: 500;
+}
+.vechicle_list_info
+{
+	    width: 80%;
+    display: inline-block;
+}
+.vechicle_list_deatis
+{
+          padding: 0px;
+    list-style-type: none;
+      margin-bottom: 45px;
+        overflow-y: auto;
+}
+.vechicle_list_deatis:hover
+{
+  
+    overflow-y: auto;
+}
+.vechicle_list_deatis li
+{
+          
+}
+.main_ul_heading
+{
+        padding: 10px 0px 10px 10px;
+}
+.vechicle_list_deatis li a {
+    display: block;
+   
+    background-repeat: no-repeat;
+    background-position-x: 100%;
+    background-position-y: 50%;
+}
+.vechicle_list_deatis li a {
+    display: block;
+    background: none !important;
+    background-repeat: no-repeat;
+    background-position-x: 100%;
+    background-position-y: 50%;
+}
+
+.alertbox
+{
+        width: 70% !important;
+    display: inline-block;
+
+}
+.alert_date
+{
+           width: 23%;
+    float: right;
+    font-size: 17px;
+}
+.vechicle_list li
+{
+	       padding: 13px 20px;
+}
+
+.vechicle_list li:nth-child(odd) {
+    background:#FFFFFF;
+}
+
+.vechicle_list li:nth-child(even) {
+    background:#F3F3F3;
+}
+.vechicle_list li a {
+    display: block;
+    background: url(../images/rightarrow.png);
+    background-repeat: no-repeat;
+    background-position-x: 100%;
+    background-position-y: 50%;
+}
+.alert_list li a {
+    display: block;
+    background: none !important;
+    background-repeat: no-repeat;
+    background-position-x: 100%;
+    background-position-y: 50%;
+}
+.genarate_report
+{
+        background: #158EE9;
+    padding: 13px 0px !important;
+    text-align: center;
+    /* padding: 17px; */
+    font-size: 20px;
+    color: #fff !important;
+}
+.reportlist
+{
+    margin-bottom: 100px;
+}
+.genarate_report a
+{
+
+    color: #fff !important;
+}
+.report_list .vechicle_list li a {
+    display: block;
+    background:none !important;
+    background-repeat: no-repeat;
+    background-position-x: 100%;
+    background-position-y: 50%;
+}
+
+.report_list  .vechicle_list_info {
+    width: 64%;
+    display: inline-block;
+}
+
+.summery_minihead
+{
+        font-size: 15px;
+    color: #666666 !important;
+}
+.summery_minihead img
+{
+        display: inline-block;
+  
+    vertical-align: middle;
+    margin: 0px 6px 0px 0px;
+}
+.blueC span
+{
+color: #1F96F0;
+}
+.greenC span
+{
+color: #14D200;
+}
+.roseC span
+{
+color: #FF1414;
+}
+.oranageC span
+{
+color: #FF7800;
+}
+.img_box
+{
+        float: left;
+       display: inline-block;
+        width: 20%;
+}
+.content_main
+{
+
+            display: inline-block;
+    width: 80%;
+    font-size: 17px;
+    color: #fff;
+        font-weight: bold;
+}
+.main_ul_date
+{
+
+    font-size: 17px;
+    color: #fff; 
+        padding: 0px;
+            text-align: right; 
+                padding: 10px 10px 10px 0px;
+}
+.sub_ul
+{
+    list-style-type: none;
+    padding: 0px;
+    background-color: #000;
+}
+.sub_ul li
+{
+
+    
+       padding: 12px 10px;
+    color: #8E8E8E;
+}
+.sub_ul li:nth-child(odd) {
+    background:#FFFFFF !important;
+}
+
+.sub_ul li:nth-child(even) {
+    background:#E5E5E5 !important;
+}
+.fromtime
+{
+        padding: 0px 5px;
+            font-size: 16px;
+    vertical-align: bottom;
+}
+.fromtime1
+{
+        padding: 0px 0px;
+            font-size: 14px;
+    vertical-align: bottom;
+        color: #035994;
+}
+.from_img
+{
+        background: url(../images/icn_arrow_grey.png);
+    background-repeat: no-repeat;
+    background-position-x: 100%;
+    background-size: inherit;
+        padding-bottom: 15px;
+}
+.to_img
+{
+    text-align: right;    padding-bottom: 15px;
+}
+.duration
+{
+    background: url(../images/icn_duration_blue.png); 
+      background-repeat: no-repeat;
+    padding-left: 50px;
+    color: #2096F0 !important;
+}
+.duration span
+{
+        font-size: 14px;
+    }
+
+.duration p
+{
+margin:0px;
+ font-size: 15px;
+    }
+.distance
+{
+       background: url(../images/icn_distance_green.png);
+    background-repeat: no-repeat;
+    padding-left: 50px;
+    color: #63AB00 !important;
+}
+.distance span
+{
+        font-size: 13px;
+    }
+
+.distance p
+{
+margin:0px;
+ font-size: 15px;
+    }
+
+.idling
+{
+  
+    color: #FF7700 !important;
+}
+
+.idling_inner
+{
+    background: url(../images/icn_idling_orange.png); 
+     background-repeat: no-repeat;
+    padding-left: 60px;
+    color: #FF7700 !important;
+}
+.idling span
+{
+        font-size: 14px;
+    }
+
+.idling p
+{
+margin:0px;
+ font-size: 15px;
+    }
+ .icn_from_blue
+ {
+    background: url(../images/icn_from_blue.png); 
+     background-repeat: no-repeat;
+       padding-left: 30px;
+ }   
+.icn_to_blue
+ {
+    background: url(../images/icn_to_blue.png); 
+     background-repeat: no-repeat;
+       padding-left: 30px;
+ } 
+  .icn_time_blue
+ {
+    background: url(../images/icn_time_blue.png); 
+     background-repeat: no-repeat;
+       padding-left: 22px;
+ } 
+ .icn_distance_blue
+ {
+    background: url(../images/icn_distance_blue.png); 
+     background-repeat: no-repeat;
+        padding-left: 22px;
+ }  
+ .travel_details
+ {
+       padding: 15px 0px 10px;
+    color: #035994;
+ } 
+ .startingname
+ {
+    background: url(../images/icn_round_arrow.png); 
+    background-repeat: no-repeat;
+     background-position-x: 100%;
+         background-size: 18px;
+    
+ }
+ .headersec_main_login {
+    padding: 25% 15px 15% 15px;
+}
+.loginSec h1
+{
+        color: #fff;
+}
+.loginSec img
+{
+    width: 70%;
+        display: block;
+    margin: 0px auto;
+}
+.loginSec h2
+{
+        color: #fff;
+        font-weight: 500;
+}
+.Login_first_sec
+{
+         padding: 50px 30px;
+         background: #fff;
+}
+.Login_first_sec input
+{
+    width: 100%;
+        height: 45px;
+    margin-bottom: 10px;
+    border: 0px;
+    border-bottom: 1px solid #1F96F0;
+    box-shadow: none;
+     padding-left: 40px;
+     font-size: 22px;
+     color: #7F7C7C;
+     text-transform: lowercase;
+}
+.usernamebox
+{
+   background: url(../images/icn_username.png); 
+    background-repeat: no-repeat;
+     background-position-x: 0%; 
+}
+.password
+{
+   background: url(../images/icn_password.png); 
+    background-repeat: no-repeat;
+     background-position-x: 0%; 
+}
+
+.Login_first_sec ::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+  color: #1F96F0 !important;
+  font-size: 20px;
+}
+.Login_first_sec ::-moz-placeholder { /* Firefox 19+ */
+  color: #fff !important;
+  font-size: 20px;
+}
+.Login_first_sec :-ms-input-placeholder { /* IE 10+ */
+   color: #1F96F0 !important;
+   font-size: 20px;
+}
+.Login_first_sec :-moz-placeholder { /* Firefox 18- */
+  color: #1F96F0 !important;
+  font-size: 20px;
+}
+.loginbtn
+{
+        margin: 0px auto;
+    display: block;
+    background: #1F96F0;
+    border: 0px;
+    color: #fff;
+    font-size: 21px;
+    padding: 10px 13px;
+    width: 100%;
+    border-radius: 25px;
+    margin-top: 20px;
+}
+.textforget
+{
+        text-align: center;
+    padding: 15px 0px;
+    font-size: 17px;
+}
+.forgetmessage
+{
+    color:#828282;
+}
+.textforget
+{
+        text-align: center;
+    padding: 15px 0px;
+    font-size: 17px;
+}
+@media only screen and (max-width: 420px) {
+
+.footersec ul li {
+    display: inline-block;
+    padding: 8px 22px;
+
+
+}
+.vechicle_list_info h5 {
+    font-size: 14px;
+    margin: 0px 0px 2px;
+    color: #1A5AA4;
+    padding-left: 10px;
+    font-weight: 600;
+}
+.vechicle_list_info p {
+    font-size: 13px;
+    color: #1A5AA4;
+    padding-left: 11px;
+    margin-bottom: 0px;
+    font-weight: 500;
+}
+.alert_date
+{
+           width: 25%;
+    float: right;
+    font-size: 13px;
+}
+.alertbox {
+    width: 65% !important;
+    display: inline-block;
+}
+.distance_travelled {
+          font-size: 25px;
+    font-weight: bold;
+}
+.summery_minihead {
+    font-size: 14px;
+    color: #666666 !important;
+}
+.summery_subhead {
+  font-size: 16px;
+    display: block;
+    color: #1f96f0;
+    font-weight: bold;
+}
+.first_sec {
+    padding: 30px 15px 30px;
+}
+.second_sec ul li {
+    display: inline-block;
+    text-align: center;
+    padding: 15px;
+}
+.headersec_main_login {
+    padding: 20% 15px 10% 15px;
+
+}
+.duration p {
+    margin: 0px;
+    font-size: 14px;
+}
+.distance p {
+    margin: 0px;
+    font-size: 14px;
+}
+.idling_inner p
+{
+  margin: 0px;
+    font-size: 14px;  
+}
+.duration {
+    background: url(../images/icn_duration_blue.png);
+    background-repeat: no-repeat;
+        padding-left: 45px;
+    color: #2096F0 !important;
+    background-size: 30%;
+}
+.idling_inner {
+    background: url(../images/icn_idling_orange.png);
+    background-repeat: no-repeat;
+      padding-left: 45px;
+    background-size: 30%;
+}
+.distance {
+    background: url(../images/icn_distance_green.png);
+    background-repeat: no-repeat;
+        padding-left: 45px;
+    color: #63AB00 !important;
+     background-size: 30%;
+}
+.destinationname {
+    font-size: 13px;
+}
+.summery_minihead img
+{
+        display: inline-block !important;
+    margin: 0px auto !important;
+    margin-bottom: 5px !important;
+    width: 16px !important;
+    margin-right: 2px !important;
+}
+}
+@media only screen and (max-width: 390px) {
+.car_status img
+{
+        width: 24px;
+}
+.second_sec a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 15px;
+}
+.second_sec ul li {
+    display: inline-block;
+    text-align: center;
+    padding: 12px;
+}
+.second_sec a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 14px;
+}
+.second_sec img {
+    display: block;
+    margin: 0px auto;
+    margin-bottom: 5px;
+    width: 30px;
+}
+.duration p {
+    margin: 0px;
+    font-size: 13px;
+}
+.distance p {
+    margin: 0px;
+    font-size: 13px;
+}
+.idling_inner p
+{
+  margin: 0px;
+    font-size: 13px;  
+}
+    }
+@media only screen and (max-width: 380px) {
+
+.second_sec ul {
+    list-style-type: none;
+    padding: 10px 40px;
+    margin-bottom: 0px;
+    
+}
+.second_sec ul li {
+    display: inline-block;
+    text-align: center;
+       padding: 15px 15px;
+}
+.car_status_info h4 {
+     font-size: 35px !important;
+}
+.footersec ul li {
+    display: inline-block;
+    padding: 8px 21px;
+
+}
+.distance_travelled{
+    
+    font-size: 30px;
+    font-weight: bold;
+}
+
+.summery_subhead {
+    font-size: 16px;
+    display: block;
+    color: #1f96f0;
+    font-weight: bold;
+}
+.summery_minihead {
+    font-size: 13px;
+    color: #666666 !important;
+}
+.vechicle_list_info h5 {
+    font-size: 14px;
+    margin: 0px 0px 2px;
+    color: #1A5AA4;
+    padding-left: 10px;
+    font-weight: 600;
+}
+.vechicle_list_info p {
+    font-size: 13px;
+    color: #1A5AA4;
+    padding-left: 11px;
+    margin-bottom: 0px;
+    font-weight: 500;
+}
+.alert_date
+{
+           width: 25%;
+    float: right;
+    font-size: 13px;
+}
+.alertbox {
+    width: 65% !important;
+    display: inline-block;
+}
+.fromtime {
+    padding: 0px 5px;
+    font-size: 13px;
+    vertical-align: bottom;
+}
+
+
+.duration {
+    background: url(../images/icn_duration_blue.png);
+    background-repeat: no-repeat;
+        padding-left: 35px;
+    color: #2096F0 !important;
+    background-size: 25%;
+}
+.idling_inner {
+    background: url(../images/icn_idling_orange.png);
+    background-repeat: no-repeat;
+      padding-left: 35px;
+    background-size: 25%;
+}
+.distance {
+    background: url(../images/icn_distance_green.png);
+    background-repeat: no-repeat;
+        padding-left: 35px;
+    color: #63AB00 !important;
+     background-size: 25%;
+}
+
+.fromtime1 {
+    padding: 0px 0px;
+    font-size: 11px;
+    vertical-align: bottom;
+    color: #035994;
+}
+.startingname {
+       background: url(../images/icn_round_arrow.png);
+    background-repeat: no-repeat;
+    background-position-x: 100%;
+   
+    font-size: 12px;
+    background-size: 13px;
+}
+.destinationname {
+    font-size: 12px;
+}
+.content_main {
+    display: inline-block;
+    width: 80%;
+    font-size: 15px;
+    color: #fff;
+    font-weight: bold;
+}
+.main_ul_date {
+    font-size: 15px;
+    color: #fff;
+    padding: 0px;
+    text-align: right;
+    padding: 10px 10px 10px 0px;
+}
+
+.carname {
+    text-align: center;
+    color: #005993;
+    font-size: 20px;
+    font-weight: bold;
+}
+.second_sec img {
+    display: block;
+    margin: 0px auto;
+    margin-bottom: 5px;
+        width: 30px;
+}
+.summery_minihead img {
+        display: inline-block;
+    vertical-align: middle;
+    margin: 0px 1px 0px 0px;
+    width: 14px;
+}
+.second_sec a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 14px;
+}
+.haderdiv h2 {
+    font-size: 16px;
+    margin: 10px 0px 0px;
+    padding-left: 0px;
+    color: #fff;
+    font-family: 'Roboto', sans-serif !important;
+    font-weight: lighter;
+}
+.first_sec {
+        padding: 25px 5px 40px;
+}
+
+.distance p
+{
+margin:0px;
+ font-size: 14px;
+    }
+    .duration p {
+    margin: 0px;
+    font-size: 14px;
+}
+.car_status img
+{
+        width: 24px;
+}
+.headersec_main_login {
+    padding: 20% 15px 10% 15px;
+}
+.Login_first_sec {
+    padding: 48px 30px;
+}
+.duration p {
+    margin: 0px;
+    font-size: 13px;
+}
+.distance p {
+    margin: 0px;
+    font-size: 13px;
+}
+.idling_inner p
+{
+  margin: 0px;
+    font-size: 13px;  
+}
+.destinationname {
+        font-size: 11px;
+    padding: 0px 4px;
+}
+}
+@media only screen and (max-width: 360px)
+{
+    .car_status {
+    display: inline-block;
+    float: left;
+       width: 50%;
+}
+.car_status img
+{
+        width: 24px;
+}
+}
+@media only screen and (max-width: 320px)
+{
+.second_sec ul li {
+    display: inline-block;
+    text-align: center;
+    padding: 5px 10px;
+}
+    .duration {
+    background: url(../images/icn_duration_blue.png);
+    background-repeat: no-repeat;
+        padding-left: 25px;
+    color: #2096F0 !important;
+    background-size: 20%;
+}
+.idling_inner {
+    background: url(../images/icn_idling_orange.png);
+    background-repeat: no-repeat;
+      padding-left: 25px;
+    background-size: 20%;
+}
+.distance {
+    background: url(../images/icn_distance_green.png);
+    background-repeat: no-repeat;
+        padding-left: 25px;
+    color: #63AB00 !important;
+     background-size: 20%;
+}
+.from_img img
+{
+    width: 20px;
+}
+.to_img img
+{
+    width: 20px;
+}
+
+.play_img img
+{
+    width: 24px !important;
+}
+
+.duration p {
+    margin: 0px;
+    font-size: 12px;
+}
+.content_main {
+    display: inline-block;
+    width: 70%;
+    font-size: 14px;
+    color: #fff;
+    font-weight: bold;
+}
+.car_icon {
+    width: 23%;
+    height: 45px;
+    background-repeat: no-repeat !important;
+    float: left;
+}
+.main_ul_date {
+    font-size: 14px;
+    color: #fff;
+    padding: 0px;
+    text-align: right;
+    padding: 10px 10px 10px 0px;
+}
+.headersec_main_login {
+    padding: 20% 15px 15% 8px;
+}
+.from_img {
+    background: url(../images/icn_arrow_grey.png);
+    background-repeat: no-repeat;
+    background-position-x: 100%;
+    background-size: 12%;
+    background-position-y: 3px;
+    padding-bottom: 15px;
+}
+.Login_first_sec {
+    padding: 32px 30px;
+}
+
+    .loginSec h1 {
+    color: #fff;
+    font-size: 23px;
+}
+.loginSec h2 {
+    color: #fff;
+    font-weight: 500;
+    font-size: 18px;
+}
+::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+  color: #fff !important;
+  font-size: 14px;
+}
+::-moz-placeholder { /* Firefox 19+ */
+  color: #fff !important;
+  font-size: 14px;
+}
+:-ms-input-placeholder { /* IE 10+ */
+   color: #fff !important;
+   font-size: 14px;
+}
+:-moz-placeholder { /* Firefox 18- */
+  color: #fff !important;
+  font-size: 14px;
+}
+.first_sec {
+    padding: 35px 0px 35px;
+}
+.vechicle_list_info h5 {
+    font-size: 14px;
+    margin: 0px 0px 2px;
+    color: #1A5AA4;
+    padding-left: 10px;
+    font-weight: 600;
+}
+.vechicle_list_info p {
+    font-size: 13px;
+    color: #1A5AA4;
+    padding-left: 11px;
+    margin-bottom: 0px;
+    font-weight: 500;
+}
+.alert_date
+{
+           width: 25%;
+    float: right;
+    font-size: 13px;
+}
+.alertbox {
+    width: 65% !important;
+    display: inline-block;
+}
+
+.distance_travelled {
+       font-size: 22px;
+    font-weight: bold;
+}
+.car_status p {
+    font-size: 13px;
+    margin-bottom: 3px;
+    font-weight: normal;
+    font-family: 'Roboto', sans-serif !important;
+    font-weight: lighter;
+    color: #fff;
+}
+.summery_subhead {
+      font-size: 11px;
+    display: block;
+    color: #1f96f0;
+    font-weight: bold;
+}
+.summery_minihead {
+    font-size: 11px;
+    color: #666666 !important;
+}
+.summery_page .second_sec ul {
+    padding: 0px 20px 0px !important;
+
+}
+.summery_page .first_sec {
+    padding: 14px 15px 0px;
+}
+.summery_minihead img {
+    display: inline-block !important;
+    vertical-align: middle;
+    margin: 0px 6px 0px 0px !important;
+    width: 15px !important;
+    /* width: auto !important; */
+    margin-bottom: 0px !important;
+}
+.car_status_info h4 {
+     font-size: 30px !important;
+}
+.second_sec ul {
+    list-style-type: none;
+    padding: 19px 40px;
+    margin-bottom: 0px;
+    
+}
+.second_sec a {
+    color: #fff;
+    text-decoration: none;
+        font-size: 13px;
+}
+.footersec ul li {
+    display: inline-block;
+    padding: 8px 14px;
+}
+.first_sec {
+       padding: 10px 0px 10px;
+       height: 42vh;
+}
+.footersec img
+{
+     /*width: 70%;  */ 
+}
+.graph_div img {
+    width: 100%;
+    margin: 0px auto;
+    display: block;
+}
+.haderdiv h2 {
+    font-size: 17px;
+    margin: 10px 0px 0px;
+    padding-left: 15px;
+    color: #fff;
+    font-family: 'Roboto', sans-serif !important;
+    font-weight: lighter;
+}
+.second_sec img {
+      
+   display: block;
+    margin: 0px auto;
+    margin-bottom: 3px;
+    width: 24px;
+}
+.icn_from_blue {
+    background: url(../images/icn_from_blue.png);
+    background-repeat: no-repeat;
+    padding-left: 20px;
+    font-size: 5px;
+    background-size: 23%;
+}
+.car_status img
+{
+        width: 24px;
+}
+.icn_to_blue {
+   
+    background-repeat: no-repeat;
+    padding-left: 20px;
+    font-size: 5px;
+    background-size: 14%;
+}
+.icn_time_blue {
+    background-repeat: no-repeat;
+    padding-left: 20px;
+    font-size: 5px;
+    background-size: 14%;
+}
+.icn_distance_blue {
+        background-repeat: no-repeat;
+    padding-left: 15px;
+    font-size: 5px;
+    background-size: 28%;
+}
+.destinationname {
+       font-size: 11px;
+}
+.startingname {
+    background: url(../images/icn_round_arrow.png);
+    background-repeat: no-repeat;
+    background-position-x: 100%;
+    background-size: 13px;
+    font-size: 11px;
+}
+.content_main {
+    display: inline-block;
+    width: 70%;
+    font-size: 11px;
+    color: #fff;
+    font-weight: bold;
+}
+.vechicle_list_info {
+    width: 75%;
+    display: inline-block;
+}
+.car_status {
+    display: inline-block;
+    float: left;
+    width: 53%;
+}
+.summerygraph_div img {
+    width: 90%;
+    margin: 0px auto;
+    display: block;
+}  
+}
+}

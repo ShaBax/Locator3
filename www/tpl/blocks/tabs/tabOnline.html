@@ -1,0 +1,686 @@
+<style>
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-    ng-cloak {
+  display: none !important;
+}
+</style>
+<ul class="nav nav-tabs tabs_inner" role="tablist">
+    <li role="presentation" class="active col-md-4">
+      <a href="/#tabOnlineVehicle" aria-controls="home" role="tab" data-toggle="tab">
+        <i class="fa fa-truck" aria-hidden="true"></i>
+        <p translate="aside.nav.VEHICLES" >Vechicle</p>
+      </a>
+  </li>
+  <li class="col-md-4" role="presentation"><a href="/#tabOnlineDrivers" ng-click="getDrivers()" aria-controls="profile" role="tab" data-toggle="tab">
+    <i class="fa fa-user" aria-hidden="true"></i>
+    <p translate="aside.nav.DRIVERS"  >Drivers</p></a>
+  </li>
+  <li class="col-md-4" role="presentation"><a href="/#tabOnlineEvents" aria-controls="messages" role="tab" data-toggle="tab">
+    <i class="fa fa-calendar" aria-hidden="true"></i>
+    <p translate="aside.nav.ALERTS"  >Alerts</p></a>
+  </li>
+</ul>
+
+
+<!-- Tab panes -->
+<div class="tab-content tab-content_second" ng-cloak>
+  <div role="tabpanel" class="tab-pane active" id="tabOnlineVehicle">
+    <div class="add-group btn-group col-sm-12" style="margin-bottom:10px;">
+      <button style="width:18%;"  type="button" class="btn btn-primary ttip" title="All Vehicles" ng-class="{'activebtn': option == 'all'}" ng-click="selectedOption('all')">
+        <i class="fa fa-archive" style="color:white; "  aria-hidden="true"> &nbsp; </i>{{allno}}
+      </button>
+      <button  style="width:18%;background-color:#71cb71 !important;border-color:#71cb71 !important;" type="button" class="btn btn-success ttip"  title="Moving" ng-class="{'activebtn': option == 'Moving'}" ng-click="selectedOption('Moving')"> 
+        <i class="fa fa-exchange" style="color:white;" aria-hidden="true"> &nbsp;   </i> {{online}}
+      </button>
+      <button  style="width:18%;background-color:orange !important;" type="button" class="btn btn-warning ttip"  title="Idling" ng-class="{'activebtn': option == 'Idling'}" ng-click="selectedOption('Idling')">
+        <i class="fa fa-thumb-tack" style="color:white;" aria-hidden="true">  &nbsp;  </i>{{idle}}
+      </button>
+      <button style="width:18%;" type="button" class="btn btn-danger ttip"  title="Parking" ng-class="{'activebtn': option == 'Stopped'}" ng-click="selectedOption('stop')"> 
+        <!--<i class="fa fa-exclamation-circle" style="color:white;" aria-hidden="true">  &nbsp;  </i>-->
+        <i class="fa fa-stop" style="color:white;" aria-hidden="true">&nbsp;</i> {{conpblm}}
+      </button>
+      <button  style="width:18%;" type="button" class="btn btn-gray ttip" title="Did not run"  ng-class="{'activebtn': option == 'didnotrun'}" ng-click="selectedOption('didnotrun')">
+        <i class="fa fa-power-off" style="color:#333;" aria-hidden="true"></i>  &nbsp;  {{didnotrun}}
+      </button>      
+    </div>
+    <div class="tab_content_inner">                                        
+      <div class="panel-group tabLive">
+        <div class="panel panel-default" ng-repeat="group in allVehiclespositonsData" >
+          <div class="panel-heading">
+            <h4 class="panel-title" style="border:none;">
+              <div ng-show="option =='all' && option != 'didnotrun'" style="display: inline-block;width: 5%;margin-left:-8px;">
+                <input type="checkbox" id="livecheckall_{{group.id}}" ng-model="groupId" ng-true-value="{{group.id}}" ng-false-value="0" ng-click="checkAllVehicles(groupId,group.id)" ng-checked="selectedLiveGroups.indexOf(group.id) !== -1"> 
+                <label for="livecheckall_{{group.id}}"><span></span></label> 
+              </div>
+              <a data-toggle="collapse" data-parent="#accordion" href="/#collapse-in{{group.id}}" style="display: inline-block;width: 86%;">
+                {{group.name}}<span ng-if="option=='didnotrun'" style="float:right;">{{idle}}</span><span ng-if="vehicle.status == option || option == 'all'" style="float:right;"> {{allno}}</span>
+              </a>
+<!--               <a style="display:inline-block;float:right;width:5%;" data-toggle="modal" data-target="#editVehGroup" ng-show="group.id != -1" ng-click="getSingleVehGroup(group.id)">
+                <i class="fa fa-pencil" aria-hidden="true"></i>
+              </a> -->
+            </h4>
+          </div>
+          <div id="collapse-in{{group.group.id}}" class="panel-collapse collapse in">
+            <div class="panel-body"> 
+              <table id="responsive-example-table " class="table large-only">
+                <tbody class="skin skin-flat">  
+                  <tr class=" list"  ng-click="setObjectToCenter(vehicle.position.latitude,vehicle.position.longitude)"  ng-repeat="vehicle in group.vehicles | filter : search" ng-if="vehicle.status == option || option == 'all' || vehicle.status == secondOption || vehicle.status == 'No Connection For '" ng-class="selectedLiveVehicles.indexOf(vehicle.id) !== -1 ? 'veh_selected' : '' " >
+                    <td class="imgsat">
+                      <input tabindex="13" type="checkbox" id="live_{{vehicle.id}}" id="flat-checkbox-1" ng-model="selectedDevice" ng-click="getVehicleDetails(selectedDevice,vehicle.uniqueId,vehicle.id,vehicle.name,group.id)" class="onlineVehicleCheckBox objgpid_{{group.id}}" ng-true-value="{{vehicle.id}}"  ng-false-value="0" ng-checked="selectedLiveVehicles.indexOf(vehicle.id) !== -1">
+                      <label  for="live_{{vehicle.id}}"><span></span></label>
+                    </td> 
+                    <td class="imgsat">
+                      <img class="vehImg redVechIcon" ng-if="vehicle.position.attributes.ignition == false && vehicle.position.attributes.motion==false && vehicle.status != 'Idling' && vehicle.position.attributes.motion==false || vehicle.status=='Started' && vehicle.position.attributes.motion==false || vehicle.status=='Stopped' && vehicle.position.attributes.motion==false || vehicle.status == 'No Connection For' && vehicle.position.attributes.motion==false " src="assets/images/white icons/car.png" ngstyle="height: 16px;" style="margin-left: -7px;">
+                      <img class="vehImg greenVechIcon" ng-if="vehicle.status == 'Moving'" src="assets/images/white icons/car.png"  ngstyle="height: 16px;" style="margin-left: -7px;">
+                      <img class="vehImg orangeVechIcon" ng-if="vehicle.status == 'Idling'" src="assets/images/white icons/car.png"   ngstyle="height: 16px;" style="margin-left: -7px;">
+                    </td>
+                    <td style="width=90%;">
+                      <a class="ttip" title="{{vehicle.name}}">
+                        <b class="vehname" >{{vehicle.name | limitTo:23}}</b>
+                        <div class="datetime"style="margin-right:-42px !important;">  {{vehicle.lastupdated}} </div>
+                      </a><br>
+                      <a class="status">{{vehicle.status}}
+
+                       <span ng-if="vehicle.status=='Moving'">
+
+                        <span ng-if="vehicle.position.speed>1">&nbsp;at &nbsp;{{vehicle.position.speed}}&nbsp; km/hr&nbsp; - &nbsp;</span><span ng-if="vehicle.position.speed==0">Slowly </span></span>&nbsp;{{vehicle.position.duration | limitTo:22}}
+                        <span ng-if="vehicle.duration.length>22">...</span></a>
+
+                      </td>
+                      <td class="imgsat">
+                        <a> 
+                          <div ng-if="vehicle.position.attributes.sat>3"> 
+                           <img  src="assets/images/white icons/satgreen.png" style="border-radius: 12px;height: 21px;width: 21px;padding: 3px;margin-top:18px;" ngstyle="height: 16px;"> </div>
+                         </a>
+                         <a>
+                          <div  ng-if="vehicle.position.attributes.sat<=3"> 
+                            <img  src="assets/images/white icons/satred.png" style="border-radius: 12px;height: 21px;width: 21px;padding: 3px;margin-top:18px;" ngstyle="height: 16px;">
+                          </div>
+                        </a>
+                      </td>
+                      <td><i ng-click="editObject(vehicle.id)" style="cursor:pointer;padding:3px;margin-top:20px;background-color: #e47b14;border-radius: 5px;color: white;" class="fa fa-pencil-square-o ttip" title="Edit Object" aria-hidden="true"></i></td>
+                    </tr>
+                  <!-- <tr class=" list" ng-repeat="vehicle in group.vehicles.idle | filter :search" ng-if="option=='didnotrun'">
+                    <td  style="width:10px;">
+                      <img class="vehImg redVechIcon"  src="assets/images/white icons/car.png" ngstyle="height: 16px;">
+                    </td>
+                    <td style="width:10px;">
+                      <a> 
+                        <b class="vehname">{{vehicle.obj_name | limitTo:15}}  </b>
+                        <div class="datetime"style="margin-right:0px !important;">  {{vehicle.track_vehicles_timestamp_from_device}} </div>
+                      </a><br>
+                      <a class="status">{{vehicle.track_vehicles_status}}   &nbsp;{{vehicle.duration}}</a>
+                    </td>
+                    <td style="width:10px;" ><i ng-click="editObject(vehicle.obj_id)" style="cursor:pointer;padding:3px; float:right;background-color: #e47b14;border-radius: 5px;color: white;" class="fa fa-pencil-square-o ttip" title="Edit Object" aria-hidden="true"></i></td>
+                  </tr>-->
+                  <div class="col-sm-12 list" ng-repeat="vehicle in group.vehicles.idle  " ng-if="option=='didnotrun'">
+                    <div class="col-sm-1"   >
+                      <img class="vehImg redVechIcon"  src="assets/images/white icons/car.png" ngstyle="height: 16px;">
+                    </div>
+                    <div class="col-sm-8"  >
+                      <a> 
+                        <b class="vehname">{{vehicle.name | limitTo:15}}  </b>
+                        <div class="datetime"style="margin-right:0px !important;"></div>
+                      </a><br>
+                      <a class="status">Never made contact</a>
+                    </div>
+                    <div class="col-sm-2"   ><i ng-click="editObject(vehicle.id)" style="cursor:pointer;padding:3px; float:right;background-color: #e47b14;border-radius: 5px;color: white;" class="fa fa-pencil-square-o ttip" title="Edit Object" aria-hidden="true"></i></div>
+                  </div>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-12 nopadding bottom-search">
+      <div class="col-sm-9 nopadding">
+        <div class="input-group input-widget" style="width:100%">
+          <input style="border-radius:15px;width: 100%;/*! margin: 0px !important; */margin-top: 10px;" ng-model="search" placeholder="Search..." class="form-control searchbox ng-pristine ng-untouched ng-valid" aria-invalid="false" type="text">
+        </div>
+      </div>
+      <div class="col-sm-3" style="padding-right:0"  >           
+        <button type="button" class="btn btn-success" data-original-title="" style="width: 50%; height:31px; float:left; border-radius:5px 0 0 5px ">
+          <i class="fa fa-volume-up" style="color:#333;padding: 6px;font-size: 16px;" aria-hidden="true"  ng-if="audioSound == 1" ng-click="MuteWindow(0)"></i> 
+          <i class="fa fa-volume-off" style="color:#333;padding: 6px;font-size: 16px;" aria-hidden="true" ng-if="audioSound == 0" ng-click="MuteWindow(1)"></i> 
+        </button>
+        <button type="button" class="btn btn-gray" ng-click="getGroups()" data-original-title="" title="" style="width: 50%; height:31px; border-radius:0 5px 5px 0 ">
+          <i class="fa fa-refresh" style="color:#333;" aria-hidden="true"></i> 
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div role="tabpanel" class="tab-pane tab_content_inner" id="tabOnlineDrivers" >
+    <div class="panel-group tabDrivers">
+      <div class="panel panel-default driverBorder" ng-repeat="driver in drivers  | filter :searchDriver" >
+        <div class="panel-heading">
+          <h4 class="panel-title" style="border:none;">
+            <a style="display:inline-block;width:94%;" data-toggle="collapse" data-parent="#accordion" href="/#collapse-out{{driver.driver.driver_id}}">
+              <div class="col-sm-12">
+                <div class="col-sm-6" style=" margin-left: -31px !important;">
+                  <span class="glyphicon glyphicon-user"></span> {{driver.driver.driver_name | limitTo:14}} 
+                </div>  
+                <div class="col-sm-6">
+                  <span>
+                    <i class="fa fa-phone" aria-hidden="true"></i>&nbsp;{{driver.driver.driver_phone | limitTo:14}} 
+                    <i style="float:right;margin-left:-11px;margin-right:-62px !important;  " class="fa fa-chevron-down" aria-hidden="true" ng-click="getDriverHistory(driver.driver.driver_id)" ng-show="selectedDriver == ''"></i>
+                    <i style="float:right;margin-left:-11px;margin-right:-62px !important;  " class="fa fa-chevron-up" aria-hidden="true" ng-click="closeDriverHistory()"  ng-show="selectedDriver == driver.driver.driver_id"></i>
+                  </span> 
+                </div>  
+              </div>  
+            </a>
+            <a style="display:inline-block;float:right;width:5%;" data-toggle="modal" data-target="#addDriver" ng-click="editDriver(driver.driver.driver_id)">
+              <i   class="fa fa-pencil" aria-hidden="true"></i>
+            </a>         
+          </h4>
+          <div>{{driver.driver.obj_name}}  &nbsp;<span style="float:right; font-family: roboto">{{driver.driver.i_button_driver_id}}</span></div>       
+        </div>
+        <div>
+          <div  style="max-height:300px;overflow-y: scroll;" id="collapse-out{{driver.driver.driver_id}}" class="panel-collapse collapse">
+            <div class="panel-body">
+              <table id="responsive-example-table " class="table large-only">
+                <tbody class="skin skin-flat">
+                  <tr class=" list" ng-repeat="history in driverHistory"  ng-if="driverHistory.length>0">                     
+                    <td style="width:66%" class="imgsat">&nbsp; <b class="vehname">{{history.obj_name}}</b> </td>
+                    <td style="font-size: 11px; display: inline-block; float: right; width: 116%;">
+                      <i class="fa fa-clock-o" aria-hidden="true"></i>{{history.trip_start}}<br>
+                      <i class="fa fa-clock-o" aria-hidden="true"></i>{{history.trip_parking_start}}  
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-12 nopadding bottom-search">
+      <div class="col-sm-6 nopadding">
+        <div class="input-group input-widget" style="width:100%">
+          <input style="border-radius:15px;width: 100%; margin-top: 10px;" ng-model="searchDriver" placeholder="Search..." class="form-control searchbox ng-pristine ng-untouched ng-valid" aria-invalid="false" type="text">
+        </div>
+      </div>
+      <div class="col-sm-6" style="padding-right:0"  > 
+        <div class="btn-group"> 
+          <button translate="aside.nav.ADD" type="button" data-toggle="modal" class="btn btn-warning ttip" data-target="#addDriver" title="Add Driver" style="margin: 0 !important;border-radius: 5px 0px 0px 5px !important;" ng-click="addDriver()">Add </button>
+          <button style="border-radius: 0px 5px 5px 0px !important; margin:0 !important;width:54px;" type="button" class="btn btn-danger ttip" ng-click="getDrivers()" data-original-title="" title="Refresh"> <i class="fa fa-refresh" style="color:#333;" aria-hidden="true"></i> </button>                                   
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div role="tabpanel" class="tab-pane" id="tabOnlineEvents"> 
+    <div class="btn-group datebuttons" style="display:block !important;">
+     <button translate="aside.nav.TODAY" style="border-radius: 5px !important; width: 32%; margin-right: 8px !important;" data-format="dd-MM-yyyy hh:mm:ss" ng-click="todays('events')" type="button" class="btn btn-warning ttip"  title=""><i class="fa fa-calendar-check-o" aria-hidden="true"></i> Today</button> 
+
+     <button translate="aside.nav.YESTERDAY" style="border-radius: 5px !important; width: 32%; margin-right: 8px !important;" data-format="dd-MM-yyyy hh:mm:ss" ng-click="yesterday('events')" type="button" class="btn btn-danger ttip" title="" ><i class="fa fa-calendar-check-o" aria-hidden="true"></i> Yesterday</button>
+
+     <button translate="aside.nav.LASTWEEK" style="border-radius: 5px !important; width: 32%;" data-format="dd-MM-yyyy hh:mm:ss" ng-click="lastweek('events')" type="button" class="btn btn-info ttip" title=""><i class="fa fa-calendar-check-o" aria-hidden="true"></i> Last Week</button> 
+   </div>   
+   <div class="col-md-12 paddingnone datepickersec">
+    <div class="col-md-5 paddingnone">
+      <div  id="datetimepicker15" class="input-group date" >
+        <input class="form-control" data-format="dd-MM-yyyy hh:mm:ss" type="text" ng-model="eventss.from"  ng-click="showEvent(eventss.from,'')" >
+        <span class="input-group-addon add-on" style="display:table-cell;">
+          <i style="font-style:normal;" data-time-icon="entypo-clock" data-date-icon="entypo-calendar">
+          </i>
+        </span>
+      </div>
+    </div>
+    <div class="col-md-5 paddingnone">
+      <div  id="datetimepicker25" class="input-group date">
+        <input class="form-control" data-format="dd-MM-yyyy hh:mm:ss" type="text"   ng-model="eventss.to" ng-click="showEvent('',eventss.to)">
+        <!--   <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="eventss.to" is-open="opened" min-date="minDate" max-date="'2015-06-22'" ng-change="showEvent(eventss.to)" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />-->
+        <span class="input-group-addon add-on" style="display:table-cell;">
+          <i style="font-style:normal;" data-time-icon="entypo-clock"   data-date-icon="entypo-calendar">
+          </i>
+        </span>
+      </div>
+    </div>
+    <div class="col-md-2 paddingnone">
+      <button   ng-click="showEvent(eventss.from,eventss.to)"  style="border-radius:0px;height:31px;width:100%;" aria-controls="profile" role="tab" data-toggle="tab" data-format="dd-MM-yyyy hh:mm:ss"   type="button" class="btn btn-warning"   ><i class="fa fa-search" aria-hidden="true"></i> </button> 
+    </div>
+  </div>
+  <div class="tab_content_inner"  >                                        
+    <div class="panel-group tabAlerts" >
+      <div class="body-nest">
+        <div>  
+          <section id="flip-scroll">
+            <table class="table table-bordered table-striped cf">
+              <thead class="cf">
+                <tr>
+                  <th>Name</th>
+                  <th>Event/Time</th>                    
+                  <th>Place</th>       
+                </tr>
+              </thead>
+              <tbody ng-repeat="event in events">     
+                <tr ng-repeat="vehicle in event.vehicles" ng-click="showOnlineEventInfowindow(vehicle)">
+                  <td style="padding-left: 5px !important; vertical-align: middle; width: 35%;">{{event.name}}</td>                  
+                  <td ng-if="vehicle.event_status == 1 && vehicle.event_type == 'ignition'">{{vehicle.event_type}} on<br>{{vehicle.event_time}}</td>
+                  <td ng-if="vehicle.event_status == 0 && vehicle.event_type == 'ignition'">{{vehicle.event_type}} off<br>{{vehicle.event_time}}</td>
+                  <td>{{vehicle.event_place}}</td>
+                </tr>  
+              </tbody>
+            </table>
+          </section>
+          <h5>Notifications-High Priority</h5>
+          <section id="flip-scroll">
+            <table class="table table-bordered table-striped cf">
+              <thead class="cf">
+                <tr>
+                  <th>Name</th>
+                  <th> Type </th>                    
+                  <th>Content</th>       
+                </tr>
+              </thead>
+              <tbody ng-repeat="event in events   ">     
+                <tr ng-repeat="notification in event.notifications.high">
+                  <td style="padding-left: 5px !important; vertical-align: middle; width: 35%;">{{event.name}}</td>
+                  <td>{{notification.push_notification_type}}</td>
+                  <td>{{notification.push_notification_content}}</td>
+                </tr>  
+              </tbody>
+            </table>
+          </section>
+          <h5>Notifications-Normal</h5>
+          <section id="flip-scroll">
+            <table class="table table-bordered table-striped cf">
+              <thead class="cf">
+                <tr>
+                  <th>Name</th>
+                  <th> Type </th>                    
+                  <th>content</th>       
+                </tr>
+              </thead>
+              <tbody ng-repeat="event in events   ">     
+                <tr ng-repeat="notification in event.notifications.normal  ">
+                  <td style="padding-left: 5px !important; vertical-align: middle; width: 35%;">{{event.name}}</td>
+                  <td>{{notification.push_notification_type}} </td>
+                  <td>{{notification.push_notification_content}}</td>
+                </tr>  
+              </tbody>
+            </table>
+          </section>
+        </div>  
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-12 bottom-search " >
+    <div class="col-sm-9 nopadding">
+      <div class="input-group input-widget" style="width:100%">
+        <input style="border-radius:15px;width: 100%; margin-top: 10px;" ng-model="searchh" placeholder="Search..." class="form-control searchbox ng-pristine ng-untouched ng-valid" aria-invalid="false" type="text">
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--Manage vehicle modal-->
+
+<div ng-init="addObject()" class="modal fade" id="addVehicle" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true" >
+ <div class="modal-dialog" style="width:1200px !important;"  role="document">
+   <div class="modal-content" >
+     <div class="modal-header">
+       <h5 class="modal-title" id="exampleModalLongTitle">Add/Edit Object  <div class="modal-header-text" ng-if="vehicleDetails.obj_id>0">
+        <span>Customer ID: {{vehicleDetails.obj_user_id + 1000}}&nbsp; | &nbsp;Object ID : {{vehicleDetails.obj_id +5000}}&nbsp; | &nbsp;Added Date : {{vehicleDetails.createdTime}}</span>
+      </div></h5>
+
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+       <span aria-hidden="true">&times;</span>
+     </button>
+   </div>
+   <div class="alert alert-success" style="width:100%;text-align:center;" ng-show="successMessage">
+     <span class="entypo-thumbs-up"></span>
+     {{successMessage}}.
+   </div>
+   <form class="form-validation" name="form">
+     <div class="modal-body" style="overflow:hidden"> 
+       <div class="col-sm-12"> 
+         <div  class="col-sm-4">
+           <label class="col-sm-5 control-label labelstyle">Object Group</label>
+           <div class="col-sm-12">
+             <select style="padding:1px !important;" class="form-control" ng-model="vehicleDetails.obj_gp_id">
+               <option ng-repeat="group in vehgroups" ng-selected="vehicleDetails.obj_gp_id == group.obj_group_id" value="{{group.obj_group_id}}"  >{{group.obj_group_name}}</option>
+               <option ng-selected="vehicleDetails.obj_gp_id == -1" value="-1">Default Group</option>
+             </select>
+           </div> 
+           <label class="col-sm-5 control-label labelstyle">Object Name *</label>
+           <div class="col-sm-12" >
+             <input  required class="form-control" type="text" ng-model="vehicleDetails.obj_name">
+           </div>  
+
+<!--            <label class="col-sm-6 control-label labelstyle">Object Number </label>
+           <div class="col-sm-12" >
+             <input  class="form-control" type="text" ng-model="vehicleDetails.obj_vehicle_number">
+           </div>    -->
+
+          <!-- <label class="col-sm-5 control-label labelstyle">Initial Mileage</label>
+           <div class="col-sm-12" >
+             <input  class="form-control" type="text" ng-model="vehicleDetails.obj_initial_mileage">
+           </div> -->
+
+            <label class="col-sm-5 control-label labelstyle">Device Description</label>
+                                  <div class="col-sm-12" >
+                                    <input   class="form-control" type="text" ng-model="vehicleDetails.obj_device_description">
+                                  </div> 
+
+
+           <label class="col-sm-5 control-label labelstyle">Current Odometer</label>
+           <div class="col-sm-12" >
+            <input class="form-control" type="text" ng-model="vehicleDetails.totalCurrentMileage">
+          </div> 
+
+
+
+
+          <label class="col-sm-5 control-label labelstyle">Object Type *</label>
+          <div class="col-sm-12">
+           <select style="padding:1px !important;" required class="form-control" ng-model="vehicleDetails.obj_type_id" >
+             <option ng-repeat="type in types"  ng-selected="vehicleDetails.obj_type_id == type.vehicle_type_id" value="{{type.vehicle_type_id}}"  >{{type.vehicle_type_name}}</option>
+           </select>
+         </div> 
+
+
+       </div>
+
+       <div class="col-sm-4">
+
+                             <!--<label class="col-sm-5 control-label labelstyle">Other Details</label>
+                              <div class="col-sm-12" >
+                                  <textarea class="form-control" type="text" ng-model="vehicleDetails.obj_description"/>
+                                </div>-->
+
+                                <label class="col-sm-5 control-label labelstyle">Time Zone*</label>
+                                <div class="col-sm-12">
+                                  <select style="padding:1px !important;" required class="form-control" ng-model="vehicleDetails.obj_time_zone">
+                                    <option  ng-selected="vehicleDetails.obj_time_zone == 'Dubai'" value="Dubai">Dubai</option>
+                                    <option ng-selected="vehicleDetails.obj_time_zone == 'Kuwait'" value="Kuwait">Kuwait</option>
+                                  </select>
+                                </div> 
+
+
+
+                                <label class="col-sm-5 control-label labelstyle">Driver Name </label>
+                                <div class="col-sm-12" >
+                                 <div class="col-sm-8">
+	                                    <!--<select style="padding:1px !important;width: 212px;margin-left: -16px;" ng-click="refreshDriverList()" class="form-control" ng-model="vehicleDetails.obj_driver_id" >
+	                                        <option ng-repeat="driver in orgdrivers"  value="{{driver.driver_id}}"  ng-selected="vehicleDetails.obj_driver_id == driver.driver_id">{{driver.driver_name}}</option>
+                                       </select> -->
+
+                                       <select style="padding:1px !important;width: 212px;margin-left: -16px;" ng-click="refreshDriverList()" class="form-control" ng-options="driver.driver_id as driver.driver_name for driver in orgdrivers" ng-model="vehicleDetails.obj_driver_id"></select>
+
+                                     </div>
+                                     <div class="col-sm-4" >
+                                       <button style="padding:6px;" type="submit" class="btn btn-info" ng-click="addDriver()" data-toggle="modal" data-target="#addDriver">Add Driver</button>
+                                     </div>
+                                   </div>
+
+                                   <label class="col-sm-7 control-label labelstyle">Default Driver Phone</label>
+                                   <div class="col-sm-12" >
+                                     <input  class="form-control" type="text" ng-model="vehicleDetails.default_driver_phone_number">
+                                   </div> 
+
+                                   <label class="col-sm-5 control-label labelstyle">Device ID *</label>
+                                   <div class="col-sm-12" >
+                                     <input required class="form-control" type="text" ng-model="vehicleDetails.obj_device_id">
+                                   </div> 
+
+<!--                                    <label class="col-sm-7 control-label  labelstyle">Vehicle Device Type *</label>
+                                   <div class="col-sm-12">
+                                     <select style="padding:1px !important;" class="form-control" ng-model="vehicleDetails.obj_device_type_id" >
+                                       <option ng-repeat="devicetype in deviceTypes"  value="{{devicetype.device_type_id}}" ng-selected="vehicleDetails.obj_device_type_id == devicetype.device_type_id">{{devicetype.device_type_name}}</option>
+                                     </select>
+                                   </div>  -->
+
+                                   <label class="col-sm-6 control-label labelstyle">Data SIM Number *</label>
+                                   <div class="col-sm-12" >
+                                     <input required class="form-control" type="text" ng-model="vehicleDetails.obj_sim_number">
+                                   </div> 
+
+
+                                 </div>   
+
+                                 <div class="col-sm-4">
+
+                                 <!-- <label class="col-sm-5 control-label labelstyle">Device Description</label>
+                                  <div class="col-sm-12" >
+                                    <input   class="form-control" type="text" ng-model="vehicleDetails.obj_device_description">
+                                  </div> -->
+
+
+                                  <label class="col-sm-5 control-label labelstyle">Fuel Type</label>
+                                  <div class="col-sm-12">
+                                   <select style="padding:1px !important;" class="form-control" ng-model="vehicleDetails.obj_fuel_type" >
+                                     <option value="PETROL">PETROL</option>
+                                     <option value="DIESEL">DIESEL</option>
+                                     <option value="GAS">GAS</option>
+                                     <option value="SUPER 98" >SUPER 98</option>
+                                     <option value="NORMAL 80" >NORMAL 80</option>
+                                     <option value="REGULAR 92" >REGULAR 92</option>
+                                     <option value="PREMIUM 95" >PREMIUM 95</option>
+
+
+                                   </select>
+                                 </div> 
+
+                                 <label class="col-sm-7 control-label labelstyle">Running Consumption/km</label>
+                                 <div class="col-sm-12" >
+                                   <input class="form-control" type="text" ng-model="vehicleDetails.obj_fuel_consumption_running">
+                                 </div>  
+
+                                 <label class="col-sm-6 control-label labelstyle">Idling Consumption</label>
+                                 <div class="col-sm-12" >
+                                   <input  class="form-control" type="text" ng-model="vehicleDetails.obj_fuel_consumption_idle">
+                                 </div>   
+
+                                 <div class="col-sm-12">
+                                   <div class="col-sm-6">
+                                     <label class="col-sm-9 control-label labelstyle">Fuel Rate</label>
+                                     <input style="width: 151px;margin-left:-14px !important;"  class="form-control" type="text" ng-model="vehicleDetails.obj_fuel_rate">
+                                   </div>
+                                   <div class="col-sm-6">
+                                     <label class="col-sm-12 control-label labelstyle">Per</label>
+                                     <select style="padding:1px !important;width:141px;" class="form-control" ng-model="vehicleDetails.obj_fuel_per" >
+                                       <option value="Gallon"  >Gallon</option>
+                                       <option value="Litre"  >Litre</option>
+                                     </select>
+                                   </div>
+                                 </div>
+
+                                 <div class="col-sm-12" >
+                                   <h3> Total Mileage:{{vehicleDetails.totalMileage | number:2}}</h3>
+                                 </div>
+                                <!-- <label class="col-sm-6 control-label labelstyle">Object Status</label>
+                                <div class="col-sm-12" >
+                                     <select style="padding:1px !important;" class="form-control" ng-model="vehicleDetails.obj_status">
+                                     <option value="active"  >Active</option>
+                                        <option value="inactive"  >Inactive</option>
+                                      </select>
+                                    </div>  -->
+                                  </div>
+
+                                </div>
+
+                              </div>
+                              <div class="modal-footer">
+                                <!--<button style="padding:6px;" type="submit" class="btn btn-danger"  ng-click="deleteObject()">Delete</button>-->
+                                <button style="padding:6px;" type="submit" class="btn btn-success" ng-disabled='form.$invalid'  ng-click="saveObject()">Submit</button>
+                                <button style="padding:7px;" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                              </div>
+                            </form>
+                          </div>
+                        </div>
+                      </div>
+
+
+                      <!--Manage driver modal-->
+
+                      <div class="modal fade" id="addDriver" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+                       <div class="modal-dialog" style="width:800px !important;"  role="document">
+                         <div class="modal-content" >
+                           <div class="modal-header">
+                             <h5 class="modal-title" id="exampleModalLongTitle">Add/Edit Driver Details</h5>
+                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                               <span aria-hidden="true">&times;</span>
+                             </button>
+                           </div>
+                           <div class="alert alert-success" style="width:100%;text-align:center;" ng-show="successMessage">
+                             <span class="entypo-thumbs-up"></span>
+                             {{successMessage}}.
+                           </div>
+                           <form class="form-validation ng-pristine ng-invalid ng-invalid-required ng-valid-email ng-valid-url" name="driverform">
+                             <div class="modal-body" style="overflow:hidden"> 
+                               <div class="col-sm-12">
+
+                                <div  class="col-sm-12" style="padding-bottom: 15px;">
+                                  <div style="margin-left:295px;width:140px;">
+                                    <label style="cursor:pointer;display:block;height:96px;">
+                                      <img src="{{driverImage}}" style="width:90px;height:90px;margin:5px;" alt="...">
+                                      <input type="file" onchange="angular.element(this).scope().uploadedFile(this)" ng-files="getTheDriverImage($files)" style="width:0px;height:0px;">
+                                      <!--<input type="file" multiple ng-files="getTheDriverImage($files)" style="width:0px;height:0px;">-->
+                                      <div class="chProfile" style="border: 1px solid rgb(204, 204, 204);border-radius: 5px;color: #000;height: 100px;position: absolute;top: 0;width: 100px;"></div>
+                                    </label>
+                                    <div class="btn btn-info" style="padding:6px;margin-left:3px;" ng-click="uploadDriverImage(driver.driver_id)" ng-show="driver.driver_id">Update Image</div>
+                                  </div>                                      
+                                </div>
+
+                                <div  class="col-sm-12">
+                                 <label class="col-sm-12 control-label">Driver Name</label>
+                                 <div class="col-sm-12" >
+                                   <input  placeholder="Driver Name"  required class="form-control" type="text" ng-model="driver.driver_name">
+                                 </div>  
+                               </div>            
+
+                               <div  class="col-sm-12">
+                                <div class="col-sm-6">
+                                  <label class="col-sm-6 control-label" style="padding: 0;">Driver Contact</label>
+                                  <div class="col-sm-12" style="padding: 0;">
+                                    <input placeholder="Driver Contact"  required class="form-control" type="text" ng-model="driver.driver_phone">
+                                  </div> 
+                                </div>
+                                <div class="col-sm-6">
+                                 <label class="col-sm-6 control-label" style="padding: 0;">ibuttonid</label>
+                                 <div class="col-sm-12" style="padding: 0;">
+                                  <div class="col-sm-11" style="padding:0;width: 90%;">
+                                    <input  placeholder="Driver ibuttonid"  ng-disabled="driver_edit" ng-dblclick="makeEnable()" required class="form-control" type="text" ng-model="driver.i_button_driver_id">
+                                  </div>
+                                  <div class="col-sm-1" style="padding:0;margin:0px 1px;" ng-click="makeEnable()">
+                                    <i style="padding:5px 5px 5px 6px;background-color: #365075;border-radius: 4px;color: white;font-size:21px;" class="fa fa-pencil-square" aria-hidden="true"></i>
+                                  </div>
+                                </div> 
+                              </div>
+                            </div>
+
+                            <div class="col-sm-12">
+                             <label class="col-sm-12 control-label">Other Notes</label>
+                             <div class="col-sm-12" >
+                               <textarea class="form-control" type="text" ng-model="driver.driver_description" placeholder="Other notes" rows="5" style="height: unset !important;" />
+                             </div>    
+                           </div>     
+
+                         </div>
+                       </div>
+                       <div class="modal-footer">
+                        <button style="padding:6px;" type="submit" class="btn btn-danger" ng-click="deleteDriver(driver.driver_id)" ng-show="driver.driver_id">Delete</button>
+                        <button style="padding:6px;" type="submit" class="btn btn-success" ng-disabled='driverform.$invalid'  ng-click="SubmitDriver()">Submit</button>
+                        <button style="padding:7px;" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                      </div>
+                    </form> 
+                  </div>
+                </div>
+              </div>
+
+              <div class="modal fade" id="editVehGroup" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+                <div class="modal-dialog" style="width:450px !important;" role="document">
+                  <div class="modal-content" >
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="exampleModalLongTitle" ng-click="getSingleVehGroup(vehicleGroup.obj_group_id)">Edit Group</h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="alert alert-success" style="width:100%;text-align:center;" ng-show="successMessage">
+                      <span class="entypo-thumbs-up"></span>{{vehObjEditSuccessMessage}}.
+                    </div>
+                    <form class="form-validation ng-pristine ng-invalid ng-invalid-required ng-valid-email ng-valid-url" name="vehGroupForm">
+                      <div class="modal-body" style="overflow:hidden"> 
+                        <label class="col-sm-3 control-label">Name</label>
+                        <div class="col-sm-12" >
+                          <input required class="form-control" type="text" ng-model="vehicleGroup.obj_group_name">
+                        </div>   
+                      </div>
+                      <div class="modal-footer">
+                        <button style="padding:6px;" type="submit" class="btn btn-success"  ng-disabled='vehGroupForm.$invalid'  ng-click="editObjectGroup()">Edit Group</button>
+                        <button style="padding:7px;" type="button" class="btn btn-danger" ng-click="deleteObjectGroup(vehicleGroup.obj_group_id)" >Delete</button>
+                      </div>
+                    </form> 
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+
+            <script type="text/javascript">
+            $('.ttip').tooltip({
+
+            });
+
+            </script>
+
+
+
+
+            <script type="text/javascript">
+            $('#datetimepicker15').datetimepicker({
+              language: 'pt-BR'
+
+            });
+
+            $('#datetimepicker25').datetimepicker({
+              language: 'pt-BR'
+            });
+
+
+            $('#dp1').datepicker()
+            $('#dpYears').datepicker();
+            $('#timepicker1').timepicker();
+            $('#t1').clockface();
+            $('#t2').clockface({
+              format: 'HH:mm',
+              trigger: 'manual'
+            });
+
+            $('#toggle-btn').click(function(e) {
+              e.stopPropagation();
+              $('#t2').clockface('toggle');
+            });
+            $('.btn').tooltip({
+              "margin-top": "50px"
+            });
+
+            </script>
+
+            <script type="text/javascript">
+
+            var height = $(window).height();
+            var tabLive_height = height-285;
+            var tabDrivers_height = height-245;
+            var tabAlerts_height = height-310;
+
+            $(".tabLive").height(tabLive_height);
+            $(".tabLive").css("overflow-y","scroll");
+
+            $(".tabDrivers").height(tabDrivers_height);
+            $(".tabDrivers").css("overflow-y","scroll");
+
+            $(".tabAlerts").height(tabAlerts_height);
+            $(".tabAlerts").css("overflow-y","scroll");
+
+            $(function() {
+              $(":checkbox").change(function () {
+                $(this).children(':checkbox').attr('checked', this.checked);
+              });
+            });
+
+            </script>

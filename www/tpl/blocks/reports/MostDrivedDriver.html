@@ -1,0 +1,65 @@
+ 
+
+<div class="title-alt" style="height: 50px; border-radius: 4px 4px 0px 0px; background: rgb(255, 255, 255) none repeat scroll 0% 0%; border-bottom: 1px dotted rgb(221, 221, 221); padding: 12px;">
+
+
+
+
+    <h6 style="font-size: 15px;">Most Drived Driver Report</h6> 
+    
+<div ng-init="getUserOrgLogo()" style="text-align: right;margin-top: -52px;">
+    <img class="reportlogo"    src="{{basePath}}/assets/organizationLogos/{{userOrgLogo}}"></div>
+</div>
+
+</div>
+
+<div class="body-nest">
+
+    <section id="flip-scroll">
+
+        <div style="background : #00638f none repeat scroll 0 0; color : #fff; font-size : 14px; padding : 5px 15px;">
+            Date: &nbsp;{{ fromDate | date : "fullDate" }} - {{ toDate | date : "fullDate" }}
+        </div>
+        <div  style="height: 350px; overflow-y: scroll;padding-right: 10px;margin-bottom: 10px;margin-top: 12px;">
+            <table class="table table-bordered table-striped cf" ng-repeat="veh in report">
+               <!--  <td colspan="7">Object: &nbsp;&nbsp;{{veh.name}}</td>  -->
+<div style="padding-left:90px;" ng-init="drawBarChart()">
+
+<fusioncharts 
+    width="600" 
+    height="400"
+    type="column2d"
+    datasource="{{DriverBarChart}}">
+
+</fusioncharts>
+
+
+</div>
+
+        </table>
+    </div>
+
+
+<!-- Print and PDF form -->
+ 
+<form action="../Api/public/PrintReportCreator" method="POST"  >   
+    <input type="hidden" name="vehIDs" value="{{report.vehicleIdsForPDF}}">
+    <input type="hidden" name="fromDate" value="{{fromDate}}">
+    <input type="hidden" name="toDate" value="{{toDate}}">
+    <input type="hidden" name="reportID" value="23">
+    <input type="hidden" name="toPDF" value="1">
+    <input type="hidden" name="toExcel" value="{{reportID}}">
+    
+    <button     name="printButton" value="1" class="btn btn-warning dropdown-toggle printreport" type="submit"> <span><i class="fa fa-print" aria-hidden="true"></i></span>&nbsp;Print</button>
+    <button   name="pdfButton" value="1" class="btn btn-info dropdown-toggle savepdf "   type="submit"> <span><i class="fa fa-file-pdf-o" aria-hidden="true"></i></span>  &nbsp;Save As PDF</button>
+</form>
+
+<!-- Print and PDF form -->
+
+    </section>
+
+</div>
+
+
+
+

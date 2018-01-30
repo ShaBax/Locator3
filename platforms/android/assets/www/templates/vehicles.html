@@ -1,0 +1,63 @@
+<div id="wrapper">
+    <!-- Page Content -->
+    <div id="page-content-wrapper" class="main_div">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12 col-sm-12 col-xs-12 headersec_main">
+                    <div class="leftbar" >
+                        <a ui-sref="dashboard" id="menu-toggle"><i class="fa fa-arrow-left bckbtn" aria-hidden="true"></i></a>
+                    </div>
+                    <div class="haderdiv_inner">
+                        <div class="header_sec">Vehicles - {{currentPage}}</div>                
+                    </div>
+                </div>
+                <div class="col-md-12 col-sm-12 col-xs-12 first_sec_vechicle vechicles_page" ng-init="getVehiclesList()" style="margin-bottom:40px">
+                    <div class="input-group stylish-input-group">
+                        <input type="text" class="form-control"   placeholder="Search Vechicle" ng-model="search">
+                        <span class="input-group-addon">
+                            <button type="submit">
+                                <span class="glyphicon glyphicon-search"></span>
+                            </button>  
+                        </span>
+                    </div>  
+                    <ul class="vechicle_list" ng-repeat="group in groups" style="margin-bottom:0px">      
+                        <!--<li ng-repeat="vehicle in group.vehicles.ran | filter :search">
+                            <input type="checkbox" ng-model="deviceId" id="vehicle_{{vehicle.obj_device_id}}" ng-true-value="{{vehicle.obj_device_id}}" ng-false-value="0" ng-click="selectVehicle(deviceId,vehicle.obj_device_id)">  
+                            <label for="vehicle_{{vehicle.obj_device_id}}">
+                                <div class="car_icon idle_ico">&nbsp</div>
+                                <div class="vechicle_list_info">
+                                    <h5>{{vehicle.obj_name | limitTo:20}}</h5>
+                                    <p ng-if="vehicle.track_vehicles_status == 'Moving'">Moving at {{vehicle.track_vehicles_veh_speed}}km/Hr&nbsp; - &nbsp;{{vehicle.duration}}</p>
+                                    <p ng-if="vehicle.track_vehicles_status != 'Moving'">{{vehicle.track_vehicles_status}}&nbsp;{{vehicle.duration}}</p>
+                                </div>
+                            </label>
+                            
+                        </li>   -->
+                        <li style=" font-weight: bold;    border-bottom: 1px solid #ccc; border-top: 1px solid #ccc;    font-size: 16px;">{{group.group.obj_group_name}} </li>
+                        <li ng-repeat="vehicle in group.vehicles.ran | filter :search">
+                                <a ng-click="goToNextPage(vehicle.obj_id,vehicle.obj_device_id,vehicle.obj_name)">
+                                    <div class="car_icon idle_ico">&nbsp</div>
+                                    <div class="vechicle_list_info">
+                                        <h5>{{vehicle.obj_name | limitTo:20}}</h5>
+                                        <p ng-if="vehicle.track_vehicles_status == 'Moving'">Moving at {{vehicle.track_vehicles_veh_speed}}km/Hr&nbsp; - &nbsp;{{vehicle.duration}}</p>
+                                        <p ng-if="vehicle.track_vehicles_status != 'Moving'">{{vehicle.track_vehicles_status}}&nbsp;{{vehicle.duration}}</p>
+                                    </div>
+                                </a>
+                        </li>    
+
+                    </ul>   
+                </div>
+                <div class="col-lg-12 col-sm-12 col-xs-12 paddingnone footersec">
+                    <ul>
+                        <li><a ui-sref="dashboard"><img src="images/icn_home.png" style="width:30px"></a></li>
+                        <li><a ng-click="goToPage('live')"><img src="images/map.svg" style="width:30px"></a></li>
+                        <li><a ng-click="refresh()"><img src="images/icn_refresh.png" style="width:30px"></a></li>
+                        <li><a ui-sref="alert"><img src="images/icn_notification.png" style="width:30px"></a></li>
+                    </ul>
+                </div>
+            </div>   
+        </div>
+    </div><!-- /#page-content-wrapper -->
+</div><!-- /#wrapper -->
+
+   

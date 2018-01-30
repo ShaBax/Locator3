@@ -1,0 +1,221 @@
+<div class="title-alt" style="height: 50px; border-radius: 4px 4px 0px 0px; background: rgb(255, 255, 255) none repeat scroll 0% 0%;border-bottom: 1px dotted rgb(221, 221, 221); padding: 2px 12px;">
+  <h5 style="margin: 5px;width: 80%;"><b>{{vehiclename | limitTo:20}}</b></h5>
+  <h6 style="font-size: 15px;margin: 5px;width: 80%;">SERVICE ENTRY</h6>
+  <button style="margin-top:-35px; width:69px; padding:8px;float:right;"  class="btn btn-success" ng-click="AddnewService()" id="changeImage" >Add New</button>  
+</div>
+
+<div class="body-nest">
+  <section id="flip-scroll">
+    <div class="thisform">
+      <form class="form-validation" name="form" id="fileform">
+        <div class="panel panel-default" style="margin-bottom: 10px;">
+          <div class="panel-body">                   
+            <div class="pull-in clearfix">
+              <div class="col-sm-4" style="padding-bottom: 0.5vw;">
+                <label>Service Name </label>
+                <input type="text" required="" ng-model="service.service_name" placeholder="Service Name" class="form-control ng-pristine ng-untouched ng-invalid ng-invalid-required" aria-required="true" aria-invalid="true" >
+              </div>                      
+              <div class="col-sm-2" style="padding-bottom: 0.5vw;">
+                <label>Service Date </label>
+                <div id="datetimepicker33" class="input-group date" style="width: 113px;">
+                  <input class="form-control" data-format="yyyy-MM-dd hh:mm:ss" id="dateService" ng-model="service.service_date" type="text" style="height:31px !important;padding:4px;">
+                  <span class="input-group-addon add-on" style="display:table-cell;">
+                    <i style="font-style:normal;" data-time-icon="entypo-clock" data-date-icon="entypo-calendar"></i>
+                  </span>
+                </div>
+              </div> 
+              <div class="col-sm-2" style="padding-bottom: 0.5vw;">
+                <label>Odometer</label>
+                <input type="text" ng-model="service.service_odometer_value" placeholder="Odometer " class="form-control" aria-required="true" aria-invalid="true" style="width: 100px;">
+              </div>
+              <div class="col-sm-2" style="padding-bottom: 0.5vw;">
+                <label>Material Cost</label>
+                <input type="text" ng-model="service.service_material_cost" placeholder="Material " class="form-control" ng-keyup="sumTheCost()" aria-required="true" aria-invalid="true" style="width: 100px;">
+              </div>
+              <div class="col-sm-2" style="padding-bottom: 0.5vw;">
+                <label>Service Cost</label>
+                <input type="text" ng-model="service.service_cost" placeholder="Service " class="form-control" ng-keyup="sumTheCost()" aria-required="true" aria-invalid="true" style="width: 100px;">
+              </div>
+              <div class="col-sm-2" style="padding-bottom: 0.5vw;">
+                <label>Total Cost</label>
+                <input type="text" ng-model="service.service_total_cost" ng-click="sumTheCost()" disabled placeholder="Total Cost" class="form-control ng-pristine ng-untouched ng-invalid" aria-required="true" aria-invalid="true" style="width: 100px;">
+              </div>
+              <div class="col-sm-4" style="padding-bottom: 0.5vw;">
+                <label>Comments</label>
+                <textarea style="height:64px !important;" placeholder="Comments" class="form-control" ng-model="service.service_comments"></textarea>
+              </div>
+              <div class="col-sm-3" style="padding-bottom: 0.5vw;">
+                <label>Attach Files</label>
+                <input type="file" id="file2" name="file"  ng-files="getTheFile($files)">
+              </div>
+              <div class="col-sm-3" style="padding-bottom: 0.5vw;margin-top:15px;" ng-show="service.service_image">
+                <a href="{{maintenanceImagePath}}service/{{service.service_image}}" style="background: #65C3DF; padding:8px;border-radius:4px;text-decoration: none;color: #fff;" download>Download Image</a>
+              </div>
+              <div class="col-sm-4" style="padding-bottom: 0.5vw;">
+                <button style="margin-top:14px; width:69px; padding:8px;"  class="btn btn-danger" ng-click="deleteService(service.service_id)" ng-show="deleteButton">Delete</button>
+                <button style="margin-top:12px; padding:8px;width:86px;" type="submit" class="btn btn-success" ng-disabled='form.$invalid'  ng-click="submitServiceForm()">Submit</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+    <!--<div style="min-height:110px;max-height:110px;overflow-y: scroll;padding-bottom: 100px;margin-bottom: 100px;">-->
+    <div  class="maintenanceTab">
+      <div style="background:#354f74;padding:0px;border-radius:5px;color:white;"  ng-show="vehicles.length > 0">
+        <table class="table table-bordered   cf" style="border:none !important;">
+          <thead >
+            <tr>
+              <th style="border:none !important;width:4%;color:white;">Sl</th>
+              <th style="border:none !important;width:8%;color:white;">Date</th>				
+              <th style="border:none !important;width:12%;color:white;">Service Name</th>
+              <th style="border:none !important;width:5%;color:white;">Odometer</th>				
+              <th style="border:none !important;width:8%;color:white;">Material cost </th>
+              <th style="border:none !important;width:8%;color:white;">Service Cost</th>				
+              <th style="border:none !important;width:8%;color:white;">Total Cost</th>
+              <th style="border:none !important;width:15%;color:white;">Comments</th>				
+              <th style="border:none !important;width:10%;color:white;">Attachment</th>			
+              <th style="border:none !important;width:4%;color:white;"></th> 				
+            </tr>
+          </thead>
+          <tbody style="background-color:#fffffd;">	
+            <tr  ng-repeat="vehicle in vehicles">
+              <td>{{$index +1}}</td>
+              <td>{{vehicle.service_date | limitTo:10 }} </td>		
+              <td>{{vehicle.service_name | limitTo:13}}</td>
+              <td> {{vehicle.service_odometer_value}}</td>		
+              <td>{{vehicle.service_material_cost}}  </td>
+              <td>{{vehicle.service_cost}} </td>							
+              <td>{{vehicle.service_total_cost}} </td>
+              <td>{{vehicle.service_comments}} </td>      
+              <td><img style="width:63px;" ng-show="vehicle.service_image" src="{{maintenanceImagePath}}/service/{{vehicle.service_image}}"/></td>	
+              <td> 
+                <button type="button" class="btn btn-info" ng-click="getService(vehicle.service_id)"><i class="fa fa-eye" aria-hidden="true"></i></button>
+              </td>	
+            </tr>	
+            <tr ng-show="vehicle.length>0">
+              <td colspan="2"><b>Total Cost</b></td>
+              <td colspan="5" style="text-align:end;">{{serviceSum}} </td>
+              <td colspan="3"></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>  
+
+      <div style="margin: 10px 35px;" ng-show="vehicles.length == 0">No service entry</div>
+    </div>
+
+
+    <!--<div style="margin-top:-60px !important;margin-bottom:150px !important; ">-->
+    <!--<div style="border-radius:5px;border-top: 1px solid #ddd;margin-top: 5px;">
+      <div class="col-sm-6" >
+        <div class="col-sm-6">
+          <label>Period from</label>                   
+          <div class="well" style="width:95%;padding:0;">
+            <div id="datetimepicker11" class="input-group date">
+              <input class="form-control" data-format="yyyy-MM-dd hh:mm:ss"  id="dateServiceFrom" ng-model="maintenanceFrom" type="text" style="height:30px !important;padding:4px;">
+              <span class="input-group-addon add-on" style="display:table-cell;">
+                <i style="font-style:normal;" data-time-icon="entypo-clock" data-date-icon="entypo-calendar"></i>
+              </span>
+            </div>
+          </div>
+        </div> 
+        <div class="col-sm-6">
+          <label>Period to</label>                   
+          <div class="well" style="width:95%;padding:0;">
+            <div id="datetimepicker22" class="input-group date">
+              <input class="form-control" data-format="yyyy-MM-dd hh:mm:ss" id="dateServiceTo" ng-model="maintenanceTo" type="text" style="height:30px !important;padding:4px;">
+              <span class="input-group-addon add-on" style="display:table-cell;">
+                <i style="font-style:normal;" data-time-icon="entypo-clock" data-date-icon="entypo-calendar"></i>
+              </span>
+            </div>
+          </div>
+        </div> 
+      </div> 
+      <div style="padding: 20px;">
+        <button type="button" class="btn btn-info" class="ui button aligned center teal" id="crete_pdf" style="padding:5px;float:right;margin:2px;"  data-dismiss="modal">Download Pdf</button>
+        <button type="submit" class="btn btn-info"   style="padding:5px;float:right;margin:2px;" ng-click="getServiceBydate()">Search</button>
+      </div>
+    </div> -->
+  </section>
+</div>
+
+
+
+<script type="text/javascript">
+$('#datetimepicker11').datetimepicker({
+  language: 'pt-BR'
+
+});
+
+$('#datetimepicker22').datetimepicker({
+  language: 'pt-BR'
+});
+
+$('#datetimepicker33').datetimepicker({
+  language: 'pt-BR'
+});
+
+$('#dp1').datepicker()
+$('#dpYears').datepicker();
+$('#timepicker1').timepicker();
+$('#t1').clockface();
+$('#t2').clockface({
+  format: 'HH:mm',
+  trigger: 'manual'
+});
+
+$('#toggle-btn').click(function(e) {
+  e.stopPropagation();
+  $('#t2').clockface('toggle');
+});
+</script>
+
+
+
+ 
+
+
+
+<script type="text/javascript">
+
+ var height = $(window).height();
+
+ var maintenanceTab_height = height-338;
+ 
+ 
+  
+ 
+      $(".maintenanceTab").height(maintenanceTab_height);
+      $(".maintenanceTab").css("overflow-y","scroll");
+
+     
+       
+
+      </script>
+<!--
+      <script type="text/javascript">
+
+
+$('#changeImage').click(function(){
+   
+
+  var fileInput = document.getElementById('file2');
+
+alert(fileInput.value);
+   //$('#uploadPreview').addClass('hide');
+   //$('#customImage').removeClass('hide');
+   // Reset the form
+  // $("#fileform")[0].reset();
+    fileInput.value = null;
+
+   //form.reset();
+});
+
+      </script>
+
+      
+
+
+
+-->

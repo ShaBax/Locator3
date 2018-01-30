@@ -1,0 +1,99 @@
+<div class="title-alt" style="height: 50px; border-radius: 4px 4px 0px 0px; background: rgb(255, 255, 255) none repeat scroll 0% 0%; border-bottom: 1px dotted rgb(221, 221, 221); padding: 12px;">
+
+<h6 style="font-size: 15px;">Idling Report</h6> 
+    
+<div ng-init="getUserOrgLogo()" style="text-align: right;margin-top: -52px;">
+    <img class="reportlogo"    src="{{basePath}}/assets/organizationLogos/{{userOrgLogo}}"></div>
+</div>
+
+</div>
+
+<div class="body-nest">
+
+    <section id="flip-scroll">
+
+        <div style="background : #00638f none repeat scroll 0 0; color : #fff; font-size : 14px; padding : 5px 15px;">
+            Date: &nbsp;{{ fromDate | date : "fullDate" }} - {{ toDate | date : "fullDate" }}
+        </div>
+        <div class="idlingheight" style="overflow-y: scroll;padding-right: 10px;margin-bottom: 10px;margin-top: 12px;">
+            <table class="table table-bordered table-striped cf" ng-repeat="veh in report" ng-if="veh.name.length>0">
+                <thead class="cf">
+                    <tr style="background: #eef5ff none repeat scroll 0 0;">
+                        <td colspan="5">Object: &nbsp;&nbsp;<b>{{veh.name}}</b></td>   
+                    </tr>
+                    <tr>
+                        
+                        <!--<th style="width:8%;" >Sl No</th>  
+                        <th style="width:10%;" >Status</th>  -->            
+                        <th style="width:17%;" >Beginning</th>
+                        <th style="width:17%;" >End</th>    
+                        <th style="width:13%;" >Duration</th>
+                        <th style="width:50%;" >Address</th>
+                      
+                    </tr>               
+                </thead>
+                <tbody> 
+
+                   <tr  ng-repeat="data in veh.vehicles.data" >
+                    <!--<td style="width:8%;">{{$index+1}}</td>
+                    <td style="width:10%;" >{{data.type}}</td>-->
+                    <td style="width:17%;" >{{data.date}}</td>
+                    <td style="width:17%;" >{{data.endtime}}</td>       
+                    <td style="width:15%;" >{{data.duration | limitTo:8}}</td>  
+                    <td style="width:50%;" >{{data.address}}</td>  
+                    </tr>
+
+
+                    <tr ng-if="veh.vehicles.length != 0">
+                    <td colspan="5">
+                        <p><b>Total Idlings : &nbsp;{{veh.vehicles.count}} </b></p>
+                        <p><b>Total Time : &nbsp;{{veh.vehicles.totalDuration}} </b></p>
+
+                    </td>                   
+                </tr>
+
+
+
+                <tr ng-if="veh.vehicles.length == 0">
+                    <td colspan="7">
+                        <p>No data available for the selected time</p>
+                    </td>                   
+                </tr>                                       
+            </tbody>
+        </table>
+    </div>
+<!-- Print and PDF form -->
+ 
+<form action="../Api/public/PrintReportCreator" method="POST" target="_blank" >   
+    <input type="hidden" name="vehIDs" value="{{report.vehicleIdsForPDF}}">
+    <input type="hidden" name="fromDate" value="{{fromDate}}">
+    <input type="hidden" name="toDate" value="{{toDate}}">
+    <input type="hidden" name="userOrgLogo" value="{{userOrgLogo}}">
+    <input type="hidden" name="reportID" value="15">
+    <input type="hidden" name="toPDF" value="1">
+    <button     name="printButton" value="1" class="btn btn-warning dropdown-toggle printreport" type="submit"> <span><i class="fa fa-print" aria-hidden="true"></i></span>&nbsp;Print</button>
+    <button   name="pdfButton" value="1" class="btn btn-info dropdown-toggle savepdf "   type="submit"> <span><i class="fa fa-file-pdf-o" aria-hidden="true"></i></span>  &nbsp;Save As PDF</button>
+    <button  name="csvButton" value="1" class="btn btn-info dropdown-toggle savecsv" type="submit" onclick="window.open('http://mylocatorplus.net/Api/storage/exports/Idlingreport.xls')"> 
+        <i class="fa fa-file-excel-o" aria-hidden="true"></i>
+        Save As Excel  </button>
+
+    </form>
+
+<!-- Print and PDF form -->
+
+    </section>
+
+</div>
+
+
+<script type="text/javascript">
+
+var height = $(window).height();
+var idlingheight_height = height-215;
+
+$(".idlingheight").height(idlingheight_height);
+$(".idlingheight").css("overflow-y","scroll");
+
+</script>
+
+

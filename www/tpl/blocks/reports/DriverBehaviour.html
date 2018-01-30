@@ -1,0 +1,90 @@
+ 
+
+<div class="title-alt" style="height: 50px; border-radius: 4px 4px 0px 0px; background: rgb(255, 255, 255) none repeat scroll 0% 0%; border-bottom: 1px dotted rgb(221, 221, 221); padding: 12px;">
+
+
+
+
+    <h6 style="font-size: 15px;">Trips and Parkings Report</h6> 
+    
+<div ng-init="getUserOrgLogo()" style="text-align: right;margin-top: -52px;">
+    <img class="reportlogo"    src="{{basePath}}/assets/organizationLogos/{{userOrgLogo}}"></div>
+</div>
+
+
+</div>
+
+<div class="body-nest">
+
+    <section id="flip-scroll">
+
+        <div style="background : #00638f none repeat scroll 0 0; color : #fff; font-size : 14px; padding : 5px 15px;">
+            Date: &nbsp;{{ fromDate | date : "fullDate" }} - {{ toDate | date : "fullDate" }}
+        </div>
+        <div  style="height: 350px; overflow-y: scroll;padding-right: 10px;margin-bottom: 10px;margin-top: 12px;">
+            <table class="table table-bordered table-striped cf" ng-repeat="veh in report">
+                <thead class="cf">
+                    <tr style="background: #eef5ff none repeat scroll 0 0;">
+                        <td colspan="7">Object: &nbsp;&nbsp;{{veh.name}}</td>   
+                    </tr>
+                    <tr>
+                        <th>Status</th>             
+                        <th>Beginning</th>
+                        <th>End</th>    
+                        <th>Dur</th>
+                        <th>Mileage</th>
+                        <th>Start</th>  
+                        <th>Stop</th>   
+                    </tr>               
+                </thead>
+                <tbody> 
+
+                   <tr  ng-repeat="data in veh.vehicles" >
+                    <td> {{data.type}}</td>
+                    <td  >{{data.date}}</td>
+                    <td  >{{data.endtime}}</td>       
+                    <td  >{{data.duration}}</td>
+                    <td  >{{data.tripmileage | number : 2}}</td>
+                    <td  >{{data.startaddress}}</td>
+                    <td  >{{data.stopaddress}}</td>                       
+                </tr>
+
+                
+
+
+
+                <tr ng-if="veh.vehicles.length == 0">
+                    <td colspan="7">
+                        <p>No data available for the selected time</p>
+                    </td>                   
+                </tr>                                       
+            </tbody>
+        </table>
+    </div>
+
+ <button   data-toggle="dropdown" class="btn btn-success dropdown-toggle saveexcel" type="button">
+        <span> <i class="fa fa-file-excel-o" aria-hidden="true"></i></span>  &nbsp;Save As Excel</button>
+
+     <button     data-toggle="dropdown" class="btn btn-warning dropdown-toggle printreport" type="button"> <span><i class="fa fa-print" aria-hidden="true"></i></span>&nbsp;Print</button>
+
+ <button     data-toggle="dropdown" class="btn btn-info dropdown-toggle savepdf" type="button"> <span><i class="fa fa-file-pdf-o" aria-hidden="true"></i></span>  &nbsp;Save As PDF</button>
+
+
+  <!--  <button  style="float:right;padding:6px;" data-toggle="dropdown" class="btn btn-primary dropdown-toggle" type="button">
+        <span> <i class="fa fa-file-excel-o" aria-hidden="true"></i></span>  &nbsp;Save As Excel</button>-->
+
+        <!--<button   style=" padding:6px;"  data-toggle="dropdown" class="btn btn-primary dropdown-toggle" type="button"> <span><i class="fa fa-file-pdf-o" aria-hidden="true"></i></span>  &nbsp;Save As PDF</button>-->
+
+
+<!--
+        <div class="ui button aligned center teal" id="create_pdf" style="color:white;background: #428bca; padding: 6px; width: 99px; text-align: center; border-radius: 4px;"><span><i class="fa fa-file-pdf-o" aria-hidden="true"></i></span>Save As PDF</div>
+        -->
+
+        
+    </section>
+
+</div>
+
+
+
+

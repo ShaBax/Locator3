@@ -1,0 +1,82 @@
+<div class="title-alt" style="height: 50px; border-radius: 4px 4px 0px 0px; background: rgb(255, 255, 255) none repeat scroll 0% 0%; border-bottom: 1px dotted rgb(221, 221, 221); padding: 12px;">
+    <h6 style="font-size: 15px;">Trip Report</h6> 
+    <div ng-init="getUserOrgLogo()" style="text-align: right;margin-top: -52px;">
+        <img class="reportlogo"    src="{{basePath}}/assets/organizationLogos/{{userOrgLogo}}">
+    </div>
+</div>
+
+<div class="body-nest">
+    <section id="flip-scroll">
+        <div style="background : #00638f none repeat scroll 0 0; color : #fff; font-size : 14px; padding : 5px 15px;">
+            Date: &nbsp;{{ fromDate | date : "fullDate" }} - {{ toDate | date : "fullDate" }}
+        </div>
+        <div class="tripheight" style="overflow-y: scroll;padding-right: 10px;margin-bottom: 10px;margin-top: 12px;">
+            <table class="table table-bordered table-striped cf" ng-repeat="veh in report" ng-if="veh.name.length>0" >
+                <thead class="cf">
+                    <tr style="background: #eef5ff none repeat scroll 0 0;">
+                        <td colspan="6">Object: &nbsp;&nbsp;<b>{{veh.name}}</b></td>   
+                    </tr>
+                    <tr>
+                        <!--<th style="width:10%;">Status</th>  -->                                
+                        <th style="width:15%;">Date</th>  
+                        <th style="width:10%;">Duration</th>
+                        <th style="width:10%;">Kilometer</th>
+                        <th style="width:30%;">Start</th>  
+                        <th style="width:30%;">Stop</th>
+                       <!--  <th style="width:5%;">Route</th>    -->
+                    </tr>               
+                </thead>
+                <tbody> 
+
+                    <tr  ng-repeat="data in veh.vehicles" ng-if="data.tripmileage != 0 " >
+                        <!--<td style="width:10%;">{{data.type}}</td>-->
+                        <td style="width:15%;">{{data.date}}<br>{{data.endtime}}</td>       
+                        <td style="width:10%;">{{data.duration}}</td>
+                        <td style="width:10%;">{{data.tripmileage | number : 2}}</td>
+                        <td style="width:30%;">{{data.startaddress}}</td>
+                        <td style="width:30%;">{{data.stopaddress}}</td>  
+   <!--                      <td style="width:5%;" onclick="openRightSide()" ng-click="getMapOfThisRow(data.deviceID,data.trip_id)">
+                            <img src="../final/img/route.png" style="width:30px;margin-left: 5px;">
+                        </td>  -->                       
+                    </tr>
+                    <tr ng-if="veh.vehicles.length == 0">
+                        <td colspan="6">
+                            <p>No data available for the selected time</p>
+                        </td>                   
+                    </tr>                                       
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Print and PDF form -->
+         
+        <form action="../Api/public/PrintReportCreator" method="POST" target="_blank"  >   
+            <input type="hidden" name="vehIDs" value="{{report.vehicleIdsForPDF}}">
+            <input type="hidden" name="fromDate" value="{{fromDate}}">
+            <input type="hidden" name="toDate" value="{{toDate}}">
+            <input type="hidden" name="userOrgLogo" value="{{userOrgLogo}}">
+            <input type="hidden" name="reportID" value="5">
+            <input type="hidden" name="toPDF" value="1">
+            <button disabled="disabled"    name="printButton" value="1" class="btn btn-warning dropdown-toggle printreport" type="submit"> <span><i class="fa fa-print" aria-hidden="true"></i></span>&nbsp;Print</button>
+            <button disabled="disabled"  name="pdfButton" value="1" class="btn btn-info dropdown-toggle savepdf "   type="submit"> <span><i class="fa fa-file-pdf-o" aria-hidden="true"></i></span>  &nbsp;Save As PDF</button>
+
+             <button disabled="disabled"  name="csvButton" value="1" class="btn btn-info dropdown-toggle savecsv" type="submit" onclick="window.open('http://mylocatorplus.net/Api/storage/exports/Tripreport.xls')"> 
+            <i class="fa fa-file-excel-o" aria-hidden="true"></i>
+            Save As Excel  </button> 
+
+
+        </form>
+
+        <!-- Print and PDF form -->
+    </section>
+</div>
+
+<script type="text/javascript">
+
+var height = $(window).height();
+var tripheight_height = height-215;
+
+$(".tripheight").height(tripheight_height);
+$(".tripheight").css("overflow-y","scroll");
+
+</script>

@@ -1,0 +1,19 @@
+{
+    "name": "com.synosys.locator",
+    "version": "0.0.1",
+    "displayName": "Locator",
+    "cordova": {
+        "platforms": [
+            "android",
+            "ios"
+        ],
+        "plugins": {
+            "cordova-plugin-whitelist": {}
+        }
+    },
+    "dependencies": {
+        "cordova-android": "^5.1.1",
+        "cordova-ios": "^4.0.0",
+        "cordova-plugin-whitelist": "1"
+    }
+}

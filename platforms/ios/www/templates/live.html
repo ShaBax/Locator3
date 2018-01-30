@@ -1,0 +1,337 @@
+<div id="wrapper"   >
+    <!-- Page Content -->
+    <div id="page-content-wrapper" class="main_div" ng-init=showCurrentTrack(objDeviceID,objTripId)>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12 col-sm-12 col-xs-12 headersec_main">
+                    <div class="leftbar" >
+                            <a ui-sref="vehicles" id="menu-toggle" ng-if="currentPage=='Live View'"><i class="fa fa-arrow-left bckbtn" aria-hidden="true"></i></a>
+                            <a ui-sref="tripVehicles" id="menu-toggle" ng-if="currentPage!='Live View'"><i class="fa fa-arrow-left bckbtn" aria-hidden="true"></i></a>
+                    </div>
+                    <div class="haderdiv_inner">
+                        <div class="header_sec" ng-if="currentPage=='Live View'">Live View</div>
+                        <div class="header_sec" ng-if="currentPage!='Live View'">Trip View</div>
+                    </div>
+                </div>
+                <div class="col-md-12 col-sm-12 col-xs-12 first_sec_vechicle vechicles_page">
+                    <!--<div class="input-group stylish-input-group">
+                        <input type="text" class="form-control"  placeholder="Search Vechicle" >
+                        <span class="input-group-addon">
+                            <button type="submit">
+                                <span class="glyphicon glyphicon-search"></span>
+                            </button>  
+                        </span>
+                    </div>-->
+                  
+                    <ul class="vechicle_list">
+                        <ng-map center="{{center}}" zoom="18"  pan-control="true" street-view-control-options='{position:"right_center"}' zoom-control-options='{position:"right_center"}' style="height: 85vh;">
+
+                            <street-view-panorama ng-if="streetViewcenter!=''"
+                                click-to-go="false"
+                                disable-default-u-i="false"
+                                disable-double-click-zoom="false"
+                                position="{{streetViewcenter}}"
+                                pov="90,0"
+                                scrollwheel="false"
+                                enable-close-button="{{showStreetView}}"
+                                visible="true">
+                            </street-view-panorama>
+
+                            <custom-control id="home" position="TOP_RIGHT" index="1" ng-show="false">                           
+                                <div style="background-color: white; color:#000;cursor:pointer;padding: 2px 7px 28px;right:25%;font-size:19px;" ng-if="showStreetView" ng-click="closeStreetView()">
+                                    <i class="fa fa-close" aria-hidden="true"></i>Close Streetview 
+                                </div>
+                            </custom-control>
+
+                            <marker ng-repeat="onlineMarker in onlineMarkers" on-click="getCurrentLocation(onlineMarker)"  animation="{{onlineMarker.animation}}" icon="{{onlineMarker.icon}}" 
+                            title="{{onlineMarker.title}}" position="{{onlineMarker.vehDetails.track_vehicles_veh_latitude}},{{onlineMarker.vehDetails.track_vehicles_veh_longitude}}" ></marker> 
+
+                            <custom-marker ng-repeat="onlineMarker in onlineMarkers"  position="{{onlineMarker.vehDetails.track_vehicles_veh_latitude}}, {{onlineMarker.vehDetails.track_vehicles_veh_longitude}}">
+                                <div class="markerLabel">{{onlineMarker.label}}</div>
+                            </custom-marker>
+
+                            <marker ng-if="movingPoints.length>0" position="{{marlatlong}}" icon="{{pointerImage}}" optimized="false"></marker>
+        
+                            <marker ng-show="movingPoints.length>0" ng-if="i.status_status=='Parking'"  ng-repeat="i in idlingMarkers[0]" icon="{{imagePath}}/bus.png" oon-click="vm.getIdlingDetails(i)" position="{{i.track_vehicles_veh_latitude}}, {{i.track_vehicles_veh_longitude}}" ></marker>
+
+                            <marker id="ignitionOnMarker" ng-repeat="e in eventMarkers[0]" ng-if="movingPoints.length>0 && e.event_status==1" icon="{{imagePath}}/ignON.png" on-click="getEventDetails(e)" position="{{e.event_latitude}}, {{e.event_longitude}}"></marker>
+
+                            <marker id="ignitionOffMarker" ng-repeat="e in eventMarkers[0]" ng-if="movingPoints.length>0 && e.event_status==0" icon="{{imagePath}}/ignOFF.png" on-click="getEventDetails(e)" position="{{e.event_latitude}}, {{e.event_longitude}}" ></marker>
+
+                            <marker ng-show="movingPoints.length>0" ng-if="i.status_status=='Idling'" ng-repeat="i in idlingMarkers[0]" icon="{{imagePath}}/idling.png" on-click="getIdlingDetails(i)"     position="{{i.track_vehicles_veh_latitude}},{{i.track_vehicles_veh_longitude}}" ></marker>
+
+                            <shape id="path" name="polyline" ng-if="movingPoints.length>0"   data-placement="left" title="{{marlatlong}}"
+                                path="{{movingPoints}}"
+                                stroke-color="grey"
+                                stroke-opacity="1"
+                                stroke-weight="10"
+                                z-index= "2"
+                                icons="">             
+                            </shape>
+
+                            <shape id="path" name="polyline" ng-if="movingPoints.length>0"   data-placement="left" title="{{marlatlong}}"
+                                path="{{movingPoints}}"
+                                stroke-color="white"
+                                stroke-opacity="1"
+                                stroke-weight="8"
+                                z-index= "3"
+                                icons="">             
+                            </shape>
+
+                            <shape id="path" name="polyline" ng-repeat="polylinePoint in polylinePoints" 
+                                on-mousemove="getPoint(polylinePoint.speed, polylinePoint.time,polylinePoint.trackDate)" 
+                                on-mouseout=""
+                                data-toggle="tooltip" 
+                                data-placement="left" 
+                                title="{{marlatlong}}"
+                                path="{{polylinePoint.point}}"
+                                geodesic="true"
+                                stroke-color="{{polylinePoint.color}}"
+                                stroke-opacity="1.0"
+                                stroke-weight="3"
+                                z-index= "6"
+                                geodesic="true"
+                                icons="[{
+                                  icon: {
+                                    path: 'FORWARD_CLOSED_ARROW',
+                                    strokeOpacity: 1,
+                                    scale: 1
+                                  },
+                                  offset: '0%'
+                                }]">             
+                            </shape>
+
+                            <shape id="mover" name="polyline" ng-if="movingPoints.length>0" 
+                                path="{{movingPoints}}"
+                                geodesic="true"
+                                stroke-color="{{polylinePoint.color}}"
+                                stroke-opacity="0"
+                                stroke-weight=".8"
+                                offfset="5"
+                                z-index="9"
+                                icons="[{
+                                  icon: {{iconCar}}                    
+                                }]">              
+                            </shape>
+
+                            <info-window id="foo-pw">
+                                <div ng-non-bindable="">
+                                  <h1>Parking</h1>
+                                  Start: {{parkingMarker.parking_start}}<br/>
+                                  End: {{parkingMarker.parking_end}}<br/>
+                                  Duration: {{parkingMarker.duration}}
+                                </div>
+                            </info-window>
+
+                            <info-window id="foo-ev">
+                                <div ng-non-bindable="">
+                                  <h1>Event</h1>
+                                  Type: {{eventMarker.event_type}}<br/>
+                                  <div ng-if="eventMarker.event_status==1">
+                                    Status:On<br/>
+                                  </div>
+                                  <div ng-if="eventMarker.event_status==0">
+                                    Status:Off<br/>
+                                  </div>
+                                  Address: {{eventMarker.event_place}}<br/>
+                                </div>
+                            </info-window>
+
+                            <info-window id="foo-idling">
+                                <div ng-non-bindable="">
+                                  <h1>{{idlingMarker.status_status}}</h1>
+                                  Start: {{idlingMarker.status_start}}<br/>
+                                  End: {{idlingMarker.status_end}}<br/>
+                                  Duration:{{idlingMarker.status_duration | limitTo : 8}}
+                                </div>
+                            </info-window>
+
+                        </ng-map>
+                        <div ng-show="currentPage=='Live View' && selectAllDevices == false" style="background-color: white;    bottom: 47px;    padding: 5px;    position: fixed;    width: 100%; text-align:center">
+                            <ul class="icon_set">
+                                <li>
+                                    <a class="ttip"  ng-click="enableStreetView()" title="Street View">
+                                        <img src="images/icon4.png" />
+                                    </a>
+                                </li>
+                                <li>
+                                    <a ng-click="showCurrentTrack(objDeviceID,objTripId)"  class="ttip showCurrentTrack" title="Current Trip">
+                                        <img src="images/icon5.png" />
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="ttip" id="shareBtn" title="Share the Location">
+                                        <img src="images/icon3.png" />
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </ul>              
+                </div>        
+                <div class="col-lg-12 col-sm-12 col-xs-12 paddingnone footersec">
+                    <ul>
+                        <li><a ui-sref="dashboard"><img src="images/icn_home.png" style="width:30px"></a></li>
+                        <li><a ng-click="goToPage('live')"><img src="images/map.svg" style="width:30px" ></a></li>
+                        <li><a ng-click="refresh()"><img src="images/icn_refresh.png" style="width:30px"></a></li>
+                        <li><a ui-sref="alert"><img src="images/icn_notification.png" style="width:30px"></a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div><!-- /#page-content-wrapper -->
+</div><!-- /#wrapper -->
+
+<div id="shareModal" class="modal">
+    <!-- Modal content -->
+    <div class="modal-content">
+        <div class="modal-header">
+          <!--<span class="close">&times;</span>-->
+          <h4>Share Location</h4>
+        </div>
+
+        <form class="form-validation" name="formShareLocation">
+            <div class="modal-body">
+                <div class="col-sm-12" style="padding: 0px;">
+                   
+                    <label class="col-sm-3 control-label" style="padding: 0px;">Valid To</label>
+                    <div class="col-sm-12" style="padding: 0px;">
+                        <select style="padding:1px !important;" class="form-control" ng-model="tokenvalidity" >
+                          <option ng-selected="true" value="15">15 Minutes</option>
+                          <option value="30">30 Minutes</option>
+                          <option value="60">1 Hour</option>
+                          <option value="120">2 Hours</option>
+                          <option value="180">3 Hours</option>
+                          <option value="360">6 Hours</option>
+                        </select>
+                    </div>
+                </div> 
+            </div> 
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-success" style="padding:6px;" ng-disabled='formShareLocation.$invalid' ng-click="saveShareLocation()">Share Location</button>
+            </div>
+        </form>
+    </div>      
+</div>
+
+<script>
+
+var modal = document.getElementById('shareModal');
+
+var btn = document.getElementById("shareBtn");
+
+//var span = document.getElementsByClassName("close")[0];
+
+btn.onclick = function() {
+    modal.style.display = "block";
+}
+
+/*span.onclick = function() {
+    modal.style.display = "none";
+}*/
+
+window.onclick = function(event) {
+    if (event.target == modal) {
+        modal.style.display = "none";
+    }
+}
+</script>
+
+
+
+
+<style>
+    .markerLabel div{
+        padding: 5px;
+        width: 100px;
+        border: 0px solid;
+        overflow: hidden;
+        background: blue;
+        color: #fff;
+        opacity: .5;
+        font-size: 14px;
+        border-radius: 5px;
+        top: 12px;
+        position: absolute;
+        left: -50px;
+        text-align: center;
+    }
+
+    /* The Modal (background) */
+    .modal {
+        display: none; /* Hidden by default */
+        position: fixed; /* Stay in place */
+        z-index: 1; /* Sit on top */
+        padding-top: 100px; /* Location of the box */
+        left: 0;
+        top: 0;
+        width: 100%; /* Full width */
+        height: 100%; /* Full height */
+        overflow: auto; /* Enable scroll if needed */
+        background-color: rgb(0,0,0); /* Fallback color */
+        background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    }
+
+    /* Modal Content */
+    .modal-content {
+        position: relative;
+        background-color: #fefefe;
+        margin: auto;
+        padding: 0;
+        border: 1px solid #888;
+        width: 90%;
+        box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+        -webkit-animation-name: animatetop;
+        -webkit-animation-duration: 0.4s;
+        animation-name: animatetop;
+        animation-duration: 0.4s
+    }
+
+    /* Add Animation */
+    @-webkit-keyframes animatetop {
+        from {top:-300px; opacity:0} 
+        to {top:0; opacity:1}
+    }
+
+    @keyframes animatetop {
+        from {top:-300px; opacity:0}
+        to {top:0; opacity:1}
+    }
+
+    /* The Close Button */
+    .close {
+        color: white;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+    .close:hover,
+    .close:focus {
+        color: #000;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    .modal-header {
+        padding: 2px 16px;
+        background-color: #0786e7;
+        color: white;
+    }
+    .btn-success
+    {
+         background-color: #0786e7;
+    }
+    .btn-success:hover,.btn-success:active:focus, .btn-success:active:hover
+    {
+         background-color: #389eec;
+    }
+
+
+    .modal-body {padding: 2px 16px;}
+
+    .modal-footer {
+        padding: 7px 16px;
+        /*background-color: #5cb85c;*/
+        color: white;
+    }
+</style>

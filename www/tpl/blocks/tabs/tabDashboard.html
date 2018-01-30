@@ -1,0 +1,163 @@
+<ul class="nav nav-tabs tabs_inner" role="tablist">
+  <li role="presentation" class="active col-md-6"><a href="/#tabOnlineVehicles" aria-controls="home" role="tab" data-toggle="tab">
+    <i class="fa fa-truck" aria-hidden="true"></i>
+    <p translate="aside.nav.VEHICLES" >Vehicles</p></a>
+  </li>
+  <li class="col-md-6" role="presentation"><a href="/#tabOnlineDriver" ng-click="getDrivers()" aria-controls="profile" role="tab" data-toggle="tab">
+    <i class="fa fa-user" aria-hidden="true"></i>
+    <p translate="aside.nav.DRIVERS" >Drivers</p></a>
+  </li>  
+</ul>
+
+<!-- Tab panes -->
+<div class="tab-content tab-content_second">
+  <div role="tabpanel" class="tab-pane active" id="tabOnlineVehicles"> 
+    <div class="tab_content_inner tabDashboardVehicles">                                        
+      <div class="panel-group">
+        <div class="panel panel-default" ng-repeat="group in allVehiclespositonsData" >
+          <div class="panel-heading">
+            <h4 class="panel-title">
+              <a data-toggle="collapse" data-parent="#accordion" href="/#collapse-{{group.group.id}}"><span class="glyphicon glyphicon-th"></span>{{group.group.id==-1 ? organisationName :group.group.name}}<span style="float:right;">{{group.online}}</span></a>
+            </h4>
+          </div>
+          <div id="collapse-{{group.id}}" class="panel-collapse collapse in">
+            <div class="panel-body">
+              <table id="responsive-example-table " class="table large-only">
+                <tbody class="skin skin-flat">  
+                  <tr style="cursor:pointer" class="list dashVehicles" ng-class="{'veh_selected':vehicle.id == dashboardObjID}" ng-repeat="vehicle in group.vehicles | filter : search" ng-if="vehicle.status == option || option == 'all' "  ng-click="getVehicleDetailsforDashboard(vehicle.id,vehicle.uniqueId)">
+                    <td class="imgsat"> 
+                    <img class="vehImg redVechIcon" ng-if="vehicle.position.attributes.ignition == false && vehicle.status != 'Idling' || vehicle.status=='Started' || vehicle.status=='Stopped' || vehicle.status == 'No Connection For '" src="assets/images/white icons/car.png" ngstyle="height: 16px;">
+                      <img class="vehImg greenVechIcon" ng-if="vehicle.position.attributes.ignition == true && vehicle.status == 'Moving'" src="assets/images/white icons/car.png"  ngstyle="height: 16px;">
+                      <img class="vehImg orangeVechIcon" ng-if="vehicle.status == 'Idling'" src="assets/images/white icons/car.png" style="border-radius: 12px;height: 26px;width: 26px;padding: 3px;" ngstyle="height: 16px;">
+                    </td>
+                    <td style="width=90%;">
+                      <a> 
+                        <b class="vehname">{{vehicle.name | limitTo:23}}  </b>
+                        <div class="datetime">  {{vehicle.lastupdated}} </div>
+                      </a><br>
+                      <a class="status">{{vehicle.status}}
+
+                      <span ng-if="vehicle.status=='Moving'"><span ng-if="vehicle.position.speed>0">&nbsp;at &nbsp;{{vehicle.position.speed}}&nbsp; km/hr<!-- &nbsp; - &nbsp; --></span><span ng-if="vehicle.position.speed==0">Slowly </span>
+
+                    </span><!-- &nbsp;{{vehicle.duration}} --></a>
+
+
+                    </td>
+
+                     <td class="imgsat">
+                      <a> 
+                        <div ng-if="vehicle.position.sat>3"> 
+                         <img  src="assets/images/white icons/satgreen.png" style="border-radius: 12px;height: 21px;width: 21px;padding: 3px;" ngstyle="height: 16px;"> </div>
+                       </a>
+                       <a>
+                        <div  ng-if="vehicle.position.sat<=3"> 
+                          <img  src="assets/images/white icons/satred.png" style="border-radius: 12px;height: 21px;width: 21px;padding: 3px;" ngstyle="height: 16px;">
+
+
+                        </div>
+                      </a>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-12 nopadding bottom-search">
+      <div class="col-sm-9 nopadding">
+        <div class="input-group input-widget">
+          <input style="border-radius:15px;width:152%;" type="text" ng-model="search" placeholder="Search..." class="form-control searchbox">
+        </div>
+      </div>
+      <div class="col-sm-3" style="padding-right:0"  >           
+        <button type="button" class="btn btn-gray" ng-click="update_vehicles_status()" data-original-title="" title="" style="width: 50%;margin-top:-8px; height:31px; border-radius:5px;">
+          <i class="fa fa-refresh" style="color:#333;" aria-hidden="true"></i> 
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div role="tabpanel" class="tab-pane tab_content_inner" id="tabOnlineDriver" >
+    <div class="panel-group  tabDashboardDrivers ">
+      <div class="panel panel-default driverBorder" ng-repeat="driver in drivers | filter : searchDriver" >
+        <div class="panel-heading" >
+          <h4 class="panel-title" style="border:none;">
+            <a style="display:inline-block;width:100%;" data-toggle="collapse" data-parent="#accordion" href="/#collapse{{driver.driver.driver_id}}">
+              <div class="col-sm-12">
+                <div class="col-sm-6" style=" margin-left: -31px !important;">
+                  <span class="glyphicon glyphicon-user"></span>{{driver.driver.driver_name | limitTo:14}} 
+                </div>  
+                <div class="col-sm-6">
+                  <span>
+                    <i class="fa fa-phone" aria-hidden="true"></i>&nbsp;{{driver.driver.driver_phone | limitTo:14}} 
+                    <i style="float:right; margin-left:-11px;margin-right:-62px !important; " class="fa fa-chevron-down" aria-hidden="true" ng-click="getDriverHistory(driver.driver.driver_id)" ng-show="selectedDriver == ''"></i>
+                    <i style="float:right; margin-left:-11px;margin-right:-62px !important; " class="fa fa-chevron-up" aria-hidden="true" ng-click="closeDriverHistory()"  ng-show="selectedDriver == driver.driver.driver_id"></i>
+                  </span> 
+                </div>  
+              </div>  
+            </a>
+          </h4>
+          <div>{{driver.driver.obj_name}}&nbsp; 
+            <span style="float:right; font-family: roboto">{{driver.driver.i_button_driver_id}}</span>
+          </div> 
+        </div>
+        <div>
+          <div id="collapse{{driver.driver.driver_id}}" class="panel-collapse collapse">
+            <div style="max-height:300px;overflow-y: scroll;">
+              <div class="panel-body" >
+                <table id="responsive-example-table " class="table large-only">
+                  <tbody class="skin skin-flat">
+                    <tr class=" list" ng-repeat="history in driverHistory"  ng-if="driverHistory.length>0">
+                      <td class="imgsat">&nbsp;</td>
+                      <td style="width:60%" class="imgsat">  <b class="vehname">{{history.obj_name}}</b></td>                
+                      <td style="font-size: 11px; display: inline-block; float: right; width: 150%;">
+                        <i class="fa fa-clock-o" aria-hidden="true"></i>{{history.trip_start}}<br>
+                        <i class="fa fa-clock-o" aria-hidden="true"></i>{{history.trip_parking_start}}  
+                      </td>
+                      <td class="imgsat"><a href="#"></td>
+                    </tr>
+                    <!--<tr class=" list" ng-if="driverHistory.length == 0">
+                      <td colspan="4">No data available</td>
+                    </tr>-->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-12 nopadding bottom-search">
+        <div class="col-sm-12 nopadding">
+          <div class="input-group input-widget">
+            <input style="border-radius:15px;width:152%;" type="text" ng-model="searchDriver" placeholder="Search Driver..." class="form-control searchbox">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script type="text/javascript">
+function makeSelected($this)
+{
+  
+  $(".dashVehicles").removeClass('veh_selected');
+  $($this).addClass('veh_selected');
+  
+}
+</script>
+
+<script type="text/javascript">
+var height = $(window).height();
+var tabDashboardVehicles_height = height-210;
+var tabDashboardDrivers_height = height-245;
+
+$(".tabDashboardVehicles").height(tabDashboardVehicles_height);
+$(".tabDashboardVehicles").css("overflow-y","scroll");
+
+$(".tabDashboardDrivers").height(tabDashboardDrivers_height);
+$(".tabDashboardDrivers").css("overflow-y","scroll");
+</script>

@@ -1,0 +1,116 @@
+<div class="title-alt" style="height: 50px; border-radius: 4px 4px 0px 0px; background: rgb(255, 255, 255) none repeat scroll 0% 0%; border-bottom: 1px dotted rgb(221, 221, 221); padding: 12px;">
+
+	<h6 style="font-size: 15px;">Temperature Report</h6>	
+
+    <div ng-init="getUserOrgLogo()" style="text-align: right;margin-top: -52px;">
+       <img class="reportlogo"    src="{{basePath}}/assets/organizationLogos/{{userOrgLogo}}"></div>
+   </div>
+</div>
+
+<div class="body-nest">
+
+	<section id="flip-scroll">
+
+		<div style="background : #00638f none repeat scroll 0 0; color : #fff; font-size : 14px; padding : 5px 15px;">
+            Date: &nbsp;{{ fromDate | limitTo:10 }}
+		</div>
+
+              <div  class="speedheight" style="overflow-y: scroll;padding-right: 10px;margin-bottom: 10px;margin-top: 12px;">
+               <table class="table table-bordered table-striped cf">
+                <div class="content-wrap" ng-repeat="n in range(graphLength)"  >
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="body-nest" id="line" style="height:550px;" >
+
+                                <h4 ng-if="n==0" >{{vehicleName0}}</h4>
+                                <h4 ng-if="n==1" >{{vehicleName1}}</h4>
+                                <h4 ng-if="n==2" >{{vehicleName2}}</h4>
+                                <h4 ng-if="n==3" >{{vehicleName3}}</h4>
+                                <h4 ng-if="n==4" >{{vehicleName4}}</h4>
+                                <h4 ng-if="n==5" >{{vehicleName5}}</h4>
+                                <h4 ng-if="n==6" >{{vehicleName6}}</h4>
+                                <h4 ng-if="n==7" >{{vehicleName7}}</h4>
+                                <h4 ng-if="n==8" >{{vehicleName8}}</h4>
+                                <h4 ng-if="n==9" >{{vehicleName9}}</h4>
+                                <h4 ng-if="n==10" >{{vehicleName10}}</h4>
+                                <h4 ng-if="n==11" >{{vehicleName11}}</h4>
+                                <h4 ng-if="n==12" >{{vehicleName12}}</h4>
+                                <h4 ng-if="n==13" >{{vehicleName13}}</h4>
+                                <h4 ng-if="n==14" >{{vehicleName14}}</h4>
+                                <h4 ng-if="n==15" >{{vehicleName15}}</h4>
+                                <h4 ng-if="n==16" >{{vehicleName16}}</h4>
+                                <h4 ng-if="n==17" >{{vehicleName17}}</h4>
+                                <h4 ng-if="n==18" >{{vehicleName18}}</h4>
+                                <h4 ng-if="n==19" >{{vehicleName19}}</h4>
+                                <h4 ng-if="n==20" >{{vehicleName20}}</h4>
+                                <h4 ng-if="n==21" >{{vehicleName21}}</h4>
+                                <h4 ng-if="n==22" >{{vehicleName22}}</h4>
+                                <h4 ng-if="n==23" >{{vehicleName23}}</h4>
+                                <h4 ng-if="n==24" >{{vehicleName24}}</h4>
+                                <h4 ng-if="n==25" >{{vehicleName25}}</h4>
+                                <h4 ng-if="n==26" >{{vehicleName26}}</h4>
+                                <h4 ng-if="n==27" >{{vehicleName27}}</h4>
+                                <h4 ng-if="n==28" >{{vehicleName28}}</h4>
+                                <h4 ng-if="n==29" >{{vehicleName29}}</h4>
+                                <h4 ng-if="n==30" >{{vehicleName30}}</h4>
+                                <h4 ng-if="n==31" >{{vehicleName31}}</h4>
+                                <h4 ng-if="n==32" >{{vehicleName32}}</h4>
+                                <h4 ng-if="n==33" >{{vehicleName33}}</h4>
+                                <h4 ng-if="n==34" >{{vehicleName34}}</h4>
+                                <h4 ng-if="n==35" >{{vehicleName35}}</h4>
+                                <h4 ng-if="n==36" >{{vehicleName36}}</h4>
+                                <h4 ng-if="n==37" >{{vehicleName37}}</h4>
+                                <h4 ng-if="n==38" >{{vehicleName38}}</h4>
+                                <h4 ng-if="n==39" >{{vehicleName39}}</h4>
+
+
+ 
+
+                                <div style="float:right;margin-top:-53px;"> <h5>X axis :Temperature (Celsius)</h5>
+                                 <h5>Y axis :Time</h5>
+                             </div>
+                             <canvas id="canvas{{n}}" class="myChart" height="416" width="1900"></canvas>
+                         </div>
+                     </div>
+                 </div>
+             </div>
+         </table>
+     </div> 
+
+                    <!--  PLUGIN -->
+                    <script type="text/javascript" src="assets/js/chart/chart.js"></script>
+                    <script type="text/javascript" src="assets/js/chart/jquery.flot2.js"></script>
+                    <script type="text/javascript" src="assets/js/chart/jquery.flot.resize.js"></script>
+                    <script type="text/javascript" src="assets/js/chart/realTime.js"></script>
+                    <script type="text/javascript" src="assets/js/chart/chart-float-stacking.js"></script>
+
+                
+
+        <!-- Print and PDF form -->
+
+        <form action="../Api/public/PrintReportCreator" method="POST" target="_blank" >   
+            <input type="hidden" name="vehIDs" value="{{report.vehicleIdsForPDF}}">
+            <input type="hidden" name="fromDate" value="{{fromDate}}">
+            <input type="hidden" name="toDate" value="{{toDate}}">
+            <input type="hidden" name="userOrgLogo" value="{{userOrgLogo}}">
+            <input type="hidden" name="reportID" value="7">
+            <input type="hidden" name="toPDF" value="1">
+    <!--<button     name="printButton" value="1" class="btn btn-warning dropdown-toggle printreport" type="submit"> <span><i class="fa fa-print" aria-hidden="true"></i></span>&nbsp;Print</button>
+    <button   name="pdfButton" value="1" class="btn btn-info dropdown-toggle savepdf "   type="submit"> <span><i class="fa fa-file-pdf-o" aria-hidden="true"></i></span>  &nbsp;Save As PDF</button>-->
+</form>
+
+<!-- Print and PDF form -->
+
+</section>
+
+</div>
+
+<script type="text/javascript">
+
+var height = $(window).height();
+var speedheight_height = height-215;
+
+$(".speedheight").height(speedheight_height);
+$(".speedheight").css("overflow-y","scroll");
+
+</script>

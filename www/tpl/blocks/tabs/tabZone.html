@@ -1,0 +1,312 @@
+<ul class="nav nav-tabs tabs_inner" role="tablist"  >
+  <li role="presentation" class="active col-md-6">
+    <a href="/#tabZonesZones" aria-controls="home" role="tab" data-toggle="tab" ng-click="clearMap()">
+      <i class="fa fa-globe" aria-hidden="true"></i>
+      <p>Zones</p>
+    </a>
+  </li>
+  <li class="col-md-6" role="presentation">
+    <a href="/#tabZonesPoints" aria-controls="profile" role="tab" data-toggle="tab" ng-click="clearMap()">
+      <i class="fa fa-map-marker" aria-hidden="true"></i>
+      <p>Points</p>
+    </a>
+  </li>
+</ul>
+
+<!-- Tab panes -->
+<div class="tab-content tab-content_second" ng-controller="GeoZoneCtrl">
+  <div role="tabpanel" class="tab-pane active" id="tabZonesZones" >  
+    <div class="tab_content_inner tabGeozoneZones">
+      <div class="panel-group">
+        <div class="panel panel-default" ng-repeat="gzGroup in geoGroups" >
+          <div class="panel-heading">
+            <h4 class="panel-title" style="border: medium none;">
+              <a data-toggle="collapse" data-parent="#accordionZones" href="/#collapse-zone-{{gzGroup.group.gz_group_id}}">
+                <span class="glyphicon glyphicon-th"></span>{{gzGroup.group.gz_group_id==-1 ? organisationName :gzGroup.group.gz_group_name}}
+                <span style="float:right;">{{gzGroup.geozone.length}}</span>
+              </a>         
+              <button ng-if="gzGroup.group.gz_group_id != -1 && gzGroup.group.gz_group_id != 8"  style="height:22px;float: right; margin-top:-20px;margin-right:12px;"; type="button" class="btn btn-primary ttip" title="Delete Group" ng-click="deleteGeozoneGroup(gzGroup.group.gz_group_id)">
+                <i class="fa fa-trash-o" aria-hidden="true"></i>
+              </button>
+              <button ng-if="gzGroup.group.gz_group_id != -1 && gzGroup.group.gz_group_id != 8" data-toggle="modal" data-target="#editGroup" style="height:22px;float:right;margin-top:-20px;margin-right:12px;"; type="button" class="btn btn-primary ttip" title="Edit Group"  ng-click="editGeoGroup(gzGroup.group.gz_group_id)">
+                <i class="fa fa-pencil" aria-hidden="true"></i>
+              </button>
+            </h4>
+          </div>
+          <div id="collapse-zone-{{gzGroup.group.gz_group_id}}" class="panel-collapse collapse in">
+            <div class="panel-body">
+              <table id="responsive-example-table " class="table large-only">
+                <tbody class="skin skin-flat">  
+                  <tr class=" list" ng-repeat="geozone in gzGroup.geozone | filter:POIsearch" ng-click="setObjectToCenter('geozone',geozone.gz_id)" ng-class="selectedGeozone.indexOf(geozone.gz_id) !== -1 ? 'veh_selected' : '' " >
+                    <td class="imgsat" width="10%">
+                      <!--<input tabindex="13" type="checkbox" id="zone_{{geozone.gz_id}}" ng-model="zone" onclick="makeActive(this)" ng-true-value="1" ng-false-value="0" ng-click="getGeoZone('geozone',geozone.gz_id,0,zone,'show')">-->
+                      <input tabindex="13" type="checkbox" id="zone_{{geozone.gz_id}}" ng-model="zone" ng-checked="selectedGeozone.indexOf(geozone.gz_id) !== -1" ng-true-value="1" ng-false-value="0" ng-click="getGeoZone('geozone',geozone.gz_id,0,zone,'show')">
+                      <label for="zone_{{geozone.gz_id}}"><span></span></label>
+                    </td> 
+                    <td  width="60%">
+                      <a> 
+                        <b class="vehname">{{geozone.gz_name | limitTo:15}} </b>
+                      </a>
+                    </td>            
+                    <td width="15%">
+                      <button type="button" class="btn btn-success ttip" title="Edit Geozone" ng-click="getGeoZone('geozone',geozone.gz_id,1,1,'edit')" ng-show="selectedGeozoneToEdit == geozone.gz_id || selectedGeozoneToEdit == '' && geozone.gz_type != 'salik'">
+                        Edit
+                      </button>
+                    </td>
+                    <td width="15%"> 
+                      <button  type="button" class="btn btn-danger  ttip" title="Delete Geozone"   ng-click="deleteGeozone(geozone.gz_id)" ng-show="geozone.gz_type != 'salik'">
+                        Delete
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-12 nopadding bottom-search">
+      <div class="col-sm-6 nopadding">
+        <div class="input-group input-widget" style="width:100%;margin: -7px 0 0 !important;">
+          <input style="border-radius:15px;width: 100%;/*! margin: 0px !important; */margin-top: 10px;" ng-model="POIsearch" placeholder="Search..." class="form-control searchbox ng-pristine ng-untouched ng-valid" aria-invalid="false" type="text">
+        </div>
+      </div>
+      <div class="col-sm-5" style="padding: 0 5px;"> 
+        <div class="btn-group"> 
+          <button type="button" data-toggle="modal" class="btn btn-primary ttip" ng-disabled="!showAddButton"  ng-click="drawGeoZone()" title="Add Geo-Zone" style="margin: 0 !important;border-radius: 5px 0px 0px 5px !important;padding:8px 12px !important; width: 100%" ><i class="fa fa-plus" style="color:white; "   aria-hidden="true"> &nbsp; </i> Zone </button>
+          
+          <div class="mapGZControls" ng-show="showSaveButton"  >
+              <button type="button" style="margin: 0 !important;border-radius: 5px 0px 0px 5px !important;padding:8px 12px !important;" class="btn btn-primary ttip" title="Save Geo-Zone"   data-toggle="modal" data-target="#saveZoneModal">
+                Save  
+              </button>
+              <button type="button" style="margin: -5px !important;border-radius:   0px 5px 5px 0px !important;padding:8px 12px !important;" class="btn btn-gray"   ng-click="clearNGMap('add')">
+                Cancel  
+              </button>
+          </div>
+
+      <!--     <button type="button" data-toggle="modal" class="btn btn-info ttip"  data-toggle="modal" data-target="#addGeoGroup" title="Add Geo-Zone Group" style="margin: 0 !important;border-radius: 0px 5px 5px 0px !important;padding:8px 12px !important; width:50%"><i class="fa fa-plus" style="color:white; "   aria-hidden="true"> &nbsp; </i> 
+            Group
+          </button> -->
+        </div>
+      </div>
+      <div class="col-sm-1" style="padding: 0px; ">
+        <button type="button" class="btn btn-gray ttip" ng-click="clearNGMap('add')" title="Refresh Map" style="padding:8px 12px !important;">
+          <i class="fa fa-refresh" style="color:#333;" aria-hidden="true"></i> 
+        </button>
+      </div>
+    </div>
+  </div>
+ 
+  <div role="tabpanel" class="tab-pane  " id="tabZonesPoints"><!--Points-->
+    <div class="tab_content_inner tabGeozonePOIs">
+      <div class="panel-group">
+        <div class="panel panel-default" ng-repeat="gzGroup in geoGroups" ng-show="gzGroup.group.gz_group_id != 8">
+          <div class="panel-heading">
+            <h4 class="panel-title" style="border: medium none;">
+              <a data-toggle="collapse" data-parent="#accordionZones" href="/#collapse-point-{{gzGroup.group.gz_group_id}}">
+                <span class="glyphicon glyphicon-th"></span>  {{gzGroup.group.gz_group_id==-1 ? organisationName :gzGroup.group.gz_group_name}}
+                <span style="float:right;">{{gzGroup.points.length}}</span>
+              </a>
+              <button ng-if="gzGroup.group.gz_group_id != -1" data-toggle="modal" data-target="#editGroup" style="height:22px;float: right; margin-top:-20px;margin-right:12px;"; type="button" class="btn btn-primary ttip" title="Delete Group" ng-click="deleteGeozoneGroup(gzGroup.group.gz_group_id)">
+                <i class="fa fa-trash-o" aria-hidden="true"></i>
+              </button>
+              <button ng-if="gzGroup.group.gz_group_id != -1" data-toggle="modal" data-target="#editGroup" style="height:22px;float: right; margin-top:-20px;margin-right:12px;"; type="button" class="btn btn-primary ttip" title="Edit Group" ng-click="editGeoGroup(gzGroup.group.gz_group_id)">
+                <i class="fa fa-pencil" aria-hidden="true"></i>           
+              </button>
+            </h4>
+          </div>
+          <div id="collapse-point-{{gzGroup.group.gz_group_id}}" class="panel-collapse collapse in">
+            <div class="panel-body">
+              <table id="responsive-example-table " class="table large-only">
+                <tbody class="skin skin-flat">  
+                  <tr class=" list" ng-repeat="point in gzGroup.points | filter:ZoneSearch" ng-click="setObjectToCenter('point',point.gz_id)" ng-class="selectedPoint.indexOf(point.gz_id) !== -1 ? 'veh_selected' : '' " >
+                    <td class="imgsat" width="10%">
+                      <!--<input tabindex="13" type="checkbox" id="zone_point_{{point.gz_id}}" ng-model="poi" ng-true-value="1" ng-false-value="0" onclick="makeActive(this)" ng-click="getGeoZone('point',point.gz_id,0,poi,'show')">-->
+                      <input tabindex="13" type="checkbox" id="zone_point_{{point.gz_id}}" ng-model="poi" ng-true-value="1" ng-false-value="0" ng-checked="selectedPoint.indexOf(point.gz_id) !== -1" ng-click="getGeoZone('point',point.gz_id,0,poi,'show')">
+                      <label for="zone_point_{{point.gz_id}}"><span></span></label>
+                    </td> 
+                    <td style="width:60%;">
+                      <a> 
+                        <b class="vehname">{{point.gz_name | limitTo:15}} </b>
+                      </a>
+                    </td>
+                    <td style="width:15%;">
+                      <button type="button" class="btn btn-success ttip" title="Edit Geozone Point" ng-click="getGeoZone('point',point.gz_id,2,1,'edit')" ng-show="selectedGeozoneToEdit == point.gz_id || selectedGeozoneToEdit == ''">
+                        Edit
+                      </button>
+                    </td>
+                    <td style="width:15%;"> 
+                      <button  type="button" class="btn btn-danger ttip" title="Delete Point"  style="float:right;" ng-click="deleteGeozone(point.gz_id)">
+                        Delete
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-12 nopadding bottom-search">
+      <div class="col-sm-6 nopadding">
+        <div class="input-group input-widget" style="width:100%;margin: -7px 0 0 !important;">
+          <input style="border-radius:15px;width: 100%;margin-top: 10px;" ng-model="ZoneSearch" placeholder="Search..." class="form-control searchbox ng-pristine ng-untouched ng-valid" aria-invalid="false" type="text">
+        </div>
+      </div>
+      <div class="col-sm-5" style="padding: 0 5px; "> 
+        <div class="btn-group"> 
+          <button type="button" data-toggle="modal" class="btn btn-primary ttip" ng-disabled="!showAddpoint"  ng-click="drawGeoPoint()" title="Add Point" style="margin: 0 !important;border-radius: 5px 0px 0px 5px !important;padding:8px 12px !important; width:100%" ><i class="fa fa-plus" style="color:white; "   aria-hidden="true"> &nbsp; </i> POI </button>
+           <div class="mapGZControls" ng-show="showSavepoint"  >
+          <button type="button" style="margin: 0 !important;border-radius: 5px 0px 0px 5px !important;padding:8px 12px !important; width: 100%" class="btn btn-primary ttip" title="Save Point"  data-toggle="modal" data-target="#saveZoneModal">
+            Save  
+          </button> 
+          <button type="button" style="margin: -5px !important;border-radius:   0px 5px 5px 0px !important;padding:8px 12px !important;" class="btn btn-gray"   ng-click="clearNGMap('add')">
+            Cancel  
+          </button>
+          </div>
+<!--           <button type="button" data-toggle="modal" class="btn btn-info ttip"  data-target="#addGeoGroup"   title="Add Geo-Zone Group" style="margin: 0 !important;border-radius: 0px 5px 5px 0px !important;padding:8px 12px !important; width:50%"><i class="fa fa-plus" style="color:white; "   aria-hidden="true"> &nbsp; </i> Group</button> -->
+        </div>
+      </div>
+      <div class="col-sm-1" style="padding: 0px; ">
+        <button type="button" class="btn btn-gray" ng-click="clearNGMap('add')" style="padding:8px 12px !important;">
+          <i class="fa fa-refresh" style="color:#333;" aria-hidden="true"></i> 
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="saveZoneModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle" ng-click="selectedGeozoneDetails()">Save {{selectedType}}</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body" style="overflow:hidden"> 
+          <label class="col-sm-3 control-label">{{selectedType}} Name</label>
+          <div class="col-sm-12" >
+            <input class="form-control" type="text" ng-model="geoZone.gz_name">
+          </div> 
+          <label class="col-sm-3 control-label">{{selectedType}} Group</label>
+          <div class="col-sm-12">          
+            <!--<select class="form-control" ng-model="geoZone.gz_group_id">
+              <option value="{{gzGroup.group.gz_group_id}}" ng-repeat="gzGroup in geoGroups" ng-selected="gzGroup.group.gz_group_id == geoZone.gz_group_id">{{gzGroup.group.gz_group_name}}</option>
+            </select>-->
+            <select class="form-control" ng-model="geoZone.gz_group_id" ng-options="gzGroup.group.gz_group_id as gzGroup.group.gz_group_name for gzGroup in geoGroups">    
+            </select>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" ng-click="saveGeoZone()">Save {{selectedType}}</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="editGroup" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+    <div class="modal-dialog" style="width:400px !important;" role="document">
+      <div class="modal-content" >
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">Edit Group</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="alert alert-success" style="width:100%;text-align:center;" ng-show="successMessage">
+          <span class="entypo-thumbs-up"></span>
+          {{successMessage}}.
+        </div>
+        <form class="form-validation ng-pristine ng-invalid ng-invalid-required ng-valid-email ng-valid-url" name="form">
+          <div class="modal-body" style="overflow:hidden"> 
+            <label class="col-sm-3 control-label">Name</label>
+            <div class="col-sm-12" >
+              <!--<input style="padding:1px !important;width:109%;" required class="form-control" type="text" ng-model="GroupNames.gz_group_name">-->
+              <input required class="form-control" type="text" ng-model="GroupNames.gz_group_name">
+            </div>  
+            <label class="col-sm-3 control-label">Color</label>
+            <div class="col-sm-12">
+              <select class="form-control" ng-model="GroupNames.gz_group_color">
+                <option value="red">Red</option>
+                <option value="green">Green</option>
+                <option value="blue">Blue</option>
+                <option value="yellow">Yellow</option>
+                <option value="orange">Orange</option>
+              </select>
+            </div> 
+          </div>
+          <div class="modal-footer">
+            <button style="padding:6px;" type="submit" class="btn btn-success"  ng-disabled='form.$invalid'  ng-click="editGeozoneGroup()">Save Changes</button>
+            <button style="padding:7px;" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          </div>
+        </form> 
+      </div>
+    </div>
+  </div>
+
+</div>
+
+
+<div class="modal fade" id="addGeoGroup" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true" ng-controller="NavigationCtrl">
+  <div class="modal-dialog" style="width:450px !important;" role="document">
+    <div class="modal-content" >
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Add Geozone Group</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="alert alert-success" style="width:100%;text-align:center;" ng-show="successMessage">
+        <span class="entypo-thumbs-up"></span>
+          {{successMessage}}.
+      </div>
+      <form class="form-validation ng-pristine ng-invalid ng-invalid-required ng-valid-email ng-valid-url" name="form">
+        <div class="modal-body" style="overflow:hidden"> 
+          <label class="col-sm-3 control-label">Name</label>
+          <div class="col-sm-12" >
+            <input style="padding:1px !important;" required class="form-control" type="text" ng-model="geozonegroup.gz_group_name">
+          </div>
+          <label class="col-sm-3 control-label">Color</label>
+          <div class="col-sm-12">
+            <select class="form-control" ng-model="geozonegroup.gz_group_color">
+              <option value="red">Red</option>
+              <option value="green">Green</option>
+              <option value="blue">Blue</option>
+              <option value="yellow">Yellow</option>
+              <option value="orange">Orange</option>
+            </select>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button style="padding:6px;" type="submit" class="btn btn-success"  ng-disabled='form.$invalid'  ng-click="AddGeoGroup()">Add Group</button>
+          <button style="padding:7px;" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </form> 
+    </div>
+  </div> 
+</div>
+
+
+<script type="text/javascript">
+$('.ttip').tooltip({
+
+});
+
+</script>
+
+
+
+
+<script type="text/javascript">
+var height = $(window).height();
+var tabGeozoneZones_height = height-210;
+var tabGeozonePOIs_height = height-210;
+$(".tabGeozoneZones").height(tabGeozoneZones_height);
+$(".tabGeozoneZones").css("overflow-y","scroll");
+$(".tabGeozonePOIs").height(tabGeozonePOIs_height);
+$(".tabGeozonePOIs").css("overflow-y","scroll");
+</script>

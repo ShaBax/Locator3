@@ -1,0 +1,64 @@
+<div id="wrapper">
+  <!-- Page Content -->
+  <div id="page-content-wrapper" class="main_div">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-lg-12 col-sm-12 col-xs-12 headersec_main">
+          <div class="leftbar" >
+            <a ui-sref="report" id="menu-toggle"><i class="fa fa-arrow-left bckbtn" aria-hidden="true"></i></a>
+          </div>
+          <div class="haderdiv_inner" ng-repeat="name in reportNames">
+            <div class="header_sec" ng-if="name.report_id == report.reportID">{{name.report_name}}</div>           
+          </div>
+        </div>
+        <div class="col-md-12 col-sm-12 col-xs-12 first_sec_vechicle vechicles_page">                          
+          <ul class="vechicle_list_deatis">                  
+            <ul class="main_ul">                    
+              <li class="col-xs-12 paddingnone" ng-repeat="data in reportDtls" ng-if="data.name!=''">
+                <div ng-if="data.name">
+                  <div class="col-xs-12 paddingnone main_ul_heading">
+                    <div class="main_head">
+                      <div class="img_box"><img src="images/icn_truck.png"></div>
+                      <div class="content_main">{{data.name}}</div>
+                    </div>
+                  </div>
+                  <div class="col-xs-12 main_ul_date" style="padding-left:9px; text-align:left; ">{{reportDetails.from | limitTo:16}}&nbsp;TO&nbsp;{{reportDetails.to | limitTo:16}}</div>
+                  <ul class="sub_ul"> 
+                  
+                    <li class="col-xs-12 paddingnone playback_sublist" ng-repeat="vehicle in data.vehicles" ng-if="vehicle.trip_start!=''" >
+                      <div ng-if="vehicle.obj_name"><div class="col-xs-3 paddingnone icn_from_blue">                          
+                        <span class="fromtime1">{{vehicle.trip_start}}  </span>
+                      </div>
+                      <div class="col-xs-3 paddingnone icn_to_blue">                          
+                        <span class="fromtime1">{{vehicle.trip_stop}}</span>
+                      </div>
+                      <div class="col-xs-4 paddingnone icn_time_blue">                         
+                        <span class="fromtime1">{{vehicle.duration | limitTo:8}}</span>
+                      </div>
+                      <div class="col-xs-2 paddingnone icn_distance_blue">                         
+                        <span class="fromtime1">{{vehicle.trip_milage | number:2}}</span>
+                      </div>
+                      <div class="col-xs-12  travel_details">
+                        <div class="col-xs-6 startingname paddingnone">{{vehicle.trip_start_address}}</div>
+                        <div class="col-xs-6 destinationname ">{{vehicle.trip_stop_address}}</div>
+                      </div></div>
+                    </li>                     
+                  </ul>
+                </div>
+              </li>
+            </ul>
+          </ul>              
+        </div>                 
+        <div class="col-lg-12 col-sm-12 col-xs-12 paddingnone footersec">
+          <ul>
+            <li><a ui-sref="dashboard"><img src="images/icn_home.png" style="width:30px"></a></li>
+            <li><a ng-click="goToPage('live')"><img src="images/map.svg"  style="width:30px"></a></li>
+            <li><a ng-click="refresh()"><img src="images/icn_refresh.png" style="width:30px"></a></li>
+            <li><a ui-sref="alert"><img src="images/icn_notification.png" style="width:30px"></a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div><!-- /#page-content-wrapper -->
+
+</div><!-- /#wrapper -->

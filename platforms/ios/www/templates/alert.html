@@ -1,0 +1,61 @@
+<div id="wrapper">
+  <!-- Page Content -->
+  <div id="page-content-wrapper" class="main_div">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-lg-12 col-sm-12 col-xs-12 headersec_main">
+          <div class="leftbar" >
+            <a ui-sref="dashboard" id="menu-toggle"><i class="fa fa-arrow-left bckbtn" aria-hidden="true"></i></a>
+          </div>
+          <div class="haderdiv_inner">
+            <div class="header_sec">Alert</div>                 
+          </div>
+        </div>
+        <div class="col-md-12 col-sm-12 col-xs-12 first_sec_vechicle vechicles_page" ng-if="highNotfns.length >0">                             
+          <ul class="vechicle_list alert_list">
+            <li style="background-color: #2096f0;color: #fff;font-size: 16px;">Priority Alerts</li>
+            <li ng-repeat="highNotfn in highNotfns">
+              <a>
+                <div class="alert_icon">
+                  <img src="images/icn_alert.png">
+                </div>
+                <div class="vechicle_list_info alertbox">
+                  <h5>{{highNotfn.obj_name}}</h5>
+                  <p>{{highNotfn.push_notification_content}}</p>
+                </div>
+                <div class="alert_date">{{highNotfn.createdTime}}</div>
+              </a>
+            </li>
+          </ul>            
+        </div> 
+
+        <div class="col-md-12 col-sm-12 col-xs-12 first_sec_vechicle vechicles_page" ng-if="normalNotfns.length >0">                          
+          <ul class="vechicle_list alert_list">
+            <li style="background-color: #2096f0;color: #fff;font-size: 16px;">Normal Alerts</li>
+            <li ng-repeat="normalNotfn in normalNotfns">
+              <a>
+                <div class="alert_icon">
+                  <img src="images/icn_alert.png">
+                </div>
+                <div class="vechicle_list_info alertbox">
+                  <h5>{{normalNotfn.obj_name}}</h5>
+                  <p>{{normalNotfn.push_notification_content}}</p>
+                </div>
+                <div class="alert_date">{{normalNotfn.createdTime}}</div>
+              </a>
+            </li>
+          </ul>            
+        </div>
+
+        <div class="col-lg-12 col-sm-12 col-xs-12 paddingnone footersec">
+          <ul>
+            <li><a ui-sref="dashboard"><img src="images/icn_home.png" style="width:30px"></a></li>
+            <li><a ng-click="goToPage('live')"><img src="images/map.svg"  style="width:30px"></a></li>
+            <li><a ng-click="refresh()"><img src="images/icn_refresh.png" style="width:30px"></a></li>
+            <li><a ui-sref="alert"><img src="images/icn_notification.png" style="width:30px"></a></li>
+          </ul>
+        </div>
+      </div>
+    </div>       
+  </div><!-- /#page-content-wrapper -->
+</div><!-- /#wrapper -->

@@ -1,0 +1,439 @@
+ 
+<ul class="nav nav-tabs tabs_inner" role="tablist">
+  <li role="presentation" class="active col-md-6 historyVehicleTab">
+    <a href="/#tabHistoryVehicle" aria-controls="home" role="tab" data-toggle="tab">
+      <i class="fa fa-truck" aria-hidden="true"></i>
+      <p translate="aside.nav.VEHICLES"  >Vechicle</p>
+    </a>
+  </li>
+  <li class="col-md-6 historyRouteTab" role="presentation">
+    <a ng-href="{{historyVehIDs.length > 0 ? '/#tabHistoryRoutes' : ''}}"  aria-controls="profile" role="tab" data-toggle="tab">
+      <i class="fa fa-random" aria-hidden="true"></i>
+      <p translate="aside.nav.ROUTES"  >Routes</p>
+    </a>
+  </li>
+</ul>
+<!--/*ng-click="routeClick()"*/-->
+<!-- Tab panes -->
+<div class="tab-content tab-content_second">
+  <div role="tabpanel" class="tab-pane active" id="tabHistoryVehicle">
+    <form name="form">
+      <div class="btn-group datebuttons" style="display:block !important;">     
+        <button  translate="aside.nav.TODAY" style="border-radius: 5px !important; width: 32%; margin-right: 8px !important;" ng-href="{{historyVehIDs.length > 0 ? '/#tabHistoryRoutes' : ''}}" aria-controls="profile" role="tab" data-toggle="tab" data-format="dd-MM-yyyy hh:mm:ss" ng-click="todays('history')" type="button" class="btn btn-warning" title="Today"><i class="fa fa-calendar-check-o" aria-hidden="true"></i> Today</button> 
+        <button  translate="aside.nav.YESTERDAY"  style="border-radius: 5px !important; width: 32%; margin-right: 8px !important;"  ng-href="{{historyVehIDs.length > 0 ? '/#tabHistoryRoutes' : ''}}" aria-controls="profile" role="tab" data-toggle="tab" data-format="dd-MM-yyyy hh:mm:ss" ng-click="yesterday('history')" type="button" class="btn btn-danger" title="Yesterday"><i class="fa fa-calendar-check-o" aria-hidden="true"></i> Yesterday</button> 
+        <button  translate="aside.nav.LASTWEEK" style="border-radius: 5px !important; width: 32%;" ng-href="{{historyVehIDs.length > 0 ? '/#tabHistoryRoutes' : ''}}" aria-controls="profile" role="tab" data-toggle="tab"  data-format="dd-MM-yyyy hh:mm:ss" ng-click="lastweek('history')" type="button" class="btn btn-info" title="Last Week"><i class="fa fa-calendar-check-o" aria-hidden="true"></i> Last Week</button> 
+      </div>   
+      <div class="col-md-12 paddingnone datepickersec">
+        <div class="col-md-5 paddingnone">
+          <div  id="datetimepicker1" class="input-group date" >
+            <input class="form-control" data-format="dd-MM-yyyy hh:mm:ss" type="text" ng-model="history.from" >
+            <span class="input-group-addon add-on" style="display:table-cell;">
+              <i style="font-style:normal;" data-time-icon="entypo-clock" data-date-icon="entypo-calendar">
+              </i>
+            </span>
+          </div>
+        </div>
+        <div class="col-md-5 paddingnone">
+          <div  id="datetimepicker2" class="input-group date">
+            <input class="form-control" data-format="dd-MM-yyyy hh:mm:ss" type="text" ng-model="history.to">
+            <span class="input-group-addon add-on" style="display:table-cell;">
+              <i style="font-style:normal;" data-time-icon="entypo-clock" data-date-icon="entypo-calendar">
+              </i>
+            </span>
+          </div>
+        </div>
+        <div class="col-md-2 paddingnone">
+          <button  ng-href="{{historyVehIDs.length > 0 ? '/#tabHistoryRoutes' : ''}}"  ng-click="routeClick()"  style="border-radius:0px;height:31px;width:100%;" aria-controls="profile" role="tab" data-toggle="tab" data-format="dd-MM-yyyy hh:mm:ss"   type="button" class="btn btn-warning"   ><i class="fa fa-search" aria-hidden="true"></i> </button> 
+        </div>
+      </div>
+    </form>
+    <div>
+      <div class="tab_content_inner">                                        
+        <div class="panel-group tripVehicleTab">
+          <div class="panel panel-default" ng-repeat="group in allVehiclespositonsData">
+            <div class="panel-heading ">
+              <h4 class="panel-title">
+
+<!--                 <div ng-show="group.vehicles.length>0" style="display: inline-block;width: 5%;margin-left:-8px;">
+                  <input type="checkbox" id="tripCheckAll_{{group.id}}" ng-model="tripGroupId" ng-true-value="{{group.id}}" ng-false-value="0" ng-click="checkAllTripVehicles(tripGroupId,group.id)" ng-checked="selectedTripGroups.indexOf(group.id) !== -1"> 
+                  <label for="tripCheckAll_{{group.id}}"><span></span></label> 
+                </div>
+ -->
+                <a data-toggle="collapse" data-parent="#accordion" href="/#collapse-group-{{group.id}}"  style="display: inline-block;width: 95%;">
+                  {{group.id==-1 ? organisationName :group.name}}
+                  <span style="float:right;">{{group.vehicles.length}}</span>
+                </a>
+              </h4>
+            </div>
+            <div id="collapse-group-{{group.id}}" class="panel-collapse collapse in">
+              <div class="panel-body"> 
+                <table id="responsive-example-table " class="table large-only">
+                  <tbody class="skin skin-flat">  
+                    <tr class=" list" ng-repeat="vehicle in group.vehicles | filter : search" ng-class="historyVehIDs.indexOf(vehicle.id) !== -1 ? 'veh_selected' : '' ">
+                      <td class="imgsat" width="6%">
+                        <input ng-model="HistoryVehID" id="history_{{vehicle.id}}" ng-true-value="{{vehicle.id}}" ng-false-value="0" tabindex="13" type="checkbox" id="flat-checkbox-1" ng-click="selectedVehicleforHistory(vehicle.name,vehicle.uniqueId,vehicle.id,HistoryVehID,group.id)" ng-checked="historyVehIDs.indexOf(vehicle.id) !== -1">
+                        <!--<input ng-model="HistoryVehID" id="history_{{vehicle.obj_id}}" ng-true-value="{{vehicle.obj_id}}" ng-false-value="0" onclick="makeActive(this)" tabindex="13" type="checkbox" id="flat-checkbox-1" ng-change="selectedVehicleforHistory(vehicle.obj_name,vehicle.obj_device_id,HistoryVehID)" ng-checked="historyDeviceIDs.indexOf(vehicle.obj_id) !== -1">-->
+                        <label for="history_{{vehicle.id}}"><span></span></label>
+                      </td>                                                
+                      <td style="width=100%;">
+                        <a aria-controls="profile" role="tab" data-toggle="tab">
+                          <b class="vehname">{{vehicle.name  | limitTo:30}}</b>
+                          <div class="datetime"></div>
+                        </a><br>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+        <div class="col-sm-12 nopadding bottom-search">
+          <div class="col-sm-9 nopadding">
+            <div class="input-group input-widget">
+              <input style="border-radius:15px; width:150%;" type="text" ng-model="search" placeholder="Search..." class="form-control searchbox">
+            </div>
+          </div>
+          <div class="col-sm-3" style="padding-right:0"  >           
+            <button type="button" class="btn btn-gray" ng-click="getGroups()" data-original-title="" title="" style="margin-top:-8px;width: 75%; height:31px; border-radius:5px">
+              <i class="fa fa-refresh" style="color:#333;" aria-hidden="true"></i> 
+            </button>
+          </div>
+        </div>
+    </div>
+  </div>
+
+  <div role="tabpanel" class="tab-pane" id="tabHistoryRoutes" >
+
+    <div id="tab_content_inner2" class="tab_content_inner default-skin" >
+      <div style="max-height:210px;overflow-y: scroll;padding-bottom: 100px;margin-bottom: 10px;">
+        <div class="details_vechicle" ng-if="trips.length>0" ng-repeat="trip in trips  track by $index">
+
+          <h4  ng-if="($index<trips.length && trips[$index-1].deviceName!=trip.deviceName) || $index==0"  class="vechicle_head">{{trip.deviceName}}</h4> 
+            <div>
+            <p ng-if="($index<trips.length && comparedate(trips[$index-1].startTime,trip.startTime)) || $index==0 || ($index<trips.length && trips[$index-1].deviceName!=trip.deviceName)"> {{getdate(trip.startTime)}}</p>
+            <table id="responsive-example-table " class="table large-only">
+              <thead ng-if="($index<trips.length && comparedate(trips[$index-1].startTime,trip.startTime)) || $index==0 || ($index<trips.length && trips[$index-1].deviceName!=trip.deviceName)">
+                <tr>
+                  <th style="width: 1%"> </th> 
+                  <th style="width: 25%">Start</th>
+                  <th style="width: 25%">Stop</th>
+                  <th style="width: 25%">Duration</th>
+                  <th>Kilometer</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="mainRows"  onclick="makeSelected(this,'mainRows')" style="cursor:pointer" ng-click="ShortRoutOnMap(trip)" >
+                  <td></td> 
+                  <td><a href="#"></a>{{gettime(trip.startTime)}}</td>
+                  <td style="text-align: left!important;" ng-if="tripsdata.endTime!=''"><a href="#"> </a>{{gettime(trip.endTime)}}</td>
+                  <td style="text-align: left!important;" ng-if="tripsdata.endTime==''"><a href="#"> </a>Running</td>
+                  <td style="text-align: left!important;"><a href="#"></a>{{getduration(trip.duration)}}</td>
+                  <td style="text-align: left!important;"><a href="#"></a>{{getkm(trip.distance)}}</td>               
+                </tr>
+
+              </tbody>
+            </table> 
+          </div>
+<!--           <div ng-if="!trip.trip.length" translate="COMMON.NO_TRIPS">
+          </div> -->
+        </div>
+      </div>
+    </div>
+
+    <ul class="nav nav-tabs tabs_inner detailsUL" role="tablist">
+
+      <li role="presentation" class="active">
+        <a href="/#details" aria-controls="home" role="tab" data-toggle="tab">
+          <i class="fa fa-info-circle" aria-hidden="true"></i>
+          <p translate="COMMON.SUMMARY"></p>
+        </a>
+      </li>
+      <li  role="presentation" >
+        <a href="/#idling" aria-controls="profile" role="tab" data-toggle="tab">
+          <i class="fa fa-stop" aria-hidden="true"></i>
+          <p translate="COMMON.STOPS"></p>
+        </a>
+      </li>
+      <li  role="presentation">
+        <a href="/#event" aria-controls="profile" role="tab" data-toggle="tab">
+            <!--<i class="fa fa-commenting-o" aria-hidden="true"></i>-->
+            <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+            <p translate="COMMON.ALERTS"></p>
+        </a>
+      </li>
+      <li  role="presentation">
+        <a href="/#geozone" aria-controls="profile" role="tab" data-toggle="tab">
+          <i class="fa fa-random" aria-hidden="true"></i>
+          <p translate="COMMON.ZONES"></p>
+        </a>
+      </li>
+      <li  role="presentation">
+        <a href="/#tolls" aria-controls="profile" role="tab" data-toggle="tab">
+          <i class="fa fa-usd" aria-hidden="true"></i>
+          <p translate="COMMON.SALIK"></p>
+        </a>
+      </li>
+    </ul>
+
+      <div id="tab_content_inner3" class="tab_content_inner tripsRoutesTabss">
+        <div>
+          <div class="tab-content tab-content_second">
+
+            <div role="tabpanel" class="tab-pane " id="idling">
+                <div class="details_vechicle">
+                  <table id="responsive-example-table " class="table large-only">
+                    <thead>
+                      <tr>
+                        <th style="width: 5%"></th>
+                        <th style="width: 28%" translate="COMMON.START"></th>
+                        <th style="width: 28%" translate="COMMON.END"></th>
+                        <th style="width: 28%" translate="COMMON.TIME"></th>                        
+                        <th style="width: 11%"></th> 
+                      </tr>
+                    </thead>
+                    <tbody> 
+                      <tr  ng-repeat="iding in idling" class="subRows"  onclick="makeSelected(this,'subRows')" style="cursor:pointer" ng-click="openPopUp(iding.track_vehicles_veh_latitude,iding.track_vehicles_veh_longitude,iding)" >
+                        <td colspan="6">
+                          <table width="100%">
+                            <tr>
+                              <td style="width: 5%">
+                                <span ng-if="iding.status_status==='Idling'"><img style="width:26px;" src="assets/img/left_icons/idling.svg"></span>
+                                <span ng-if="iding.status_status==='Parking'"><img style="width:26px;" src="assets/img/left_icons/parking.svg"></span>                               
+                              </td>
+                              <td style="width: 28%"><p style="background:none;">{{iding.status_start_time}}</p></td>
+                              <td style="width: 28%"><p style="background:none;">{{iding.status_end_time}}</p></td>
+                              <td style="width: 28%">  {{iding.status_duration | limitTo: 8}}        </td>
+                              <td style="width: 11%" data-toggle="modal" data-target="#savePOIModal" ng-click="showSavePoiModal(iding.track_vehicles_veh_latitude,iding.track_vehicles_veh_longitude,iding)">
+                                <img src="img/addIcon.png" style="width: 30px;" class="ttip" title="Add mark as POI">
+                              </td> 
+                            </tr>
+                            <tr>
+                              <td></td>
+                              <td colspan="5"> {{iding.status_address }}</td>
+                            </tr>
+                          </table>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+            </div>
+
+            <div role="tabpanel" class="tab-pane" id="event">
+                <div class="details_vechicle">
+                  <table id="responsive-example-table " class="table large-only">
+                    <thead>
+                      <tr>
+                        <th style="width: 5%;"></th>
+                        <th style="width: 55%;" translate="COMMON.TIME"></th> 
+                        <th style="width: 40%;" translate="COMMON.EVENT"></th> 
+                      </tr>
+                    </thead>
+                    <tbody>
+                     <!--<tr  ng-repeat="event in events" class="subRows" onclick="makeSelected(this,'subRows')" style="cursor:pointer" ng-click="setObjectToCenter(event.event_latitude,event.event_longitude)">-->
+                      <tr  ng-repeat="event in events" class="subRows" onclick="makeSelected(this,'subRows')" style="cursor:pointer" ng-click="showHistoryEventInfowindow(event)">
+                        <td colspan="4">
+                          <table width="100%">
+                            <tr> 
+                              <td style="width: 5%;"></td>                             
+                              <td style="width: 55%;">{{event.event_time}}</td>
+                              <td ng-if="event.event_status==0" style="width: 40%;" translate="COMMON.IGNITION_OFF">Ignition Off </td>
+                              <td ng-if="event.event_status==1" style="width: 40%;" translate="COMMON.IGNITION_ON">Ignition On </td>
+                            </tr>
+                            <tr>
+                              <td style="width: 5%;"></td>   
+                              <td colspan="3">{{event.event_place}}</td>
+                            </tr>
+                          </table>
+                        </td>
+                      </tr>                     
+                    </tbody>
+                 </table>
+               </div>
+            </div>
+
+            <div role="tabpanel" class="tab-pane active" id="details">
+                <div class="vechicle_info_inner" ng-repeat="detail in details">
+                   
+                  <div class="col-md-12 car_name">
+                    <h2>{{selectedtrip.deviceName | limitTo : 25}}</h2>
+                    <!--<p>{{detail.obj_vehicle_number}}</p>-->
+                  </div>
+                  <div class="col-md-12 car_table"   >
+                    <table>
+                       <tr><td style="width: 20%" translate="COMMON.FROM"></td><td style="width: 80%">: {{selectedtrip.startAddress | limitTo : 30}}</td></tr> 
+                       <tr ng-if="detail.endAddress != ''"><td>To</td><td>: {{selectedtrip.endAddress | limitTo : 30}}</td></tr> 
+                       <tr><td translate="COMMON.FUEL_COST"></td><td>: {{tripHistoryDetails.fuelrates | number:2}}/-</td></tr>
+                       <tr><td translate="COMMON.PARKING_COUNT"></td><td>: {{tripHistoryDetails.totalStops}}</td></tr> 
+                       <tr ng-if="tripHistoryDetails.idlingTime != ''"><td>Idling Time</td><td>: {{tripHistoryDetails.idlingTime}}</td></tr> 
+                       <tr ng-if="selectedtrip.driverName.length>0" ><td translate="COMMON.DRIVER_NAME"></td><td>: {{selectedtrip.driverName}}</td></tr> 
+                       <tr><td translate="COMMON.MAXIMUM_SPEED"></td><td>: {{selectedtrip.maxSpeed | number:1}}&nbsp;Km/Hr</td></tr> 
+                   </table>
+                  </div>
+                </div>
+            </div>
+
+            <div role="tabpanel" class="tab-pane" id="tab123">
+               Content here
+            </div>
+
+            <div role="tabpanel" class="tab-pane" id="geozone">
+              <div class="details_vechicle">
+                <table id="responsive-example-table " class="table large-only">
+                  <thead>
+                    <tr>     
+                      <th style="width:6%;"></th>                
+                      <th style="width:30%;" translate="COMMON.NAME"></th>
+                      <th style="width:32%;" translate="COMMON.ENTER_TIME"></th> 
+                      <th style="width:32%;" translate="COMMON.EXIT_TIME"></th> 
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr ng-repeat="geozone in geoZones" class="subRows" ng-class="geozone.trip_geozone_geozone_id == tripZoneId ? 'veh_selected' : '' " style="cursor:pointer" ng-click="showGeozoneOnMap(geozone)">
+                    <!--<tr ng-repeat="geozone in geoZones" class="subRows" onclick="makeSelected(this,'subRows')" style="cursor:pointer" ng-click="showGeozoneOnMap(geozone)">-->
+                      <td>
+                        <span class="label label-warning" ng-if="geozone.gz_shape == 'polygon'">G</span>
+                        <span class="label label-info" ng-if="geozone.gz_shape == 'marker'">P</span>
+                      </td>
+                      <td>{{geozone.gz_name}} </td>
+                      <td>{{geozone.trip_geozone_enter_time}} </td>
+                      <td>{{geozone.trip_geozone_exit_time}} </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div role="tabpanel" class="tab-pane" id="tolls">
+              <div class="details_vechicle">
+                <table id="responsive-example-table " class="table large-only">
+                    <thead>
+                      <tr> 
+                        <th style="width:6%;"></th>   
+                        <th style="width:30%;" translate="COMMON.NAME"></th>
+                        <th style="width:32%;" translate="COMMON.ENTER_TIME"></th> 
+                        <th style="width:32%;" translate="COMMON.EXIT_TIME"></th> 
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr ng-repeat="salik in salikData" style="cursor:pointer" ng-click="showsalikOnMap(salik)">
+                        <td>
+                          <span class="label label-warning" ng-if="salik.gz_shape == 'polygon'">G</span>
+                          <span class="label label-info" ng-if="salik.gz_shape == 'marker'">P</span>
+                        </td>
+                        <td>{{salik.gz_name}}</td>
+                        <td>{{salik.trip_geozone_enter_time}}</td>
+                        <td>{{salik.trip_geozone_exit_time}}</td>
+                      </tr>
+                    </tbody>
+                </table>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+  </div>
+
+</div>      
+
+<div class="modal fade" id="savePOIModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">Save POI</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body" style="overflow:hidden"> 
+
+          <label class="col-sm-3 control-label">POI Name</label>
+          <div class="col-sm-12" >
+            <input class="form-control" type="text" ng-model="geoPoint.gz_name">
+          </div> 
+          <label class="col-sm-3 control-label">POI Group</label>
+          <div class="col-sm-12">         
+            <select class="form-control" ng-model="geoPoint.gz_group_id">
+              <option value="{{gzGroup.group.gz_group_id}}" ng-repeat="gzGroup in geoGroups">{{gzGroup.group.gz_group_name}}</option>
+            </select>
+          </div>
+
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" ng-click="saveGeoZonePoint()">Save Zone/Point</button>
+        </div>
+      </div>
+    </div>
+</div>    
+
+
+<script type="text/javascript">
+$('.ttip').tooltip({
+
+});
+
+</script>
+<script type="text/javascript">
+$('#datetimepicker1').datetimepicker({
+  language: 'pt-BR'
+
+});
+
+$('#datetimepicker2').datetimepicker({
+  language: 'pt-BR'
+});
+
+
+$('#dp1').datepicker()
+$('#dpYears').datepicker();
+$('#timepicker1').timepicker();
+$('#t1').clockface();
+$('#t2').clockface({
+  format: 'HH:mm',
+  trigger: 'manual'
+});
+
+$('#toggle-btn').click(function(e) {
+  e.stopPropagation();
+  $('#t2').clockface('toggle');
+});
+$('.btn').tooltip({
+  "margin-top": "50px"
+});
+function makeSelected($this,rowType)
+{
+  $("."+rowType).removeClass('veh_selected');
+  $($this).addClass('veh_selected');
+  
+}
+</script>
+
+
+<script type="text/javascript">
+
+ var height = $(window).height();
+
+ var tripVehicleTab_height = height-318;
+ var tripsRoutesTab_height = height-470;
+
+ 
+  
+ 
+      $(".tripVehicleTab").height(tripVehicleTab_height);
+      $(".tripVehicleTab").css("overflow-y","scroll");
+
+     
+       $(".tripsRoutesTabss").height(tripsRoutesTab_height);
+      $(".tripsRoutesTabss").css("overflow-y","scroll");
+
+
+
+      </script>
+
+

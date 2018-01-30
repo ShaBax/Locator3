@@ -1,0 +1,182 @@
+<div class="title-alt" style="height: 50px; border-radius: 4px 4px 0px 0px; background: rgb(255, 255, 255) none repeat scroll 0% 0%;border-bottom: 1px dotted rgb(221, 221, 221); padding: 12px;">
+  <h5 style="margin-top:-9px;"><b>{{vehiclename | limitTo:20}} </b></h5>
+  <h6 style="font-size: 15px;">FUEL ENTRY</h6>  
+  <button style="margin-top:-38px; width:69px; padding:8px;float:right;"  class="btn btn-success" ng-click="AddnewFuel()" >Add New</button>
+</div>
+
+<div class="body-nest" >
+  <section id="flip-scroll">
+    <div class="thisform">
+      <form class="form-validation ng-pristine ng-invalid ng-invalid-required ng-valid-email ng-valid-url " name="form">
+        <div class="panel panel-default">
+          <div class="panel-body"  >                   
+            <div class="form-group pull-in clearfix" >
+              <div class="col-sm-4" style="padding-bottom: 1vw;">
+                <label>Date </label>
+                <div id="datetimepicker45" class="input-group date">
+                  <input class="form-control" data-format="yyyy-MM-dd hh:mm:ss" id="dateFuel" ng-model="fuelEntry.fuel_date" type="text" style="height:31px !important;padding:4px;">
+                  <span class="input-group-addon add-on" style="display:table-cell;">
+                    <i style="font-style:normal;" data-time-icon="entypo-clock" data-date-icon="entypo-calendar"></i>
+                  </span>
+                </div>
+              </div> 
+              <div class="col-sm-4" style="padding-bottom: 1vw;">
+                <label >Fuel Type</label>
+                <select style="padding:1px !important;" class="form-control" ng-model="fuelEntry.fuel_type" >
+                  <option value="Petrol">Petrol</option>
+                  <option value="Diesel">Diesel</option>
+                  <option value="Gas">Gas</option>
+                </select>
+              </div>
+              <div class="col-sm-4" style="padding-bottom: 1vw;">
+                <label>Driver Name</label>
+                <select style="padding:1px !important;" class="form-control" ng-model="fuelEntry.fuel_driver_id">
+                  <option ng-repeat="driver in drivers"  ng-selected="fuelEntry.fuel_driver_id == driver.driver_id"   value="{{driver.driver_id}}">{{driver.driver_name}}</option>
+                </select>
+              </div>
+              <div class="col-sm-4" style="padding-bottom: 1vw;">
+                <label>Quantity</label>
+                <input type="text" ng-model="fuelEntry.fuel_quantity" placeholder="Quantity" class="form-control ng-pristine ng-untouched ng-invalid " aria-required="true" aria-invalid="true">
+              </div>
+              <div class="col-sm-4" style="padding-bottom: 1vw;">
+                <label>Amount</label>
+                <input type="text" ng-model="fuelEntry.fuel_amount" placeholder="Amount" class="form-control ng-pristine ng-untouched ng-valid-email ng-invalid " aria-required="true" aria-invalid="true">
+              </div>
+              <div class="col-sm-4" style="padding-bottom: 1vw;">
+                <button style="margin-top:14px; width:69px; padding:8px;"  class="btn btn-danger" ng-click="deleteFuel(fuelEntry.fuel_id)" ng-show="deleteButton">Delete</button>
+                <button style="padding:8px;width:86px;margin-top:12px;" type="submit" class="btn btn-success" ng-disabled='form.$invalid' ng-click="submitFuelEntryForm()">Submit</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  
+    <div style="padding-bottom: 100px;margin-bottom: 100px;" class="fuelentryTab">
+      <div style="background:#354f74;padding:0px;border-radius:5px;color:white;"  ng-show="fuelData.length > 0">
+        <table class="table table-bordered   cf" style="border:none !important;">
+          <thead>
+            <tr>
+              <th style="border:none !important;width:3%;color:white;">	Sl </th>
+              <th style="border:none !important;width:8%;color:white;">Date</th>				
+              <th style="border:none !important;width:12%;color:white;">Fuel Type</th>
+              <th style="border:none !important;width:12%;color:white;">Driver Name</th>				
+              <th style="border:none !important;width:12%;color:white;">Quantity </th>
+              <th style="border:none !important;width:12%;color:white;">Amount</th>				
+              <th style="border:none !important;width:4%;color:white;"></th> 
+            </tr>
+          </thead>
+          <tbody style="background-color:#fffffd;">	
+            <tr  ng-repeat="fuel in fuelData">
+              <td>{{$index+1}}</td>
+              <td>{{fuel.fuel_date | limitTo:10 }} </td>		
+              <td>{{fuel.fuel_type}}</td>
+              <td> {{fuel.driver_name}}</td>		
+              <td>{{fuel.fuel_quantity}}</td>
+              <td>{{fuel.fuel_amount}}</td>	
+              <td>
+                <button type="button" class="btn btn-info" ng-click="getSingleFuel(fuel.fuel_id)">
+                  <i class="fa fa-eye" aria-hidden="true"></i>
+               </button>
+             </td>						
+            </tr>	
+            <tr ng-show="fuel.length>0">
+              <td colspan="2"><b>Total Cost</b></td>
+              <td colspan="4" style="text-align:end;">{{fuelSum}} </td>
+              <td></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>  
+
+      <div style="margin: 10px 35px;" ng-show="fuelData.length == 0">No fuel entry</div>
+    </div>
+
+    <!--<div style="margin-top:-50px;margin-bottom:150px !important; ">
+     <div class="col-sm-6" >
+
+
+
+      <div class="col-sm-6" style="float:right; ">
+        <label>Period to</label>                   
+        <div class="well" style="width:95%;padding:0;">
+          <div id="datetimepicker257" class="input-group date">
+            <input class="form-control" data-format="yyyy-MM-dd hh:mm:ss" id="dateFuelTo" ng-model="maintenanceTo" type="text" style="height:30px !important;padding:4px;">
+
+            <span class="input-group-addon add-on" style="display:table-cell;">
+              <i style="font-style:normal;" data-time-icon="entypo-clock" data-date-icon="entypo-calendar"></i>
+            </span>
+          </div>
+        </div>
+
+      </div> 
+      
+        <div class="col-sm-6"  >
+        <label>Period from</label>                   
+        <div class="well" style="width:95%;padding:0;">
+          <div id="datetimepicker256" class="input-group date">
+            <input class="form-control" data-format="yyyy-MM-dd hh:mm:ss"  id="dateFuelFrom" ng-model="maintenanceFrom" type="text" style="height:30px !important;padding:4px;">
+
+            <span class="input-group-addon add-on" style="display:table-cell;">
+              <i style="font-style:normal;" data-time-icon="entypo-clock" data-date-icon="entypo-calendar"></i>
+            </span>
+          </div>
+        </div>
+
+      </div> 
+
+
+    </div> 
+
+    <button type="button" class="btn btn-info" class="ui button aligned center teal" id="crete_pdf" style="padding:5px;float:right;margin:2px;"  data-dismiss="modal">Download Pdf</button>
+    <button type="submit" class="btn btn-info"   style="padding:5px;float:right;margin:2px;" ng-click="getFuelBydate()">Search</button>
+    </div>-->
+
+  </section>
+</div>
+
+
+
+
+
+
+
+<script type="text/javascript">
+$('#datetimepicker45').datetimepicker({
+  language: 'pt-BR'
+
+});
+$('#datetimepicker256').datetimepicker({
+  language: 'pt-BR'
+
+});
+$('#datetimepicker257').datetimepicker({
+  language: 'pt-BR'
+
+});
+
+
+$('#dp1').datepicker()
+$('#dpYears').datepicker();
+$('#timepicker1').timepicker();
+$('#t1').clockface();
+$('#t2').clockface({
+  format: 'HH:mm',
+  trigger: 'manual'
+});
+
+$('#toggle-btn').click(function(e) {
+  e.stopPropagation();
+  $('#t2').clockface('toggle');
+});
+</script>
+
+<script type="text/javascript">
+
+ var height = $(window).height();
+ var fuelentryTab_height = height-318;
+
+$(".fuelentryTab").height(fuelentryTab_height);
+$(".fuelentryTab").css("overflow-y","scroll");
+ 
+</script>

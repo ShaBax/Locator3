@@ -1,0 +1,73 @@
+<div id="wrapper">    
+    <!-- Page Content -->
+    <div id="page-content-wrapper" class="main_div">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12 col-sm-12 col-xs-12 headersec_main">
+                    <div class="leftbar" >
+                        <a ui-sref="vehicles"  id="menu-toggle"><i class="fa fa-arrow-left bckbtn" aria-hidden="true"></i></a>
+                    </div>
+                    <div class="haderdiv_inner">
+                        <div class="header_sec">summary</div>           
+                    </div>
+                </div>
+                <div class="col-md-12 col-sm-12 col-xs-12 first_sec_vechicle summery_page" style="margin-bottom: 0px; height: 85vh;" >                          
+                    <div class="col-md-12 col-sm-12 col-xs-12 first_sec">
+                        <div class="col-xs-12 graph_div summarygraph_div" style="height:30vh; width:100%">
+                            <canvas id="doughnutsummary" class="chart chart-doughnut"   
+                                  chart-data="chartData" chart-colors="colors" chart-labels="labels">
+                                </canvas> 
+                       </div>
+                       <h2 class="carname">{{vehicledtls.obj_name}}</h2>
+                       <div style="width:100%; text-align:center; margin-top:-10px">Yesterday ({{fromDate}})</div>
+                    </div>
+                    <div class="col-lg-12 col-sm-12 col-xs-12 second_sec paddingnone">
+                        <ul class="col-lg-12 col-sm-12 col-xs-12" style="background-color: transparent;">
+                            <li class="col-lg-6 col-sm-6 col-xs-6 blueC" >
+                                <a ><img src="images/icn_distance.png">
+                                    <span class="distance_travelled">
+                                        {{details.distancetravelled[0].totalmileage ? details.distancetravelled[0].totalmileage : 0 | number:2}}
+                                        <span class="KM">km</span>
+                                    </span>
+                                    <span class="summery_subhead">Distance Travelled</span>
+                                    <span class="summery_minihead"><img src="images/icn_average.png">Max Speed <b>{{details.distancetravelled[0].avgspeed  ? details.distancetravelled[0].avgspeed : 0 | number:2}}</b></span>
+                                </a>
+                            </li>
+                            <li class="col-lg-6 col-sm-6 col-xs-6 greenC" style="border-left: 1px solid #c5c8cc;" >
+                                <a ><img src="images/icn_moving_time.png">
+                                    <span class="distance_travelled ">{{details.timemoving ? details.timemoving :0}}</span>
+                                    <span class="summery_subhead">Moving Time</span>
+                                    <span class="summery_minihead"><img src="images/icn_average.png">No. of Trips <b>{{details.totaltrips ? details.totaltrips :0}}</b></span>  
+                                </a>
+                            </li>
+                            <li class="col-lg-6 col-sm-6 col-xs-6 roseC" style="border-right: 1px solid #c5c8cc;border-top: 1px solid #c5c8cc;" >
+                                <a ><img src="images/icn_parking_time.png">
+                                    <span class="distance_travelled">{{details.parkingTime ? details.parkingTime :0}}</span>
+                                    <span class="summery_subhead">Parking Time</span>
+                                    <span class="summery_minihead"><img src="images/icn_average.png">No. of Stops <b>{{details.totalStops ? details.totalStops :0}}</b></span>
+                                </a>
+                            </li>
+                            <li class="col-lg-6 col-sm-6 col-xs-6 oranageC" style="border-top: 1px solid #c5c8cc;" >
+                                <a ><img src="images/icn_idling_time.png" style="margin-bottom: 1px;  width: 36px;">
+                                    <span class="distance_travelled">{{details.idlingTime ? details.idlingTime :0}}</span>
+                                    <span class="summery_subhead">Idling Time</span>
+                                    <span class="summery_minihead"><img src="images/icn_average.png">No. of Idling <b>{{details.totalIdling ? details.totalIdling :0}}</b></span>
+                                </a>
+                            </li>    
+                        </ul>
+                    </div>          
+                </div>
+                <div class="col-lg-12 col-sm-12 col-xs-12 paddingnone footersec">
+                    <ul>
+                        <li><a ui-sref="dashboard"><img src="images/icn_home.png" style="width:30px"></a></li>
+                        <li><a ng-click="goToPage('live')"><img src="images/map.svg" style="width:30px"  ></a></li>
+                        <li><a ng-click="refresh()"><img src="images/icn_refresh.png" style="width:30px"></a></li>
+                        <li><a ui-sref="alert"><img src="images/icn_notification.png" style="width:30px"></a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div><!-- /#page-content-wrapper -->
+</div>    <!-- /#wrapper -->
+
+  

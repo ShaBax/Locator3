@@ -1,0 +1,117 @@
+<div id="wrapper">
+  <!-- Page Content -->
+  <div id="page-content-wrapper" class="main_div">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-lg-12 col-sm-12 col-xs-12 headersec_main">
+          <div class="leftbar" >
+            <a ui-sref="tripVehicles" id="menu-toggle"><i class="fa fa-arrow-left bckbtn" aria-hidden="true"></i></a>
+          </div>
+          <div class="haderdiv_inner">
+            <div class="header_sec">Trips</div>                
+          </div>
+        </div>
+        <div class="col-md-12 col-sm-12 col-xs-12 first_sec_vechicle vechicles_page">              
+          <ul class="vechicle_list_deatis">          
+            <ul class="main_ul">                    
+              <li class="col-xs-12 paddingnone" ng-repeat="trip in trips">
+                <div class="col-xs-12 paddingnone main_ul_heading">
+                  <div class="main_head">
+                    <div class="img_box"><img src="images/icn_truck.png"></div>
+                    <div class="content_main">{{trip.name}}</div>
+                  </div>
+                </div>
+                <!--<div class="col-xs-4 main_ul_date"><i class="fa fa-calendar" aria-hidden="true"></i></div>-->
+                <ul class="sub_ul">
+                  <li class="col-xs-12 paddingnone playback_sublist" ng-repeat="trip in trip.trip" style="padding: 0 0 12px 0; overflow:auto">
+
+                    <div class="col-xs-12" style="background-color: #1f96f0;color: #fff;text-align: end;margin-bottom:10px;">{{trip.date}}&nbsp;<i class="fa fa-calendar" aria-hidden="true"></i></div>
+                    <ul class="sub_ul">
+                      <li class="col-xs-12 paddingnone playback_sublist ng-scope" ng-repeat="data in trip.data.trips">
+                    <div style="padding: 0 10px 10px;"  ng-click="showCurrentTrack(data.trip_veh_device_id,data.trip_id)">
+                      <div class="col-xs-4 paddingnone from_img">
+                        <span><img src="images/icn_from.png"></span>
+                        <span class="fromtime">{{data.trip_start | limitTo:-8}}</span>
+                      </div>
+                      <div class="col-xs-4 paddingnone to_img">
+                        <span><img src="images/icn_to.png"></span>
+                        <span class="fromtime" ng-if="data.trip_stop!=''">{{data.trip_stop | limitTo:-8}}</span>
+                        <span class="fromtime" ng-if="data.trip_stop==''">Current Trip</span>
+                      </div>
+                      <div class="col-xs-4 paddingnone to_img play_img">
+                        <span class="fromtime">Play</span>
+                        <span><img src="images/icn_play.png"></span>
+                      </div>
+                      <div class="col-xs-4 paddingnone distance">
+                        <span class="">Distance</span>
+                        <p>{{data.trip_milage | number:2}}  </p>
+                      </div>
+                      <div class="col-xs-4 paddingnone duration">
+                        <span class="">Duration</span>
+                        <p>{{data.time | limitTo:8}}</p>
+                      </div>
+                      <div class="col-xs-4 paddingnone idling_inner">
+                        <span class="">Idling</span>
+                        <span class="">{{data.idlingTime}}</span>
+                        <p>0</p>
+                      </div>
+                    </div>
+                  </li></ul>
+                    
+                  </li> 
+                  <li  ng-if="trip.trip.length==''">
+                      No Trips {{trip.trip.length}}
+                    </li>
+                  
+
+                    <!--<div style="background: #1f96f0 none repeat scroll 0 0;color: white;margin-bottom: 5px;padding-right: 10px;text-align: right;">
+                      {{trip.date}}<i class="fa fa-calendar" aria-hidden="true" style="margin-left: 5px;"></i>
+                    </div>
+
+                    <div class="col-xs-12" style="border-bottom: 1px solid #1f96f0;margin-bottom: 5px;">
+                      <div class="col-xs-3">
+                        <span>Start</span>
+                      </div>
+                      <div class="col-xs-3">
+                        <span>Stop</span>
+                      </div>                     
+                      <div class="col-xs-3">                 
+                        <span>Duration</span>
+                      </div>
+                      <div class="col-xs-3">
+                        <span>Kilometer</span>
+                      </div>                      
+                    </div>
+
+                    <div class="col-xs-12" ng-repeat="data in trip.data.trips" ng-click="showCurrentTrack(data.trip_veh_device_id,data.trip_id)">
+                      <div class="col-xs-3">
+                        <span>{{data.trip_start | limitTo:-8}}</span>
+                      </div>
+                      <div class="col-xs-3">
+                        <span>{{data.trip_stop | limitTo:-8}}</span>
+                      </div>                     
+                      <div class="col-xs-3">                 
+                        <span>{{trip.data.totalDuration}}</span>
+                      </div>
+                      <div class="col-xs-3">
+                        <span>{{trip.data.sum | number:2}}</span>
+                      </div>                      
+                    </div>-->                 
+                </ul>
+              </li>                
+            </ul>                 
+          </ul>              
+        </div>           
+        <div class="col-lg-12 col-sm-12 col-xs-12 paddingnone footersec">
+          <ul>
+            <li><a ui-sref="dashboard"><img src="images/icn_home.png" style="width:30px"></a></li>
+            <li><a ng-click="goToPage('live')"><img src="images/map.svg" style="width:30px" ></a></li>
+            <li><a ng-click="refresh()"><img src="images/icn_refresh.png" style="width:30px"></a></li>
+            <li><a ui-sref="alert"><img src="images/icn_notification.png" style="width:30px"></a></li>
+          </ul>
+          </div>
+      </div>
+    </div>        
+  </div><!-- /#page-content-wrapper -->
+    </div>
+    <!-- /#wrapper -->

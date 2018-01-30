@@ -1,0 +1,220 @@
+<div id="wrapper">
+    <!-- Page Content -->
+    <div id="page-content-wrapper" class="main_div">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12 col-sm-12 col-xs-12 headersec_main">
+                    <div class="leftbar" >
+                        <a ui-sref="dashboard" id="menu-toggle"><i class="fa fa-arrow-left bckbtn" aria-hidden="true"></i></a>
+                    </div>
+                    <div class="haderdiv_inner">
+                        <div class="header_sec">Vehicles - Trips</div>                
+                    </div>
+                </div>
+                <div class="col-md-12 col-sm-12 col-xs-12 first_sec_vechicle vechicles_page report_list" style="padding: 0px 0px 0px 0px !important;">                
+          <!-- Nav tabs -->
+          <ul class="nav nav-tabs col-md-12 col-sm-12 col-xs-12 paddingnone report_tab" role="tablist">
+            <li role="presentation" style="width: 30%" class="active" ng-click="setReportDate('today')">
+              <a aria-controls="home" role="tab" data-toggle="tab">Today</a>
+            </li>
+            <li role="presentation" style="width: 30%" ng-click="setReportDate('yesterday')">
+              <a aria-controls="Yesterday" role="tab" data-toggle="tab">Yesterday</a>
+            </li>
+            <li role="presentation" style="width: 30%" ng-click="setReportDate('lastweek')">
+              <a aria-controls="last_week" role="tab" data-toggle="tab">Last Week</a>
+            </li>
+            <li role="presentation" style="width: 10%">
+              <a id="calendarBtn"><i class="fa fa-calendar" aria-hidden="true"></i></a>
+            </li>
+          </ul>
+          <!-- Tab panes -->
+          <div class="tab-content col-md-12 col-sm-12 col-xs-12 paddingnone" ng-init="getVehiclesList()">
+            <div role="tabpanel" class="tab-pane active" id="today" style="margin-bottom:100px">   
+              <ul class="vechicle_list" ng-repeat="group in groups" style="margin-bottom:0px">
+
+                <li style=" font-weight: bold;    border-bottom: 1px solid #ccc; border-top: 1px solid #ccc;    font-size: 16px;">{{group.group.obj_group_name}} </li>
+                <li ng-repeat="vehicle in group.vehicles.ran | filter :search">
+                  
+                    <div class="car_icon idle_ico">&nbsp</div>
+                    <div class="vechicle_list_info">
+                      <h5>{{vehicle.obj_name | limitTo:20}}</h5>
+                      <p ng-if="vehicle.track_vehicles_status == 'Moving'">Moving at {{vehicle.track_vehicles_veh_speed}}km/Hr&nbsp; - &nbsp;{{vehicle.duration}}</p>
+                                        <p ng-if="vehicle.track_vehicles_status != 'Moving'">{{vehicle.track_vehicles_status}}&nbsp;{{vehicle.duration}}</p>
+                    </div>
+                    <input type="checkbox" ng-model="vehID" id="trip_{{vehicle.obj_id}}"  ng-true-value="{{vehicle.obj_id}}" ng-false-value="0" ng-change="selectedVehiclesforTrips(vehicle.obj_name,vehicle.obj_device_id,vehID)">  
+                  <label for="trip_{{vehicle.obj_id}}"><span></span></label>
+                </li>                
+              </ul>
+            </div>  
+          </div>
+        </div>
+
+
+
+            
+
+
+                <div class="col-lg-12 col-sm-12 col-xs-12 paddingnone footersec">
+                    <div class="genarate_report col-md-12" ng-click="goToNextPage(0,0,0)">
+            <a  style="text-decoration: none;">SUBMIT</a>
+          </div>
+                    <ul>
+                        <li><a ui-sref="dashboard"><img src="images/icn_home.png" style="width:30px"></a></li>
+                        <li><a ng-click="goToPage('live')"><img src="images/map.svg"   style="width:30px"></a></li>
+                        <li><a ng-click="refresh()"><img src="images/icn_refresh.png" style="width:30px"></a></li>
+                        <li><a ui-sref="alert"><img src="images/icn_notification.png" style="width:30px"></a></li>
+                    </ul>
+                </div>
+            </div>   
+        </div>
+    </div><!-- /#page-content-wrapper -->
+</div><!-- /#wrapper -->
+
+<div id="calendarModal" class="modal">
+    <!-- Modal content -->
+    <div class="modal-content">
+        <!--<div class="modal-header">
+          <h4>Share Location</h4>
+        </div>-->
+        <div class="modal-body">
+
+          <div class="col-sm-12" style="padding: 0px;">
+            
+              <label class="col-sm-3 control-label" style="padding: 0px;">From Date</label>
+                <div class="col-sm-6 form-group">
+                    <div class='input-group date' readonly id='datetimepicker1'>
+                        <input type='text'   class="form-control" />
+                        <span class="input-group-addon">
+                            <span class="glyphicon glyphicon-calendar"></span>
+                        </span>
+                    </div>
+                </div>
+            
+              <label class="col-sm-3 control-label" style="padding: 0px;">To Date</label>
+                <div class="col-sm-6 form-group">
+                    <div class='input-group date' readonly id='datetimepicker2'>
+                        <input type='text'   class="form-control" />
+                        <span class="input-group-addon">
+                            <span class="glyphicon glyphicon-calendar"></span>
+                        </span>
+                    </div>
+                </div>
+                 <div class="genarate_report col-md-12" ng-click="goToNextPage(0,0,0)">
+                    <a  style="text-decoration: none;">SUBMIT</a>
+                    </div>
+
+          </div>  
+
+        </div> 
+        <!--<div class="modal-footer">              
+        </div>-->
+    </div>      
+</div>
+
+<script type="text/javascript">
+    $(function () {
+        $('#datetimepicker1').datetimepicker({ignoreReadonly: true
+        });
+        $('#datetimepicker2').datetimepicker({ignoreReadonly: true
+        });
+
+        $("#datetimepicker1").on("dp.change", function (e) {
+            $('#datetimepicker2').data("DateTimePicker").minDate(e.date);
+        });
+        $("#datetimepicker2").on("dp.change", function (e) {
+            $('#datetimepicker1').data("DateTimePicker").maxDate(e.date);
+        });
+    });
+
+
+    var modal = document.getElementById('calendarModal');
+
+    var btn = document.getElementById("calendarBtn");
+
+    btn.onclick = function() {
+        modal.style.display = "block";
+    }
+
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+
+
+</script>
+
+<style>
+    /* The Modal (background) */
+    .modal {
+        display: none; /* Hidden by default */
+        position: fixed; /* Stay in place */
+        z-index: 1; /* Sit on top */
+        padding-top: 100px; /* Location of the box */
+        left: 0;
+        top: 50px;
+        width: 100%; /* Full width */
+        height: 100%; /* Full height */
+        overflow: auto; /* Enable scroll if needed */
+        background-color: rgb(0,0,0); /* Fallback color */
+        background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    }
+
+    /* Modal Content */
+    .modal-content {
+        position: relative;
+        background-color: #fefefe;
+        margin: auto;
+        padding: 0;
+        border: 1px solid #888;
+        width: 90%;
+        box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+        -webkit-animation-name: animatetop;
+        -webkit-animation-duration: 0.4s;
+        animation-name: animatetop;
+        animation-duration: 0.4s
+    }
+
+    /* Add Animation */
+    @-webkit-keyframes animatetop {
+        from {top:-300px; opacity:0} 
+        to {top:0; opacity:1}
+    }
+
+    @keyframes animatetop {
+        from {top:-300px; opacity:0}
+        to {top:0; opacity:1}
+    }
+
+    /* The Close Button */
+    .close {
+        color: white;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+    .close:hover,
+    .close:focus {
+        color: #000;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    .modal-header {
+        padding: 2px 16px;
+        background-color: #5cb85c;
+        color: white;
+    }
+
+    .modal-body {padding: 10px 16px;}
+
+    .modal-footer {
+        padding: 2px 16px;
+        /*background-color: #5cb85c;*/
+        color: white;
+    }
+</style>
+
+   
+   

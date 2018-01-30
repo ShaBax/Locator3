@@ -1,0 +1,1735 @@
+<style type="text/css">
+    
+.disabled {
+   pointer-events: none;
+   cursor:not-allowed;
+   opacity: 0.55 !important;
+}
+</style>
+<div  class="siteLoader" style="padding: 0;">   
+    <button type="button" class="closeLoader" ng-click="hideLoading()">
+        <span aria-hidden="true">&times;</span>
+    </button>
+    <div class="loadWrapper">
+        <div class="loader"></div>
+        <!-- <img src="assets/img/logo_icon.png" >-->
+    </div>
+</div>
+
+<body id="heightscrollset">
+
+    <!-- TOP NAVBAR -->
+    <nav role="navigation" class="navbar navbar-static-top" data-ng-controller="LogoutCtrl">
+        <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button data-target="#bs-example-navbar-collapse-1" data-toggle="collapse" class="navbar-toggle" type="button">
+                    <span class="entypo-menu"></span>
+                </button>
+                <button class="navbar-toggle toggle-menu-mobile toggle-left" type="button">
+                    <span class="entypo-list-add"></span>
+                </button>
+            </div>
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div id="bs-example-navbar-collapse-1" class="collapse navbar-collapse">
+                <div id="nt-title-container" class="navbar-left running-text visible-lg">
+                    <ul class="date-top">
+                        <li class="entypo-calendar" style="margin-right:5px"></li>
+                        <li id="Date"></li>
+                    </ul>
+                    <ul id="digital-clock" class="digital">
+                        <li class="entypo-clock" style="margin-right:5px"></li>
+                        <li class="hour"></li>
+                        <li>:</li>
+                        <li class="min"></li>
+                        <li>:</li>
+                        <li class="sec"></li>
+                        <li class="meridiem"></li>
+                    </ul>
+                </div>
+                <ul style="margin-right:0;" class="nav navbar-nav navbar-right">
+                    <li>
+                        <a data-toggle="dropdown" class="dropdown-toggle"  >
+                            <img class="admin-pic img-circle" src="{{basePath}}/assets/admin/{{userDetails.photo ? userDetails.photo : 'default.png'}}" alt="">Hi, {{userDetails.name?userDetails.name:'Name' | limitTo:15}} <b class="caret"></b>
+                        </a>
+
+                        <ul style="margin-top:14px;min-width:160px !important;" role="menu" class="dropdown-setting dropdown-menu">
+                            <li>
+                                <a  data-toggle="modal" data-target="#showProfile" class="disabled">
+                                    <span class="entypo-user"></span>&#160;&#160;My Profile
+                                </a>
+                            </li>
+
+                             <li>
+                                <a data-toggle="modal" data-target="#showChangelastuserPassword" class="disabled">
+                                    <span class="entypo-user"></span>&#160;&#160;Change Password
+                                </a>
+                            </li>
+
+
+                            <li ng-if="userDetails.user_general_type != 'User'" >
+                                <a data-toggle="modal" data-target="#accountSettings" ng-click="dgetSubUsers()" class="disabled">
+                                    <span class="entypo-vcard"></span>&#160;&#160;Account Settings
+                                </a>
+                            </li>
+                            <li>
+                                <a data-toggle="modal" data-target="#Notifications"  ng-click="cdallGetSettingsNotifications()" class="disabled">
+                                    <span class="entypo-info"></span>&#160;&#160;&#160;&#160;Notifications
+                                </a>
+                            </li>
+                                   <!-- <li>
+                                        <a data-toggle="modal" data-target="#CommonGeozones">
+                                            <span class="entypo-lifebuoy"></span>&#160;&#160;Common Zones
+                                        </a>
+                                    </li> -->
+                                    <li>
+                                        <a data-toggle="modal" data-target="#ReportScheduler" ng-click="dcallreportsScheduler()" class="disabled">
+                                            <span class="entypo-clock"></span>&#160;&#160;Report Scheduler
+                                        </a>
+                                    </li> 
+                                    <li class="divider"></li>
+                                    <li>
+                                        <a data-toggle="modal" data-target="#addVehicle" ng-click="dheaderAddObject()" class="disabled">
+                                            <span class="entypo-plus-circled"></span>&#160;&#160;Add Object
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a data-toggle="modal" data-target="#addGroup" class="disabled">
+                                            <span class="entypo-plus-circled"></span>&#160;&#160;Add Group
+                                        </a>
+                                    </li>
+                                    <li class="divider"></li>
+                                    <li>
+                                        <a ng-click="logout()" > 
+                                            <span class="entypo-logout"  ></span>&#160;&#160;Logout
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                                    <span class="icon-gear"></span>&#160;&#160;
+                                </a>
+                                <ul role="menu" class="dropdown-setting dropdown-menu" style="min-width:165px;">
+                                    <li class="theme-bg">
+                                        <div id="button-bg"></div>
+                                        <div id="button-bg2"></div>
+                                        <div id="button-bg3"></div>
+                                        <div id="button-bg5"></div>
+                                        <div id="button-bg6"></div>
+                                        <div id="button-bg7"></div>
+                                        <div id="button-bg8"></div>
+                                        <div id="button-bg9"></div>
+                                        <div id="button-bg10"></div>
+                                        <div id="button-bg11"></div>
+                                        <div id="button-bg12"></div>
+                                        <div id="button-bg13"></div>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="hidden-xs rightsideopen">
+                                <a class="toggle-left" href="#"  ng-click="callGetAllSchedules()">
+                                    <span style="font-size:20px;" class="entypo-list-add"></span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <!-- /.navbar-collapse -->
+                </div>
+                <!-- /.container-fluid -->
+            </nav>
+
+            <div class="modal fade" id="showProfile" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true" data-ng-controller="LogoutCtrl">
+                <div class="modal-dialog" style="width:800px !important;" role="document">
+                    <div class="modal-content"  >
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLongTitle">Profile</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="alert alert-success" style="text-align:center;margin-top:5px;" ng-show="profileSuccessMessage">
+                          <span class="entypo-thumbs-up"></span>{{profileSuccessMessage}}.
+                      </div>
+
+                      <div class="alert alert-danger" style="text-align:center;margin-bottom:0;"  ng-show="errorMsgFlag">
+                        <span class="entypo-thumbs-up"></span>{{errorMsg}}.
+                    </div>
+
+
+
+                    <form class="form-validation" name="form">
+                        <div class="modal-body" style="overflow:hidden">
+                            <div class="col-sm-12">
+                                <div class="col-sm-6">
+                                    <label class="col-sm-3 control-label">Name</label>
+                                    <div class="col-sm-12" >
+                                        <input class="form-control" type="text" ng-model="userDetails.user_fullname">
+                                    </div>   
+                                    <label class="col-sm-3 control-label">Email</label>
+                                    <div class="col-sm-12" >
+                                        <input required class="form-control" type="email" ng-model="userDetails.user_email">
+                                    </div>   
+                                    <label class="col-sm-3 control-label">Username</label>
+                                    <div class="col-sm-12" >
+                                        <input required class="form-control" type="text" ng-model="userDetails.user_name">
+                                    </div>
+                                    <label class="col-sm-6 control-label">User Organisation</label>
+                                    <div class="col-sm-12" >
+                                        <input required class="form-control" type="text" ng-model="userDetails.user_org_name">
+                                    </div>  
+                                </div>
+                                <div class="col-sm-6">
+                                    <label class="col-sm-3 control-label">Image</label><br>
+                                    <div class="col-sm-12" >
+                                        <input type="file" id="file1" name="file" multiple ng-files="getTheFiles($files)">
+                                    </div>  
+                                    <label class="col-sm-6 control-label">Common Message</label>
+                                    <div class="col-sm-12" >
+                                        <textarea style="width:100%;" ng-model="userDetails.common_message"></textarea>
+                                    </div> 
+                                    <label class="col-sm-6 control-label">Organization Logo</label><br>
+                                    <div class="col-sm-12" >
+                                        <input type="file" id="fileorg" name="files" multiple ng-files="getTheOrgLogo($files)">
+                                    </div> 
+                                </div>
+                            </div>  
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-success" ng-disabled='form.$invalid' style="padding:6px;"  ng-click="saveProfile()">Save Changes</button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+
+
+
+<div  ng-controller="LogoutCtrl" class="modal fade" id="showChangelastuserPassword" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+    <div class="modal-dialog" style="width:800px !important;max-height:500px !important;"  role="document">
+        <div class="modal-content" >
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Edit Password </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="alert alert-success" style="text-align:center;margin-top:5px;" ng-show="editlastPasswordSuccessMessage">
+              <span class="entypo-thumbs-up"></span>{{editlastPasswordMessage}}.
+          </div>
+
+          <div class="alert alert-danger" style="text-align:center;margin-bottom:0;"  ng-show="editlastPasswordErrorMessage">
+            <span class="entypo-thumbs-up"></span>{{editlastPasswordMessage}}.
+        </div>
+        <form class="form-validation" name="EditPasswordFormlast">
+            <div class="modal-body" style="overflow-y:auto;height:95px;">
+                <div class="col-sm-12">
+                 <div class="col-sm-4" ng-hide="settings.user_id">
+                    <label class="col-sm-8 control-label">Old Password</label>
+                    <div class="col-sm-12" >
+                        <input id="userPassword" name="userPassword" class="form-control" type="password" ng-model="editlastuserpassworddata.oldPassword" ng-minlength="6" required>
+                    </div>                                 
+                </div>
+                <div class="col-sm-4" ng-hide="settings.user_id">
+                    <label class="col-sm-8 control-label">New Password</label>
+                    <div class="col-sm-12" >
+                        <input id="userPassword" name="userPassword" class="form-control" type="password" ng-model="editlastuserpassworddata.newPassword" ng-minlength="6" required>
+                        <!-- <label style="color:red" class="error"  ng-show="EditPasswordForm.userPassword.$error.minlength">The user password must be at least 6 characters.</label>-->
+                    </div>                                 
+                </div>
+
+                <div class="col-sm-4" ng-hide="settings.user_id">
+                    <label class="col-sm-9 control-label">Confirm Password</label>
+                    <div class="col-sm-12" >
+                        <input id="userPassword" name="userPassword" class="form-control" type="password" ng-model="editlastuserpassworddata.confirmPassword" ng-minlength="6" required>
+                        <!--<label style="color:red" class="error"  ng-show="EditPasswordForm.userPassword.$error.minlength">The user password must be at least 6 characters.</label>-->
+                    </div>                                 
+                </div>
+            </div> 
+        </div>
+        <div class="modal-footer" style="padding: 10px 20px;">
+            <button type="submit" class="btn btn-success" ng-disabled='EditPasswordFormlast.$invalid' style="padding:6px;" ng-click="editLastUserPassword()">Save</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal" style="padding:7px;">Close</button>
+        </div>
+    </form>
+</div>
+</div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <div ng-controller="NavigationCtrl">
+
+            <div class="modal fade" id="addGroup" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true"  >
+                <div class="modal-dialog" style="width:450px !important;" role="document">
+                    <div class="modal-content" >
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLongTitle">Add Group</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="alert alert-success" style="width:100%;text-align:center;" ng-show="successMessage">
+                          <span class="entypo-thumbs-up"></span>{{successMessage}}.
+                      </div>
+                      <form class="form-validation" name="addObjectGroupform">
+                        <div class="modal-body" style="overflow:hidden"> 
+                            <label class="col-sm-3 control-label">Name</label>
+                            <div class="col-sm-12" >
+                                <input required class="form-control" type="text" ng-model="vehicleGroup.obj_group_name">
+                            </div>   
+                        </div>
+                        <div class="modal-footer">
+                            <button style="padding:6px;" type="submit" class="btn btn-success"  ng-disabled='addObjectGroupform.$invalid'  ng-click="saveObjectGroup()">Add Group</button>
+                            <button style="padding:7px;" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        </div>
+                    </form> 
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="accountSettings" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+            <div class="modal-dialog" style="width:1100px !important;max-height:500px !important;"  role="document">
+                <div class="modal-content" >
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLongTitle">Account Settings </h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+
+
+
+
+
+
+                    <div class="col-sm-12">
+
+                        <button style="padding:6px;float:right;" type="submit" class="btn btn-info" data-toggle="modal" data-target="#accountSettingsAddandEdit" ng-click="addSubuser()">
+                            Add Subuser</button>
+
+                            <button type="button" class="btn btn-danger " ng-click="getSubUser()" style="padding:6px 12px !important;margin-right:5px;float:right;">
+                                <i class="fa fa-refresh" style="color:#333;" aria-hidden="true"></i> 
+                            </button>                            
+                        </div>
+                        <div class="col-sm-12"> 
+                            <table class="table table-bordered cf" style="margin: 10px 20px 10px 50px;width: 90%;height: 200px; overflow-y: auto; display: block;" ng-show="subUsers.length>0">
+                                <thead style="display: table; width: 100%;">
+                                    <tr>
+                                        <th style="border-bottom:none !important;color:black;padding-left: 12px !important;width: 7%;">Sl No </th>
+                                        <th style="border-bottom:none !important;color:black;padding-left: 12px !important;width: 32%;">Name</th>       
+                                        <th style="border-bottom:none !important;color:black;padding-left: 12px !important; " col-span="4">Email</th>
+                                        
+                                    </tr>
+                                </thead>
+
+                                <tbody style="background-color:#fffffd;display: table; width: 100%;"> 
+                                    <tr ng-repeat="subUser in  subUsers">
+                                        <td style="padding-left: 12px !important;width: 7%;">{{$index+1}}</td>
+                                        <td style="padding-left: 12px !important;width: 32%;">{{subUser.user_fullname}} </td>    
+                                        <td style="padding-left: 12px !important;width: 32%;">{{subUser.user_email}} </td>   
+                                        <td style="padding-left: 12px !important;width: 7%;">
+                                            <button type="button" class="btn btn-success" data-toggle="modal" data-target="#accountSettingsAddandEdit"  ng-click="getSubuser(subUser.user_id)">Edit</button>
+                                        </td>
+
+                                        <td style="padding-left: 12px !important;width: 6%;">
+                                            <button type="button" class="btn btn-danger" ng-click="deletethisSubUser(subUser.user_id)">Delete</button>
+                                        </td>
+
+                                        <td style="padding-left: 12px !important;width: 12%;">
+                                            <button type="button" class="btn btn-warning" ng-click="editSubuserPassword(subUser.user_id)">Edit Password</button>
+                                        </td>
+
+
+
+
+
+                                    </tr> 
+                                </tbody>
+                            </table>
+
+                          <!-- <div class="alert alert-success" style="text-align:center;margin-bottom:0;" ng-show="acSettingsSuccessMessage">
+                                <span class="entypo-thumbs-up"></span>{{acSettingsSuccessMessage}}.
+                            </div>
+                            <div class="alert alert-danger" style="text-align:center;margin-bottom:0;" ng-show="acSettingsErrorMessage">
+                                <span class="entypo-thumbs-up"></span>{{acSettingsErrorMessage}}.
+                            </div>-->
+
+                        </div>
+
+                        <form class="form-validation" name="formNewSubUser">
+                            <div class="modal-body" style="overflow-y:auto;height:200px;">
+                                <!--<div class="alert alert-success" style="text-align:center;margin-bottom:0;" ng-show="acSettingsSuccessMessage">
+                                    <span class="entypo-thumbs-up"></span>{{acSettingsSuccessMessage}}.
+                                </div>
+                                <div class="alert alert-danger" style="text-align:center;margin-bottom:0;" ng-show="acSettingsErrorMessage">
+                                    <span class="entypo-thumbs-up"></span>{{acSettingsErrorMessage}}.
+                                </div>-->
+                                <!--<div class="col-sm-12">
+                                    <div class="col-sm-3">
+                                        <label class="col-sm-3 control-label">Name</label>
+                                        <div class="col-sm-12" >
+                                            <input  class="form-control" type="text" ng-model="settings.user_fullname" required>
+                                        </div>                                 
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <label class="col-sm-3 control-label">Email</label>
+                                        <div class="col-sm-12" >
+                                            <input class="form-control" type="email" ng-model="settings.user_email" required>
+                                        </div> 
+                                    </div>
+
+                                    <div class="col-sm-3">
+                                        <label class="col-sm-3 control-label">Username</label>
+                                        <div class="col-sm-12" >
+                                            <input class="form-control" type="text" ng-model="settings.user_name" required>
+                                        </div> 
+                                    </div>
+
+                                    <div class="col-sm-3" ng-hide="settings.user_id">
+                                        <label class="col-sm-3 control-label">Password</label>
+                                        <div class="col-sm-12" >
+                                            <input id="userPassword" name="userPassword" class="form-control" type="password" ng-model="settings.user_password" ng-minlength="6" required>
+                                            <label style="color:red" class="error"  ng-show="formNewSubUser.userPassword.$error.minlength">The user password must be at least 6 characters.</label>
+                                        </div>                                 
+                                    </div>
+                                </div> -->
+
+
+
+
+                              <!--  <div class="col-sm-12" ng-show="subUserCreate" style="border-top:1px solid #e5e5e5;margin-top:25px;padding-top:10px;">
+                                    <div  class="col-sm-8">
+                                        <label class="col-sm-12 control-label labelstyle">Select Report</label>
+                                        <div ng-repeat="groups in reportGroups">
+                                            <label class="col-sm-12 control-label labelstyle"> {{groups.report_group_name}}</label>
+                                            <div class="col-sm-6" ng-repeat="name in reportNames" ng-if="name.report_group_id == groups.report_group_id">
+                                                <div class="col-sm-1">
+                                                    <input class="form-control nopadding" id="account_settings_report_{{name.report_id}}" type="checkbox" ng-checked="selectedReports.indexOf(name.report_id) !== -1" ng-model="reportId" ng-click="getReportArray(reportId,name.report_id)" ng-true-value="{{name.report_id}}" ng-false-value="0">
+                                                    <label for="account_settings_report_{{name.report_id}}"><span></span></label>
+                                                </div>
+                                                <div class="col-sm-9"> 
+                                                    <span>{{name.report_name}}</span>
+                                                </div>
+                                            </div>   
+                                        </div>
+                                    </div>
+
+                                    <div  class="col-sm-4">
+                                        <label class="col-sm-12 control-label labelstyle">Select Vehicles</label>
+                                        <label class="col-sm-12 control-label labelstyle"> Default</label>
+
+                                        <div class="col-sm-6" ng-repeat="vehicle in Vehicles" ng-if="vehicle.obj_gp_id == -1">
+                                                <div class="col-sm-1">
+                                                    <input class="form-control nopadding" id="account_settings_veh_{{vehicle.obj_device_id}}" type="checkbox" ng-checked="selectedUserObjects.indexOf(vehicle.obj_device_id) !== -1" ng-model="vehicleId" ng-click="getVehicleArray(vehicleId,vehicle.obj_device_id)" ng-true-value="'{{vehicle.obj_device_id}}'" ng-false-value="0">
+                                                    <label for="account_settings_veh_{{vehicle.obj_device_id}}"><span></span></label>
+                                                </div>
+                                                <div class="col-sm-9"> 
+                                                    <span>{{vehicle.obj_name}}</span>
+                                                </div>
+                                        </div>
+
+                                        <div ng-repeat="objgroups in ObjectGroups">
+                                            
+                                            <label class="col-sm-12 control-label labelstyle"> {{objgroups.obj_group_name }}</label>
+                                            <div class="col-sm-6" ng-repeat="vehicle in Vehicles" ng-if="vehicle.obj_gp_id == objgroups.obj_group_id">
+                                                <div class="col-sm-1">
+                                                     <input class="form-control nopadding" id="account_settings_veh_{{vehicle.obj_device_id}}" type="checkbox" ng-checked="selectedUserObjects.indexOf(vehicle.obj_device_id) !== -1" ng-model="vehicleId" ng-click="getVehicleArray(vehicleId,vehicle.obj_device_id)" ng-true-value="'{{vehicle.obj_device_id}}'" ng-false-value="0">
+                                                 <label for="account_settings_veh_{{vehicle.obj_device_id}}"><span></span></label>
+                                                </div>
+                                                <div class="col-sm-9"> 
+                                                    <span>{{vehicle.obj_name}}</span>
+                                                </div>
+                                            </div>   
+                                        </div>
+                                    </div>
+                                </div>-->
+
+
+
+
+                              <!--  <div  class="col-sm-12"   ng-show="subUserCreate" >
+                                    <label class="control-label labelstyle">Select</label>
+                                    <ul class="nav nav-tabs tabs_inner" role="tablist"  >                                                 
+                                        <li class="col-md-6 " role="presentation">
+                                            <a href="/#tabVehiclesPush" aria-controls="profile" role="tab" data-toggle="tab" ng-click="clearMap()" style="padding-top:5px !important;">                                                 
+                                                <p>Vehicles</p>
+                                            </a>
+                                        </li>
+                                        <li role="presentation" class=" col-md-6 active">
+                                            <a href="/#tabReportsPush" aria-controls="home" role="tab" data-toggle="tab" ng-click="clearMap()" style="padding-top:5px !important;">                                                     
+                                              <p>Reports</p>
+                                          </a>
+                                      </li>
+                                  </ul>
+                                  
+                                  <div class="tab-content tab-content_second"  >
+                                    <div role="tabpanel" class="tab-pane " id="tabVehiclesPush" >   
+                                        <div class="panel-group">
+                                         <div class="col-sm-12" role="tabpanel" class="tab-pane "  id="tabPolygon"  style="height:165px;overflow-y: scroll;padding-bottom: 100px;margin-bottom: 10px;">
+                                            
+
+                                    <label class="col-sm-12 control-label labelstyle"> Default</label>
+
+                                        <div class="col-sm-12" ng-repeat="vehicle in Vehicles | filter:notificationSubVehicles" ng-if="vehicle.obj_gp_id == -1">
+                                                <div class="col-sm-1">
+                                                    <input class="form-control nopadding" id="account_settings_veh_{{vehicle.obj_device_id}}" type="checkbox" ng-checked="selectedUserObjects.indexOf(vehicle.obj_device_id) !== -1" ng-model="vehicleId" ng-click="getVehicleArray(vehicleId,vehicle.obj_device_id)" ng-true-value="'{{vehicle.obj_device_id}}'" ng-false-value="0">
+                                                    <label for="account_settings_veh_{{vehicle.obj_device_id}}"><span></span></label>
+                                                </div>
+                                                <div class="col-sm-9"> 
+                                                    <span>{{vehicle.obj_name}}</span>
+                                                </div>
+                                        </div>
+                                               <div ng-repeat="objgroups in ObjectGroups">
+                                            
+                                            <label class="col-sm-12 control-label labelstyle"> {{objgroups.obj_group_name }}</label>
+                                            <div class="col-sm-12" ng-repeat="vehicle in Vehicles | filter:notificationSubVehicles" ng-if="vehicle.obj_gp_id == objgroups.obj_group_id">
+                                                <div class="col-sm-1">
+                                                     <input class="form-control nopadding" id="account_settings_veh_{{vehicle.obj_device_id}}" type="checkbox" ng-checked="selectedUserObjects.indexOf(vehicle.obj_device_id) !== -1" ng-model="vehicleId" ng-click="getVehicleArray(vehicleId,vehicle.obj_device_id)" ng-true-value="'{{vehicle.obj_device_id}}'" ng-false-value="0">
+                                                 <label for="account_settings_veh_{{vehicle.obj_device_id}}"><span></span></label>
+                                                </div>
+                                                <div class="col-sm-9"> 
+                                                    <span>{{vehicle.obj_name}}</span>
+                                                </div>
+                                            </div>   
+                                        </div>
+
+
+                                        </div>
+                                    </div>
+                                     <input style="border-radius: 15px; width: 100%; margin-top: 10px;" ng-model="notificationSubVehicles" placeholder="Search..." class="form-control searchbox ng-pristine ng-valid ng-touched" aria-invalid="false" type="text">
+
+                                </div>
+                                <div role="tabpanel" class="tab-pane active" id="tabReportsPush"> 
+                                    <div class="panel-group">
+                                        <div class="col-sm-12" role="tabpanel" class="tab-pane active" id="tabMarkers"  style="height:165px;overflow-y: scroll;padding-bottom: 100px;margin-bottom: 10px;">
+                                           
+
+
+                                          <div ng-repeat="groups in reportGroups">
+                                            <label class="col-sm-12 control-label labelstyle"> {{groups.report_group_name}}</label>
+                                            <div class="col-sm-12" ng-repeat="name in reportNames" ng-if="name.report_group_id == groups.report_group_id">
+                                                <div class="col-sm-1">
+                                                    <input class="form-control nopadding" id="account_settings_report_{{name.report_id}}" type="checkbox" ng-checked="selectedReports.indexOf(name.report_id) !== -1" ng-model="reportId" ng-click="getReportArray(reportId,name.report_id)" ng-true-value="{{name.report_id}}" ng-false-value="0">
+                                                    <label for="account_settings_report_{{name.report_id}}"><span></span></label>
+                                                </div>
+                                                <div class="col-sm-9"> 
+                                                    <span>{{name.report_name}}</span>
+                                                </div>
+                                            </div>   
+                                        </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                        </div>-->
+
+
+
+                    </div>
+                          <!--  <div class="modal-footer" style="padding: 10px 20px;">
+                                <button type="submit" class="btn btn-success" ng-disabled='formNewSubUser.$invalid' style="padding:6px;" ng-click="saveAccountsSettings()">Save</button>
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal" style="padding:7px;">Close</button>
+                            </div>-->
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            <!--TODAY///TODAY////-->
+
+
+
+            <div class="modal fade" id="accountSettingsAddandEdit" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+                <div class="modal-dialog" style="width:1100px !important;max-height:800px !important;"  role="document">
+                    <div class="modal-content" >
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLongTitle">Account Settings </h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+
+                        <div class="alert alert-success" style="text-align:center;margin-bottom:0;" ng-show="acSettingsSuccessMessage">
+                            <span class="entypo-thumbs-up"></span>{{acSettingsSuccessMessage}}.
+                        </div>
+                        <div class="alert alert-danger" style="text-align:center;margin-bottom:0;" ng-show="acSettingsErrorMessage">
+                            <span class="entypo-thumbs-up"></span>{{acSettingsErrorMessage}}.
+                        </div>
+
+                        <form class="form-validation" name="formNewSubUser">
+                            <div class="modal-body" style="overflow-y:auto;height:470px;">
+                                <div class="col-sm-12">
+                                    <div class="col-sm-3">
+                                        <label class="col-sm-3 control-label">Name</label>
+                                        <div class="col-sm-12" >
+                                            <input  class="form-control" type="text" ng-model="settings.user_fullname" required>
+                                        </div>                                 
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <label class="col-sm-3 control-label">Email</label>
+                                        <div class="col-sm-12" >
+                                            <input class="form-control" type="email" ng-model="settings.user_email" required>
+                                        </div> 
+                                    </div>
+
+                                    <div class="col-sm-3">
+                                        <label class="col-sm-3 control-label">Username</label>
+                                        <div class="col-sm-12" >
+                                            <input class="form-control" type="text" ng-model="settings.user_name" required>
+                                        </div> 
+                                    </div>
+
+                                    <div class="col-sm-3" ng-hide="settings.user_id">
+                                        <label class="col-sm-3 control-label">Password</label>
+                                        <div class="col-sm-12" >
+                                            <input id="userPassword" name="userPassword" class="form-control" type="password" ng-model="settings.user_password" ng-minlength="6" required>
+                                            <label style="color:red" class="error"  ng-show="formNewSubUser.userPassword.$error.minlength">The user password must be at least 6 characters.</label>
+                                        </div>                                 
+                                    </div>
+                                </div> 
+
+
+
+                                <div  class="col-sm-12" ng-show="subUserCreate">
+                                    <label class="control-label labelstyle">Select</label>
+                                    <ul class="nav nav-tabs tabs_inner" role="tablist"  >                                                 
+                                        <li class="col-md-6 " role="presentation">
+                                            <a href="/#tabVehiclesPush" aria-controls="profile" role="tab" data-toggle="tab" ng-click="clearMap()" style="padding-top:5px !important;">                                                 
+                                                <p>Vehicles</p>
+                                            </a>
+                                        </li>
+                                        <li role="presentation" class=" col-md-6 active">
+                                            <a href="/#tabReportsPush" aria-controls="home" role="tab" data-toggle="tab" ng-click="clearMap()" style="padding-top:5px !important;">                                                     
+                                              <p>Reports</p>
+                                          </a>
+                                      </li>
+                                  </ul>
+                                  <!-- Tab panes -->
+                                  <div class="tab-content tab-content_second"  >
+                                    <div role="tabpanel" class="tab-pane " id="tabVehiclesPush" >   
+                                        <div class="panel-group">
+                                           <div class="col-sm-12" role="tabpanel" class="tab-pane "  id="tabPolygon"  style="height:340px;overflow-y: scroll;padding-bottom: 100px;margin-bottom: 10px;">
+
+
+                                             <div style="display: inline-block;width: 5%;margin-left:-8px;">
+                                                <input type="checkbox" id="checkall_-1" ng-model="groupselectId" ng-checked="groupselectId == -1"  ng-true-value="-1" ng-false-value="0" ng-click="CheckThisGroup(groupselectId,-1)" > 
+                                                <label for="checkall_-1"><span></span></label> 
+                                            </div>
+                                            <a style="display: inline-block;width: 86%;">
+                                               Default
+                                           </a>
+
+
+                                           <!--<label class="col-sm-12 control-label labelstyle"> Default</label>-->
+
+                                        <div class="col-sm-12" ng-repeat="vehicle in Vehicles | filter:notificationSubVehicles" ng-if="vehicle.obj_gp_id == -1">
+                                            <div class="col-sm-1">
+                                                <input class="form-control nopadding" id="account_settings_veh_{{vehicle.obj_device_id}}" type="checkbox" ng-checked="selectedUserObjects.indexOf(vehicle.obj_device_id) !== -1" ng-model="vehicleId" ng-click="getVehicleArray(vehicleId,vehicle.obj_device_id,-1)" ng-true-value="'{{vehicle.obj_device_id}}'" ng-false-value="0">
+                                                <label for="account_settings_veh_{{vehicle.obj_device_id}}"><span></span></label>
+                                            </div>
+                                            <div class="col-sm-9"> 
+                                                <span>{{vehicle.obj_name}}</span>
+                                            </div>
+                                        </div>
+
+
+                                        <div ng-repeat="objgroups in ObjectGroups">
+
+                                          <div style="display: inline-block;width: 5%;margin-left:-8px;">
+                                            <input ng-checked="selectedGroups.indexOf(objgroups.obj_group_id) !== -1" type="checkbox" id="checkall_{{objgroups.obj_group_id}}" ng-model="groupselectId" ng-true-value="{{objgroups.obj_group_id}}" ng-false-value="0" ng-click="CheckThisGroup(groupselectId,objgroups.obj_group_id)" > 
+                                            <label for="checkall_{{objgroups.obj_group_id}}"><span></span></label> 
+                                        </div>
+                                        <a style="display: inline-block;width: 86%;">
+                                         {{objgroups.obj_group_name }}
+                                     </a>
+
+
+
+                                     <!-- <label class="col-sm-12 control-label labelstyle"> {{objgroups.obj_group_name }}</label>-->
+
+
+                                     <div class="col-sm-12" ng-repeat="vehicle in Vehicles | filter:notificationSubVehicles" ng-if="vehicle.obj_gp_id == objgroups.obj_group_id">
+                                        <div class="col-sm-1">
+                                           <input class="form-control nopadding" id="account_settings_veh_{{vehicle.obj_device_id}}" type="checkbox" ng-checked="selectedUserObjects.indexOf(vehicle.obj_device_id) !== -1" ng-model="vehicleId" ng-click="getVehicleArray(vehicleId,vehicle.obj_device_id,objgroups.obj_group_id)" ng-true-value="'{{vehicle.obj_device_id}}'" ng-false-value="0">
+                                           <label for="account_settings_veh_{{vehicle.obj_device_id}}"><span></span></label>
+                                       </div>
+                                       <div class="col-sm-9"> 
+                                        <span>{{vehicle.obj_name}}</span>
+                                    </div>
+                                </div>   
+                            </div>
+
+
+                        </div>
+                    </div>
+                    <input style="border-radius: 15px; width: 100%; margin-top: 10px;" ng-model="notificationSubVehicles" placeholder="Search..." class="form-control searchbox ng-pristine ng-valid ng-touched" aria-invalid="false" type="text">
+
+                </div>
+                <div role="tabpanel" class="tab-pane active" id="tabReportsPush"><!--Points-->
+                    <div class="panel-group">
+                        <div class="col-sm-12" role="tabpanel" class="tab-pane active" id="tabMarkers"  style="height:340px;overflow-y: scroll;padding-bottom: 100px;margin-bottom: 10px;">
+
+                          <div ng-repeat="groups in reportGroups">
+                            <label class="col-sm-12 control-label labelstyle"> {{groups.report_group_name}}</label>
+                            <div class="col-sm-6" ng-repeat="name in reportNames" ng-if="name.report_group_id == groups.report_group_id">
+                                <div class="col-sm-1">
+                                    <input class="form-control nopadding" id="account_settings_report_{{name.report_id}}" type="checkbox" ng-checked="selectedReports.indexOf(name.report_id) !== -1" ng-model="reportId" ng-click="getReportArray(reportId,name.report_id)" ng-true-value="{{name.report_id}}" ng-false-value="0">
+                                    <label for="account_settings_report_{{name.report_id}}"><span></span></label>
+                                </div>
+                                <div class="col-sm-9"> 
+                                    <span>{{name.report_name}}</span>
+                                </div>
+                            </div>   
+                        </div>
+
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+<div class="modal-footer" style="padding: 10px 20px;">
+    <button type="submit" class="btn btn-success" ng-disabled='formNewSubUser.$invalid' style="padding:6px;" ng-click="saveAccountsSettings()">Save</button>
+    <button type="button" class="btn btn-secondary" data-dismiss="modal" style="padding:7px;">Close</button>
+</div>
+</form>
+
+
+
+</div>
+</div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="modal fade" id="Notifications" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true" >
+    <div class="modal-dialog" style="width:1200px !important;"  role="document">
+        <div class="modal-content" >
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Notifications</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form class="form-validation" name="notificationsForm">
+                <div class="modal-body" style="overflow:hidden"> 
+                    <div class="col-sm-12"> 
+                        <table class="table table-bordered cf" style="border:none !important;">
+                            <thead >
+                                <tr>
+                                    <th style="border:none !important;width:10%;color:black;padding-left: 12px !important;">Sl No </th>
+                                    <th style="border:none !important;width:30%;color:black;padding-left: 12px !important;">Name</th>       
+                                    <th style="border:none !important;width:10%;color:black;padding-left: 12px !important;">Type</th>
+                                    <th style="border:none !important;width:20%;color:black;padding-left: 12px !important;">Email</th>       
+                                    <th style="border:none !important;width:20%;color:black;padding-left: 12px !important;">Sms</th>
+                                    <th style="border:none !important;width:10%;color:black;padding-left: 12px !important;"></th>
+                                </tr>
+                            </thead>
+                            <tbody style="background-color:#fffffd;"> 
+                                <tr ng-repeat="notifn in  Notifications" > 
+                        <td style="padding-left: 12px !important;"  ng-click="editNotification(notifn.notification_id)">{{$index+1}}</td>
+                        <td style="padding-left: 12px !important;" ng-click="editNotification(notifn.notification_id)">{{notifn.notification_name}} </td>    
+                        <td style="padding-left: 12px !important;" ng-click="editNotification(notifn.notification_id)">{{notifn.notification_type}} </td>
+                        <td style="padding-left: 12px !important;" ng-click="editNotification(notifn.notification_id)">{{notifn.notification_email}} </td>    
+                        <td style="padding-left: 12px !important;" ng-click="editNotification(notifn.notification_id)">{{notifn.notification_sms}}  </td>
+                        <td style="padding: 5px !important;">
+                                        <button type="button" class="btn btn-danger" ng-click="deleteNotification(notifn.notification_id)" style="margin-left:15px;">Delete</button>
+                                    </td>
+                                </tr>
+                                <tr ng-if="Notifications.length==0"  >
+                                    <td colspan="5" style="padding-left: 12px !important;">No notifications to show</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-sm-12" >
+                        <button style="padding:6px;float:right;" type="submit" class="btn btn-info"  data-toggle="modal" ng-click="addNotification()" data-target="#addNotification">Add Notification</button>
+                        <button type="button" class="btn btn-danger ttip" ng-click="getSettingsNotifications()" title="Refresh" style="padding:6px 12px !important;margin-right:5px;float:right;">
+                          <i class="fa fa-refresh" style="color:#333;" aria-hidden="true"></i> 
+                      </button>
+                  </div>
+              </div>
+          </form>
+      </div>
+  </div>
+</div> 
+
+<div class="modal fade" id="CommonGeozones" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true" >
+    <div class="modal-dialog" style="width:500px !important;"  role="document">
+        <div class="modal-content" >
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Common Geozones</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="col-sm-12">
+                <div style="background-color: white; color:#000;cursor:pointer" class="bg-light lter b-b wrapper-md ">
+                    <input class="form-control " id="saliks"  type="checkbox" ng-model="salik" ng-change="selectCommonPointType('salik')"  />
+                    <label for="saliks"><span></span></label>Salik
+                </div>
+                <div style="background-color: white; color:#000;cursor:pointer" class="bg-light lter b-b wrapper-md ">
+                    <input class="form-control" id="bunkstitle"  type="checkbox" ng-model="bunk"   ng-change="selectCommonPointType('bunk')"/>
+                    <label for="bunkstitle"><span></span></label>Petrol Bunks
+                </div>
+            </div>
+            <form class="form-validation" name="commonGeozonesForm">
+                <div class="modal-body" style="overflow:hidden">                               
+                </div>
+            </form>
+        </div>
+    </div>
+</div> 
+
+<div class="modal fade" id="addNotification" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true" >
+    <div class="modal-dialog" style="width:1200px !important;"  role="document">
+        <div class="modal-content" >
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Add/Edit Notification</h5>
+
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="alert alert-success" style="width:100%;text-align:center;" ng-show="successMessage">
+                <span class="entypo-thumbs-up"></span>
+                {{successMessage}}.
+            </div>
+
+            <div class="alert alert-danger" style="text-align:center;margin:35px 5px 5px;" ng-show="errorNotificationFlag">
+              <span class="entypo-thumbs-up"></span>{{errorNotification}}.
+          </div>
+
+
+          <form class="form-validation" name="notfnsForm">
+            <div class="modal-body" style="overflow:hidden"> 
+                <div class="col-sm-12"> 
+                    <div  class="col-sm-3" >
+                        <label class="col-sm-12 control-label labelstyle">Select Objects </label>
+                        <div style="height: 350px; overflow: scroll; width:100%;">
+                            <div class="col-sm-12" ng-repeat="vehicle in Vehicles | filter:notificationPushVehicles">
+                                <input class="form-control nopadding" type="checkbox" ng-checked="selectedNotObjects.indexOf(vehicle.obj_device_id) !== -1" ng-model="objectId"  ng-true-value="'{{vehicle.obj_device_id}}'" ng-false-value="0" ng-click="selectSettingsNotObjects(objectId,vehicle.obj_device_id)" id="account_settings_notification_veh_{{vehicle.obj_device_id}}">
+                                <label for="account_settings_notification_veh_{{vehicle.obj_device_id}}"><span></span></label>
+                                <span> {{vehicle.obj_name}} </span>
+                            </div>   
+                        </div>
+                        <input style="border-radius: 15px; width: 100%; margin-top: 10px;" ng-model="notificationPushVehicles" placeholder="Search..." class="form-control searchbox ng-pristine ng-valid ng-touched" aria-invalid="false" type="text">                            
+                    </div>
+                    <div class="col-sm-4">                                        
+                        <div class="col-sm-12" >
+                            <label class="control-label labelstyle">Notification Name </label>
+                            <input   required class="form-control" type="text" ng-model="settingsNotification.notification_name">
+                        </div> 
+                        <label class="col-sm-5 control-label labelstyle"></label>
+                        <div class="col-sm-12">
+                            <label class="control-label labelstyle">Notification Priority</label>
+                            <div class="col-sm-12"> 
+                                <div class="col-sm-5">
+                                    <input type="radio" ng-model="settingsNotification.notification_priority" id="notification_priority_high" value="high">High 
+                                    <label for="notification_priority_high"><span></span></label>
+                                </div>
+                                <div class="col-sm-5">
+                                    <input type="radio" id="notification_priority_normal" ng-model="settingsNotification.notification_priority" value="normal">Normal
+                                    <label for="notification_priority_normal"><span></span></label>
+                                </div>                                                
+                            </div>
+                        </div>                                      
+                        <div class="col-sm-12"> 
+                            <label class="control-label labelstyle">Notification Type</label>
+                            <select style="padding:1px !important;" class="form-control" ng-model="settingsNotification.notification_type" >
+                                <option value="speed">Speed</option>
+                                  <option value="geozone">Geozone</option>
+                                <option value="ignition">Ignition</option>
+                            </select>
+                        </div> 
+                        <div ng-show="settingsNotification.notification_type == 'speed'">
+                            <label class="col-sm-12 control-label labelstyle">If Speed </label>
+                            <div class="col-sm-12" >
+
+                                <select style="width: 50%; float: left;" class="form-control" ng-model="settingsNotification.notification_speed_parameters" >
+                                    <option value="Is Greater than">Is Greater than</option>
+                                    <option value="Is Equal to">Is Equal to</option>
+                                    <option value="Is Less than">Is Less than</option>
+                                </select>
+
+                                <input  style="margin-left: 10px; float: left; width: 46%;"   class="form-control" type="text" ng-model="settingsNotification.notification_speed_parameter_value">
+
+                            </div> 
+                        </div>
+                        <div ng-show="settingsNotification.notification_type == 'ignition'">
+                            <label class="col-sm-12 control-label labelstyle">Conditions </label>
+                            <div class="col-sm-12" >
+                                <select style="padding:1px !important;" class="form-control" ng-model="settingsNotification.notification_ignition_parameter">
+                                    <option value="on">On</option>
+                                    <option value="off">Off</option>
+                                    <option value="onandoff">On and Off</option>
+                                    <option value="Movingwithoutignitionon">Moving without Ignition On</option>
+                                </select>
+                            </div> 
+                        </div>  
+                        <div class="col-sm-6">
+                            <label class="control-label labelstyle">Time From</label>
+                            <select style="padding:1px !important;" class="form-control" ng-model="settingsNotification.notification_time_from">
+                                <option class="x-boundlist-item x-boundlist-selected">00:00</option>
+                                <option >00:10</option>
+                                <option >00:20</option>
+                                <option >00:30</option>
+                                <option >00:40</option>
+                                <option >00:50</option>
+                                <option >01:00</option>
+                                <option >01:10</option>
+                                <option >01:20</option>
+                                <option >01:30</option>
+                                <option >01:40</option>
+                                <option >01:50</option>
+                                <option >02:00</option>
+                                <option >02:10</option>
+                                <option >02:20</option>
+                                <option >02:30</option>
+                                <option >02:40</option>
+                                <option >02:50</option>
+                                <option >03:00</option>
+                                <option >03:10</option>
+                                <option >03:20</option>
+                                <option >03:30</option>
+                                <option >03:40</option>
+                                <option >03:50</option>
+                                <option >04:00</option>
+                                <option >04:10</option>
+                                <option >04:20</option>
+                                <option >04:30</option>
+                                <option >04:40</option>
+                                <option >04:50</option>
+                                <option >05:00</option>
+                                <option >05:10</option>
+                                <option >05:20</option>
+                                <option >05:30</option>
+                                <option >05:40</option>
+                                <option >05:50</option>
+                                <option >06:00</option>
+                                <option >06:10</option>
+                                <option >06:20</option>
+                                <option >06:30</option>
+                                <option >06:40</option>
+                                <option >06:50</option>
+                                <option >07:00</option>
+                                <option >07:10</option>
+                                <option >07:20</option>
+                                <option >07:30</option>
+                                <option >07:40</option>
+                                <option >07:50</option>
+                                <option >08:00</option>
+                                <option >08:10</option>
+                                <option >08:20</option>
+                                <option >08:30</option>
+                                <option >08:40</option>
+                                <option >08:50</option>
+                                <option >09:00</option>
+                                <option >09:10</option>
+                                <option >09:20</option>
+                                <option >09:30</option>
+                                <option >09:40</option>
+                                <option >09:50</option>
+                                <option >10:00</option>
+                                <option >10:10</option>
+                                <option >10:20</option>
+                                <option >10:30</option>
+                                <option >10:40</option>
+                                <option >10:50</option>
+                                <option >11:00</option>
+                                <option >11:10</option>
+                                <option >11:20</option>
+                                <option >11:30</option>
+                                <option >11:40</option>
+                                <option >11:50</option>
+                                <option >12:00</option>
+                                <option >12:10</option>
+                                <option >12:20</option>
+                                <option >12:30</option>
+                                <option >12:40</option>
+                                <option >12:50</option>
+                                <option >13:00</option>
+                                <option >13:10</option>
+                                <option >13:20</option>
+                                <option >13:30</option>
+                                <option >13:40</option>
+                                <option >13:50</option>
+                                <option >14:00</option>
+                                <option >14:10</option>
+                                <option >14:20</option>
+                                <option >14:30</option>
+                                <option >14:40</option>
+                                <option >14:50</option>
+                                <option >15:00</option>
+                                <option >15:10</option>
+                                <option >15:20</option>
+                                <option >15:30</option>
+                                <option >15:40</option>
+                                <option >15:50</option>
+                                <option >16:00</option>
+                                <option >16:10</option>
+                                <option >16:20</option>
+                                <option >16:30</option>
+                                <option >16:40</option>
+                                <option >16:50</option>
+                                <option >17:00</option>
+                                <option >17:10</option>
+                                <option >17:20</option>
+                                <option >17:30</option>
+                                <option >17:40</option>
+                                <option >17:50</option>
+                                <option >18:00</option>
+                                <option >18:10</option>
+                                <option >18:20</option>
+                                <option >18:30</option>
+                                <option >18:40</option>
+                                <option >18:50</option>
+                                <option >19:00</option>
+                                <option >19:10</option>
+                                <option >19:20</option>
+                                <option >19:30</option>
+                                <option >19:40</option>
+                                <option >19:50</option>
+                                <option >20:00</option>
+                                <option >20:10</option>
+                                <option >20:20</option>
+                                <option >20:30</option>
+                                <option >20:40</option>
+                                <option >20:50</option>
+                                <option >21:00</option>
+                                <option >21:10</option>
+                                <option >21:20</option>
+                                <option >21:30</option>
+                                <option >21:40</option>
+                                <option >21:50</option>
+                                <option >22:00</option>
+                                <option >22:10</option>
+                                <option >22:20</option>
+                                <option >22:30</option>
+                                <option >22:40</option>
+                                <option >22:50</option>
+                                <option >23:00</option>
+                                <option >23:10</option>
+                                <option >23:20</option>
+                                <option >23:30</option>
+                                <option >23:40</option>
+                                <option >23:50</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-6">
+                            <label class="  control-label labelstyle">Time to</label>                                                    
+                            <select style="padding:1px !important;" class="form-control" ng-model="settingsNotification.notification_time_to">
+                                <option class="x-boundlist-item x-boundlist-selected">00:00</option>
+                                <option >00:10</option>
+                                <option >00:20</option>
+                                <option >00:30</option>
+                                <option >00:40</option>
+                                <option >00:50</option>
+                                <option >01:00</option>
+                                <option >01:10</option>
+                                <option >01:20</option>
+                                <option >01:30</option>
+                                <option >01:40</option>
+                                <option >01:50</option>
+                                <option >02:00</option>
+                                <option >02:10</option>
+                                <option >02:20</option>
+                                <option >02:30</option>
+                                <option >02:40</option>
+                                <option >02:50</option>
+                                <option >03:00</option>
+                                <option >03:10</option>
+                                <option >03:20</option>
+                                <option >03:30</option>
+                                <option >03:40</option>
+                                <option >03:50</option>
+                                <option >04:00</option>
+                                <option >04:10</option>
+                                <option >04:20</option>
+                                <option >04:30</option>
+                                <option >04:40</option>
+                                <option >04:50</option>
+                                <option >05:00</option>
+                                <option >05:10</option>
+                                <option >05:20</option>
+                                <option >05:30</option>
+                                <option >05:40</option>
+                                <option >05:50</option>
+                                <option >06:00</option>
+                                <option >06:10</option>
+                                <option >06:20</option>
+                                <option >06:30</option>
+                                <option >06:40</option>
+                                <option >06:50</option>
+                                <option >07:00</option>
+                                <option >07:10</option>
+                                <option >07:20</option>
+                                <option >07:30</option>
+                                <option >07:40</option>
+                                <option >07:50</option>
+                                <option >08:00</option>
+                                <option >08:10</option>
+                                <option >08:20</option>
+                                <option >08:30</option>
+                                <option >08:40</option>
+                                <option >08:50</option>
+                                <option >09:00</option>
+                                <option >09:10</option>
+                                <option >09:20</option>
+                                <option >09:30</option>
+                                <option >09:40</option>
+                                <option >09:50</option>
+                                <option >10:00</option>
+                                <option >10:10</option>
+                                <option >10:20</option>
+                                <option >10:30</option>
+                                <option >10:40</option>
+                                <option >10:50</option>
+                                <option >11:00</option>
+                                <option >11:10</option>
+                                <option >11:20</option>
+                                <option >11:30</option>
+                                <option >11:40</option>
+                                <option >11:50</option>
+                                <option >12:00</option>
+                                <option >12:10</option>
+                                <option >12:20</option>
+                                <option >12:30</option>
+                                <option >12:40</option>
+                                <option >12:50</option>
+                                <option >13:00</option>
+                                <option >13:10</option>
+                                <option >13:20</option>
+                                <option >13:30</option>
+                                <option >13:40</option>
+                                <option >13:50</option>
+                                <option >14:00</option>
+                                <option >14:10</option>
+                                <option >14:20</option>
+                                <option >14:30</option>
+                                <option >14:40</option>
+                                <option >14:50</option>
+                                <option >15:00</option>
+                                <option >15:10</option>
+                                <option >15:20</option>
+                                <option >15:30</option>
+                                <option >15:40</option>
+                                <option >15:50</option>
+                                <option >16:00</option>
+                                <option >16:10</option>
+                                <option >16:20</option>
+                                <option >16:30</option>
+                                <option >16:40</option>
+                                <option >16:50</option>
+                                <option >17:00</option>
+                                <option >17:10</option>
+                                <option >17:20</option>
+                                <option >17:30</option>
+                                <option >17:40</option>
+                                <option >17:50</option>
+                                <option >18:00</option>
+                                <option >18:10</option>
+                                <option >18:20</option>
+                                <option >18:30</option>
+                                <option >18:40</option>
+                                <option >18:50</option>
+                                <option >19:00</option>
+                                <option >19:10</option>
+                                <option >19:20</option>
+                                <option >19:30</option>
+                                <option >19:40</option>
+                                <option >19:50</option>
+                                <option >20:00</option>
+                                <option >20:10</option>
+                                <option >20:20</option>
+                                <option >20:30</option>
+                                <option >20:40</option>
+                                <option >20:50</option>
+                                <option >21:00</option>
+                                <option >21:10</option>
+                                <option >21:20</option>
+                                <option >21:30</option>
+                                <option >21:40</option>
+                                <option >21:50</option>
+                                <option >22:00</option>
+                                <option >22:10</option>
+                                <option >22:20</option>
+                                <option >22:30</option>
+                                <option >22:40</option>
+                                <option >22:50</option>
+                                <option >23:00</option>
+                                <option >23:10</option>
+                                <option >23:20</option>
+                                <option >23:30</option>
+                                <option >23:40</option>
+                                <option >23:50</option>
+                            </select>                                                   
+                        </div>
+                        <div class="col-sm-12">
+                            <label class="col-sm-12 control-label labelstyle"></label>
+                            <label class="col-sm-12 control-label labelstyle"></label>
+
+                            <div class="col-sm-4">
+                                <input class="form-control " id="notification_monday" type="checkbox" ng-model="settingsNotification.notification_monday" ng-true-value="'1'" ng-false-value="0">
+                                <label for="notification_monday"><span></span></label>Mon
+                            </div>
+                            <div class="col-sm-4">
+                                <input class="form-control " id="notification_tuesday"  type="checkbox" ng-model="settingsNotification.notification_tuesday" ng-true-value="'1'" ng-false-value="0">
+                                <label for="notification_tuesday"><span></span></label>Tue
+                            </div>                                                                                                 
+                            <div class="col-sm-4">
+                                <input class="form-control "  id="notification_wed" type="checkbox" ng-model="settingsNotification.notification_wednesday" ng-true-value="'1'" ng-false-value="0">
+                                <label for="notification_wed"><span></span></label>Wed
+                            </div>                                                    
+                            <div class="col-sm-4"> 
+                                <input class="form-control " id="notification_tues"  type="checkbox" ng-model="settingsNotification.notification_thursday" ng-true-value="'1'" ng-false-value="0">
+                                <label for="notification_tues"><span></span></label>Thu
+                            </div>
+                            <div class="col-sm-4">
+                                <input class="form-control " id="notification_friday"  type="checkbox" ng-model="settingsNotification.notification_friday" ng-true-value="'1'" ng-false-value="0">
+                                <label for="notification_friday"><span></span></label>Fri
+                            </div>
+                            <div class="col-sm-4">
+                                <input class="form-control " id="notification_sat"  type="checkbox" ng-model="settingsNotification.notification_saturday" ng-true-value="'1'" ng-false-value="0">
+                                <label for="notification_sat"><span></span></label>Sat
+                            </div>
+                            <div class="col-sm-4">
+                                <input class="form-control " id="notification_sunday"  type="checkbox" ng-model="settingsNotification.notification_sunday" ng-true-value="'1'" ng-false-value="0">
+                                <label for="notification_sunday"><span></span></label>Sun
+                            </div>
+                        </div>                                                                
+                    </div>   
+                    <div class="col-sm-5">
+                        <label class="col-sm-5 control-label labelstyle"></label>
+                        <div class="col-sm-12">
+                            <div class="col-sm-12" style="padding-right: 0px; padding-left: 0px; padding-bottom: 8px;">
+                                <div class="col-sm-1">
+                                    <input class="form-control " type="checkbox" id="notification_email_alert" ng-model="notificationEmail" ng-true-value="1" ng-false-value="0" ng-change="changeNotEmailStatus()">
+                                    <label for="notification_email_alert"><span></span></label>
+                                </div>
+                                <div class="col-sm-4">Email</div>
+                                <div class="col-sm-6">
+                                    <input style=" width:209px;margin-left:-50px;" class="form-control" type="text" ng-model="settingsNotification.notification_email" ng-disabled="activeNotificationEmail == 0">                                                    
+                                </div>
+                            </div>
+                            <div class="col-sm-6"  >                                                 
+                                <input class="form-control " id="notification_alert_alert" type="checkbox" ng-model="settingsNotification.notification_alert" ng-true-value="'1'" ng-false-value="0">
+                                <label for="notification_alert_alert"><span></span></label>Alert on Web
+                            </div>
+                            <div class="col-sm-6"  >                                                 
+                                <input class="form-control " id="notification_alert_alert_app" type="checkbox" ng-model="settingsNotification.notification_alert_app" ng-true-value="'1'" ng-false-value="0">
+                                <label for="notification_alert_alert_app"><span></span></label> Alert on App 
+                            </div>
+                        </div>
+                        <div class="col-sm-12" ng-show="settingsNotification.notification_type == 'geozone'">
+                            <label class="control-label labelstyle">Geozone Params</label>
+                            <div class="col-sm-12"> 
+                                <!--<div class="col-sm-4">
+                                    <input type="radio" id="notification_anywhere" ng-model="settingsNotification.notification_geozone" value="Any where">Anywhere 
+                                    <label for="notification_anywhere"><span></span></label>
+                                </div>-->
+                                <div class="col-sm-4">
+                                    <input type="radio" id="notification_in_zone" ng-model="settingsNotification.notification_geozone" value="In selected zones">In Zones
+                                    <label for="notification_in_zone"><span></span></label>
+                                </div>        
+                                <div class="col-sm-4">
+                                    <input type="radio" id="notification_out_zone" ng-model="settingsNotification.notification_geozone" value="Out selected zones">Out Zones 
+                                    <label for="notification_out_zone"><span></span></label>
+                                </div>  
+                            </div>
+                        </div>                                    
+                        <div  class="col-sm-12"  ng-show="settingsNotification.notification_type == 'geozone'">
+                            <label class="control-label labelstyle">Select Geozones </label>
+                            <ul class="nav nav-tabs tabs_inner" role="tablist"  >                                                 
+                                <li class="col-md-6 active" role="presentation">
+                                    <a href="/#tabZonesPoint" aria-controls="profile" role="tab" data-toggle="tab" ng-click="clearMap()" style="padding-top:5px !important;">                                                 
+                                        <p>Zones</p>
+                                    </a>
+                                </li>
+                                <li role="presentation" class=" col-md-6">
+                                    <a href="/#tabZonesZone" aria-controls="home" role="tab" data-toggle="tab" ng-click="clearMap()" style="padding-top:5px !important;">                                                     
+                                      <p>Points</p>
+                                  </a>
+                              </li>
+                          </ul>
+                          <!-- Tab panes -->
+                          <div class="tab-content tab-content_second"  >
+                            <div role="tabpanel" class="tab-pane " id="tabZonesZone" >   
+                                <div class="panel-group">
+                                 <div class="col-sm-12" role="tabpanel" class="tab-pane active"  id="tabPolygon"  style="height:165px;overflow-y: scroll;padding-bottom: 100px;margin-bottom: 10px;">
+                                    <div class="col-sm-6" ng-repeat="zone in Geozonemarkers | filter:notificationGZSearch">
+                                        <input class="form-control nopadding" id="notification_geo_zone_{{zone.gz_id}}" type="checkbox" ng-checked="selectedNotifnGeozones.indexOf(zone.gz_id) !== -1" ng-model="GeozoneId"  ng-true-value="{{zone.gz_id}}" ng-false-value="0" ng-click="selectNotificationGeozone(GeozoneId,zone.gz_id)">
+                                        <label for="notification_geo_zone_{{zone.gz_id}}"><span></span></label>
+                                        <span> {{zone.gz_name}} </span>
+                                    </div>  
+                                </div>
+                            </div>
+                        </div>
+                        <div role="tabpanel" class="tab-pane active" id="tabZonesPoint"><!--Points-->
+                            <div class="panel-group">
+                                <div class="col-sm-12" role="tabpanel" class="tab-pane" id="tabMarkers"  style="height:165px;overflow-y: scroll;padding-bottom: 100px;margin-bottom: 10px;">
+                                    <div class="col-sm-6" ng-repeat="zone in Geozonepolygons | filter:notificationGZSearch">
+                                        <input class="form-control nopadding" id="notification_geo_zone_{{zone.gz_id}}" type="checkbox" ng-checked="selectedNotifnGeozones.indexOf(zone.gz_id) !== -1" ng-model="GeozoneId"  ng-true-value="{{zone.gz_id}}" ng-false-value="0" ng-click="selectNotificationGeozone(GeozoneId,zone.gz_id)">
+                                        <label for="notification_geo_zone_{{zone.gz_id}}"><span></span></label>
+                                        <span> {{zone.gz_name}} </span>
+                                    </div>  
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <input style="border-radius: 15px; width: 100%; margin-top: 10px;" ng-model="notificationGZSearch" placeholder="Search..." class="form-control searchbox ng-pristine ng-valid ng-touched" aria-invalid="false" type="text"> 
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button style="padding:6px;" type="submit" class="btn btn-success" ng-disabled='notfnsForm.$invalid'  ng-click="submitSettingsNotifications()">Submit</button>
+        <button style="padding:7px;" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+    </div>
+</form>
+</div>
+</div>
+</div>
+
+<div class="modal fade" id="ReportScheduler" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+    <div class="modal-dialog" style="width:950px !important;"  role="document">
+        <div class="modal-content" style="border-radius:6px 6px 0  0;">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Report Scheduler</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="col-sm-12" >
+                <button style="padding:6px;float:right;" type="submit" class="btn btn-info" ng-click="addNewReportScheduler()" ng-show="addReportShdlrButton">Add New</button>                                                  
+            </div>
+            <div class="alert alert-success" style="text-align:center;margin:35px 5px 5px;" ng-show="successReportSchedulerFlag">
+              <span class="entypo-thumbs-up"></span>{{successReportScheduler}}.
+          </div>
+          <div class="alert alert-danger" style="text-align:center;margin:35px 5px 5px;" ng-show="errorReportSchedulerFlag">
+              <span class="entypo-thumbs-up"></span>{{errorReportScheduler}}.
+          </div>
+          <form class="form-validation"  name="schedulerForm">
+            <div class="modal-body" style="overflow-y: auto; padding: 0px 20px; height: 410px;">
+                <div class="col-sm-12">
+                    <h4 style="padding:9px;">Objects </h4>
+                    <div class="col-sm-6">
+                        <div class="col-sm-12" ng-repeat="vehicle in ObjectsForReportScheduler | filter:reportSchedulerVehicles">
+                            <div class="col-sm-1">
+                                <input class="form-control nopadding" id="report_scheduler_veh_{{vehicle.obj_device_id}}" type="checkbox" ng-checked="selectedSchedulerObjects.indexOf(vehicle.obj_device_id) !== -1" ng-model="vehicleId" ng-click="getVehicleSchedleObjects(vehicleId,vehicle.obj_device_id)" ng-true-value="'{{vehicle.obj_device_id}}'" ng-false-value="0">
+                                <label for="report_scheduler_veh_{{vehicle.obj_device_id}}"><span></span></label>
+                            </div>
+                            <div class="col-sm-9"> 
+                                <span>{{vehicle.obj_name | limitTo:15}}</span>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-12" >
+                         <input style="border-radius: 15px; width: 100%; margin-top: 10px;" ng-model="reportSchedulerVehicles" placeholder="Search..." class="form-control searchbox ng-pristine ng-valid ng-touched" aria-invalid="false" type="text">
+
+                     </div>
+
+
+
+
+
+
+                 </div>
+                 <div class="col-sm-6">
+                    <label class="col-sm-3 control-label">Name</label>
+                    <div class="col-sm-12" >
+                        <input class="form-control" required type="text" ng-model="reportSchedule.report_scheduler_name">
+                    </div>   
+                    <label class="col-sm-10 control-label">Report Type</label>                                       
+                    <div class="col-sm-12  ">
+                        <div class="col-sm-10 nopadding"    >
+                            <select class="form-control" style="height:31px;width:119%;margin-bottom:7px;" ng-model="reportSchedule.report_scheduler_report_id" required>
+                                <optgroup ng-repeat="groups in reportGroups" label="{{groups.report_group_name}}">
+                                    <option ng-repeat="name in reportNames" value="{{name.report_id}}" ng-if="name.report_group_id==groups.report_group_id" ng-selected="name.report_id == reportSchedule.report_scheduler_report_id">{{name.report_name}}</option>
+                                </optgroup>
+                            </select>
+                        </div>
+                    </div>                                       
+                    <div class="col-sm-12">
+                        <label class="control-label">Time</label>                                                    
+                        <select class="form-control" ng-model="reportSchedule.report_scheduler_time" required>
+                            <option class="x-boundlist-item x-boundlist-selected">00:00</option>
+                            <option >00:10</option>
+                            <option >00:20</option>
+                            <option >00:30</option>
+                            <option >00:40</option>
+                            <option >00:50</option>
+                            <option >01:00</option>
+                            <option >01:10</option>
+                            <option >01:20</option>
+                            <option >01:30</option>
+                            <option >01:40</option>
+                            <option >01:50</option>
+                            <option >02:00</option>
+                            <option >02:10</option>
+                            <option >02:20</option>
+                            <option >02:30</option>
+                            <option >02:40</option>
+                            <option >02:50</option>
+                            <option >03:00</option>
+                            <option >03:10</option>
+                            <option >03:20</option>
+                            <option >03:30</option>
+                            <option >03:40</option>
+                            <option >03:50</option>
+                            <option >04:00</option>
+                            <option >04:10</option>
+                            <option >04:20</option>
+                            <option >04:30</option>
+                            <option >04:40</option>
+                            <option >04:50</option>
+                            <option >05:00</option>
+                            <option >05:10</option>
+                            <option >05:20</option>
+                            <option >05:30</option>
+                            <option >05:40</option>
+                            <option >05:50</option>
+                            <option >06:00</option>
+                            <option >06:10</option>
+                            <option >06:20</option>
+                            <option >06:30</option>
+                            <option >06:40</option>
+                            <option >06:50</option>
+                            <option >07:00</option>
+                            <option >07:10</option>
+                            <option >07:20</option>
+                            <option >07:30</option>
+                            <option >07:40</option>
+                            <option >07:50</option>
+                            <option >08:00</option>
+                            <option >08:10</option>
+                            <option >08:20</option>
+                            <option >08:30</option>
+                            <option >08:40</option>
+                            <option >08:50</option>
+                            <option >09:00</option>
+                            <option >09:10</option>
+                            <option >09:20</option>
+                            <option >09:30</option>
+                            <option >09:40</option>
+                            <option >09:50</option>
+                            <option >10:00</option>
+                            <option >10:10</option>
+                            <option >10:20</option>
+                            <option >10:30</option>
+                            <option >10:40</option>
+                            <option >10:50</option>
+                            <option >11:00</option>
+                            <option >11:10</option>
+                            <option >11:20</option>
+                            <option >11:30</option>
+                            <option >11:40</option>
+                            <option >11:50</option>
+                            <option >12:00</option>
+                            <option >12:10</option>
+                            <option >12:20</option>
+                            <option >12:30</option>
+                            <option >12:40</option>
+                            <option >12:50</option>
+                            <option >13:00</option>
+                            <option >13:10</option>
+                            <option >13:20</option>
+                            <option >13:30</option>
+                            <option >13:40</option>
+                            <option >13:50</option>
+                            <option >14:00</option>
+                            <option >14:10</option>
+                            <option >14:20</option>
+                            <option >14:30</option>
+                            <option >14:40</option>
+                            <option >14:50</option>
+                            <option >15:00</option>
+                            <option >15:10</option>
+                            <option >15:20</option>
+                            <option >15:30</option>
+                            <option >15:40</option>
+                            <option >15:50</option>
+                            <option >16:00</option>
+                            <option >16:10</option>
+                            <option >16:20</option>
+                            <option >16:30</option>
+                            <option >16:40</option>
+                            <option >16:50</option>
+                            <option >17:00</option>
+                            <option >17:10</option>
+                            <option >17:20</option>
+                            <option >17:30</option>
+                            <option >17:40</option>
+                            <option >17:50</option>
+                            <option >18:00</option>
+                            <option >18:10</option>
+                            <option >18:20</option>
+                            <option >18:30</option>
+                            <option >18:40</option>
+                            <option >18:50</option>
+                            <option >19:00</option>
+                            <option >19:10</option>
+                            <option >19:20</option>
+                            <option >19:30</option>
+                            <option >19:40</option>
+                            <option >19:50</option>
+                            <option >20:00</option>
+                            <option >20:10</option>
+                            <option >20:20</option>
+                            <option >20:30</option>
+                            <option >20:40</option>
+                            <option >20:50</option>
+                            <option >21:00</option>
+                            <option >21:10</option>
+                            <option >21:20</option>
+                            <option >21:30</option>
+                            <option >21:40</option>
+                            <option >21:50</option>
+                            <option >22:00</option>
+                            <option >22:10</option>
+                            <option >22:20</option>
+                            <option >22:30</option>
+                            <option >22:40</option>
+                            <option >22:50</option>
+                            <option >23:00</option>
+                            <option >23:10</option>
+                            <option >23:20</option>
+                            <option >23:30</option>
+                            <option >23:40</option>
+                            <option >23:50</option>
+                        </select>                                                   
+                    </div>
+                    <label class="col-sm-6 control-label">Repeat</label>
+                    <div class="col-sm-12" >
+                        <select style="width: 100%; float: left;" class="form-control" ng-model="reportSchedule.report_scheduler_repeat" required>
+                            <option value="everyday">Everyday</option>
+                            <option value="everyweek">Everyweek</option>
+                            <option value="everymonth">Everymonth</option>
+                        </select>
+                    </div>
+                    <label class="col-sm-12 control-label">Email(s) (seperate with commas)</label>
+                    <div class="col-sm-12" >
+                        <textarea style="width:100%;padding: 6px 12px;" type="text" required ng-model="reportSchedule.report_scheduler_emails"></textarea>
+                    </div>  
+                </div>
+
+            </div>  
+        </div>
+        <div class="modal-footer" style="border-bottom: 1px solid rgb(229, 229, 229); margin-top: 10px; padding: 10px 20px;">
+            <button type="submit" class="btn btn-success" ng-disabled='schedulerForm.$invalid' style="padding:6px;"  ng-click="submitReportScheduler()">Save Changes</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+    </form>  
+    <div class="col-sm-12" style="background: #fff;border-radius: 0 0 6px 6px;"> 
+        <table class="table table-bordered cf" style="margin: 10px 20px 10px 50px;width: 90%;height: 200px; overflow-y: auto; display: block;" ng-show="reportSchedulers.length>0">
+            <thead style="display: table; width: 100%;">
+                <tr>
+                    <th style="border-bottom:none !important;color:black;padding-left: 12px !important;width: 7%;">Sl</th>
+                    <th style="border-bottom:none !important;color:black;padding-left: 12px !important;width: 20%;">Name</th> 
+                    <th style="border-bottom:none !important;color:black;padding-left: 12px !important;width: 22%;">Report</th>
+                    <th style="border-bottom:none !important;color:black;padding-left: 12px !important;width: 22%;">Emails</th>
+                    <th style="border-bottom:none !important;color:black;padding-left: 12px !important;width: 7%;">Time</th>
+                    <th style="border-bottom:none !important;color:black;padding-left: 12px !important;width: 20%;"></th>        
+                </tr>
+            </thead>
+            <tbody style="background-color:#fffffd;display: table; width: 100%;"> 
+                <tr ng-repeat="reportschelr in  reportSchedulers">
+                    <td style="padding-left: 12px !important;width: 7%;">{{$index+1}}</td>
+                    <td style="padding-left: 12px !important;width: 20%;">{{reportschelr.report_scheduler_name}} </td> 
+                    <td style="padding-left: 12px !important;width: 22%;">{{reportschelr.report_name}}</td> 
+                    <td style="padding-left: 12px !important;width: 22%;">{{reportschelr.report_scheduler_emails | limitTo:20 }}<span ng-if="reportschelr.report_scheduler_emails.length>20">...</span> </td>    
+                    <td style="padding-left: 12px !important;width: 7%;">{{reportschelr.report_scheduler_time}} </td> 
+                    <td style="padding-left: 12px !important;width: 20%;">
+                        <button type="button" class="btn btn-success" ng-click="editReportScheduler(reportschelr.report_scheduler_id)">Edit</button>
+                        <button type="button" class="btn btn-danger" ng-click="deleteReportScheduler(reportschelr.report_scheduler_id)">Delete</button>
+                    </td>  
+                </tr> 
+            </tbody>
+        </table>
+    </div>                
+</div>
+</div>
+</div>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div  ng-controller="NavigationCtrl" class="modal fade" id="editSubuserPassword" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+    <div class="modal-dialog" style="width:800px !important;max-height:500px !important;"  role="document">
+        <div class="modal-content" >
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Edit Password </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+
+
+            <div class="alert alert-success" style="text-align:center;margin-top:5px;" ng-show="editPasswordSuccessMessage">
+              <span class="entypo-thumbs-up"></span>{{editPasswordMessage}}.
+          </div>
+
+          <div class="alert alert-danger" style="text-align:center;margin-bottom:0;"  ng-show="editPasswordErrorMessage">
+            <span class="entypo-thumbs-up"></span>{{editPasswordMessage}}.
+        </div>
+
+
+
+
+        <form class="form-validation" name="EditPasswordForm">
+            <div class="modal-body" style="overflow-y:auto;height:95px;">
+
+                <div class="col-sm-12">
+                 <div class="col-sm-4" ng-hide="settings.user_id">
+                    <label class="col-sm-8 control-label">Old Password</label>
+                    <div class="col-sm-12" >
+                        <input id="userPassword" name="userPassword" class="form-control" type="password" ng-model="editPasswordData.oldPassword" ng-minlength="6" required>
+
+                    </div>                                 
+                </div>
+                <div class="col-sm-4" ng-hide="settings.user_id">
+                    <label class="col-sm-8 control-label">New Password</label>
+                    <div class="col-sm-12" >
+                        <input id="userPassword" name="userPassword" class="form-control" type="password" ng-model="editPasswordData.newPassword" ng-minlength="6" required>
+                        <!-- <label style="color:red" class="error"  ng-show="EditPasswordForm.userPassword.$error.minlength">The user password must be at least 6 characters.</label>-->
+                    </div>                                 
+                </div>
+
+                <div class="col-sm-4" ng-hide="settings.user_id">
+                    <label class="col-sm-9 control-label">Confirm Password</label>
+                    <div class="col-sm-12" >
+                        <input id="userPassword" name="userPassword" class="form-control" type="password" ng-model="editPasswordData.confirmPassword" ng-minlength="6" required>
+                        <!--<label style="color:red" class="error"  ng-show="EditPasswordForm.userPassword.$error.minlength">The user password must be at least 6 characters.</label>-->
+                    </div>                                 
+                </div>
+            </div> 
+        </div>
+        <div class="modal-footer" style="padding: 10px 20px;">
+            <button type="submit" class="btn btn-success" ng-disabled='EditPasswordForm.$invalid' style="padding:6px;" ng-click="editpassword()">Save</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal" style="padding:7px;">Close</button>
+        </div>
+    </form>
+</div>
+</div>
+</div>

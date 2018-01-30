@@ -1,0 +1,261 @@
+<!-- <link href="assets/css/signin.css?v=2-0-1" rel="stylesheet" type="text/css" />
+<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"> -->
+
+<div   ng-controller="SigninFormController"  >
+  <div class="preloader">
+    <div class="loadWrapper" >
+      <div class="loader"></div>
+    </div>
+  </div>
+
+
+
+  <div class="loginpage" >
+
+   <!--  PAPER WRAP -->
+   <div class="wrap-fluid">
+    <div class="container-fluid paper-wrap bevel tlbr">
+
+
+
+      <form name="LoginForm" class="login_container">
+        <div style="  color: #fff;background: red; width: 249px;padding: 9px; margin-bottom: 9px;font-size: 16px;border-radius: 5px;" ng-show="showError">
+          {{authError}}<br>
+        </div>
+
+        <img src="assets/img/new/logo.png">
+
+        <input type="text"  placeholder="Username" ng-model="user.user_name" required>
+        <input type="password"   placeholder="Password" ng-model="user. user_password" required >
+
+
+        <p class="button_login" ng-disabled='LoginForm.$invalid' ng-click="login()"><a>Log In</a></p>
+        <p class="forgot_password"><a ui-sref="access.forgotpwd">Forgot password </a></p>
+
+      </form>
+
+      <div class="col-md-12 counter_div">
+        <ul>
+          <li>
+            <div class="Inner_li">
+              <img src="assets/img/new/1.png">
+              <p>Connected</p>
+              <p><span class="counter">{{totalConnected}}</span></p>
+            </div>
+          </li>
+
+          <li>
+           <div class="Inner_li">
+            <img src="assets/img/new/2.png">
+
+            <p>Moving</p>
+            <p><span class="counter">{{totalMoving}}</span></p>
+          </div>
+        </li>
+
+        <li>
+         <div class="Inner_li">
+          <img src="assets/img/new/2.png">
+          <p>Parking</p>
+          <p><span class="counter">{{totalParking}}</span></p>
+        </div>
+      </li>
+    </ul>
+  </div>
+  <p class="download_apps">Download apps</p>
+  <ul class="get_icons">
+    <li><a target="_blank" href="https://itunes.apple.com/us/app/my-locator-plus/id1255777829?mt=8"><img src="assets/img/new/appstore.png"></a></li>
+    <li><a target="_blank" href="https://play.google.com/store/apps/details?id=com.synosys.locator&hl=en"><img src="assets/img/new/googleplay.png"></a></li>
+  </ul>
+</div>
+</div>
+
+</div>
+</div>
+
+
+<!--<script src="http://192.168.0.101/locator/final/assets/1.10.2/jquery.min.js"></script> 
+<script src="http://192.168.0.101/locator/final/assets/waypoints/2.0.3/waypoints.min.js"></script> 
+<script src="http://192.168.0.101/locator/final/assets/waypoints/2.0.3/jquery.counterup.min.js"></script>-->
+
+<!-- <script src="http://mylocatorplus.net/final/assets/1.10.2/jquery.min.js"></script>  -->
+<!-- <script src="assets/waypoints/2.0.3/waypoints.min.js"></script> -->
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/waypoints/4.0.0/jquery.waypoints.min.js"></script>  -->
+<!-- <script src="assets/waypoints/2.0.3/jquery.counterup.min.js"></script>  -->
+<!-- <script src="http://ciromattia.github.io/jquery.counterup/jquery.counterup.js"></script> 
+ -->
+
+<script type="text/javascript">
+var height = $(window).height();
+$(".loginpage").height(height); 
+</script>
+
+
+<style type="text/css">
+.loginpage
+{
+ /*background: url('http://192.168.0.101/locator/final/assets/img/new/loginbg.png') no-repeat center center fixed;*/
+ background: url('assets/img/new/loginbg.png') no-repeat center center fixed;
+ -webkit-background-size: cover;
+ -moz-background-size: cover;
+ -o-background-size: cover;
+ background-size: cover;
+ font-family: 'Roboto', sans-serif !important;
+}
+.login_container
+{
+ display: block;
+ margin: 0px auto;
+ width: 26%;
+ text-align: center;
+ margin-top: 4%;
+ padding: 50px 50px;
+ border: 1px solid #969595;
+ background: rgba(0, 0, 0, 0.5);
+ border-radius: 3px;
+ overflow:hidden;
+}
+.login_container img
+{
+  padding-bottom: 15px;
+}
+.login_container input
+{
+  width: 100%;
+  height: 35px;
+  margin-bottom: 15px;
+  border-radius: 3px;
+  box-shadow: none;
+  border: 0px;
+  padding-left: 5px;
+}
+.button_login a
+{
+
+  height: 30px;
+  width: 100%;
+  font-size: 17px;
+  color: #fff;
+  text-decoration: none;
+
+
+}
+
+
+
+.button_login
+{
+ width: 100%;
+ padding: 8px 0px;
+ border-radius: 3px;
+ background: #1091be;
+ margin-top: 5px;
+ margin-bottom: 3px;
+ cursor: pointer;
+}
+
+.button_login:hover
+{
+  background: #000;    
+
+}
+.button_login a:hover
+{
+  background: #000;    
+
+}
+
+
+.forgot_password
+{
+  margin-top: 10px;
+  margin-bottom: 0px;
+}
+
+.forgot_password a
+{
+  color: #fff;
+  font-size: 12px;
+  text-decoration: none;
+}
+
+::-webkit-input-placeholder { /* WebKit, Blink, Edge */
+  color:    #12a2d5!important;
+  text-align: center;
+}
+:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+ color:    #12a2d5!important;
+ opacity:  1;
+ text-align: center;
+}
+::-moz-placeholder { /* Mozilla Firefox 19+ */
+ color:    #12a2d5!important;
+ opacity:  1;
+ text-align: center;
+}
+:-ms-input-placeholder { /* Internet Explorer 10-11 */
+ color:    #12a2d5;
+ text-align: center;
+}
+::-ms-input-placeholder { /* Microsoft Edge */
+ color:    #12a2d5;
+ text-align: center;
+}
+.counter_div ul
+{
+  margin: 0px;
+  padding: 0px;
+  list-style-type: none;
+}
+.counter_div ul li
+{
+ display: inline-block;
+ width: 160px;
+
+
+}
+.counter_div
+{
+  text-align: center;
+  margin-top: 40px;
+}
+.counter_div p
+{
+ margin: 5px 0px 2px;
+ color: #fff;
+ text-align: left;
+ font-size: 15px;
+}
+.counter
+{
+  font-size: 28px;
+  text-align: left;
+  margin-bottom: 3px;
+}
+.counter_div img
+{
+ display: block;    
+}
+.download_apps
+{
+  text-align: center;
+  margin: 0px;
+  font-size: 13px;
+  color: #fff;
+  margin-bottom: 5px;
+  margin-top: 10px;
+}
+.get_icons
+{
+  text-align: center;
+  margin-top: 0px;
+}
+.get_icons li
+{
+  padding: 15px 5px 10px;
+  display: inline-block;
+}
+.Inner_li {
+  margin: 0px 50px;
+}
+</style>

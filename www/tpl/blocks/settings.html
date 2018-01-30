@@ -1,0 +1,415 @@
+<!--  END OF PAPER WRAP -->
+<!-- RIGHT SLIDER CONTENT -->
+<div id="idSettingsCtrl" class="sb-slidebar sb-right" ng-controller="SettingsCtrl" style="height:100%;width:100% ; ">
+  <div class="right-wrapper" style="margin:6px 0 0 14px;padding:0;" ng-show="showMapOfTripFlag">
+    <div style="background-color: red">
+      <div class="rightSideLoader"></div>
+
+      <ng-map   center="{{center}}" zoom="40"  class="GMap" id="Map" style="height:98vh !important;display: contents !important;">
+
+        <marker  ng-if="movingPoints.length>0" ng-repeat="p in parkingMarkers[0]" icon="{{imagePath}}/bus.png" position="{{p.parking_lat}}, {{p.parking_lon}}" ></marker>
+
+        <marker  ng-repeat="e in eventMarkers[0]"  ng-if="movingPoints.length>0 && e.event_status==1" icon="{{imagePath}}/ignON.png" position="{{e.event_latitude}}, {{e.event_longitude}}" ></marker>
+
+        <marker  ng-repeat="e in eventMarkers[0]"  ng-if="movingPoints.length>0 && e.event_status==0" icon="{{imagePath}}/ignOFF.png" position="{{e.event_latitude}}, {{e.event_longitude}}" ></marker>
+
+        <marker  ng-if="movingPoints.length>0" ng-repeat="i in idlingMarkers[0]" icon="{{imagePath}}/idling.png" position="{{i.track_vehicles_veh_latitude}}, {{i.track_vehicles_veh_longitude}}" ></marker>
+
+        <shape id="path" name="polyline" ng-if="movingPoints.length>0"   data-placement="left" title="{{vm.marlatlong}}"
+          path="{{movingPoints}}"
+          stroke-color="grey"
+          stroke-opacity="1"
+          stroke-weight="10"
+          z-index= "1"
+          icons="">             
+        </shape>
+
+        <shape id="path" name="polyline" ng-if="movingPoints.length>0"   data-placement="left" title="{{vm.marlatlong}}"
+          path="{{movingPoints}}"
+          stroke-color="white"
+          stroke-opacity="1"
+          stroke-weight="8"
+          z-index= "2"
+          icons="">             
+        </shape>
+
+        <shape id="path" name="polyline" ng-repeat="polylinePoint in polylinePoints"     data-toggle="tooltip" data-placement="left" title="{{vm.marlatlong}}"
+          path="{{polylinePoint.point}}"
+          geodesic="true"
+          stroke-color="{{polylinePoint.color}}"
+          stroke-opacity="1.0"
+          stroke-weight="3"
+          z-index= "3"
+          geodesic="true"
+          icons="[{
+            icon: {
+            path: 'FORWARD_CLOSED_ARROW',
+            strokeOpacity: 1,
+            scale: 1
+          },
+          offset: '0%'
+          }]">             
+        </shape>
+
+      </ng-map>
+
+      <div style="position: absolute;left: calc(32%);text-align: center;top: calc(50%);padding: 10px;border: 1px solid #ccc;background: #fff;box-shadow: 0px 0px 10px #ccc;border-radius: 11px;" ng-show="zeroTrack">
+        <div class="alert alert-warning" style="padding: 7px 70px !important;margin-bottom:0;"><strong>This is a zero mileage trip</strong></div>
+      </div>
+
+    </div>
+  </div> 
+  <!--<div class="right-wrapper" style="margin:6px 0 0 14px;padding:0;height:645px" ng-show="zeroTrack">
+    <p>
+      <span>No trip for this report</span>
+    </p>
+  </di>
+
+  <!--//////////////////////////////////////////////////////////////////////////////////////////////////////-->
+
+  <div class="right-wrapper" style="margin:8px 8px 5px 7px;padding:0; width: 95%" ng-show="liveSchedulingFlag">
+    <div class="row">
+      <h3 style="padding: 8px; margin-top: 12px; margin-bottom: 0px;">
+        <span><i class="icon icon-calendar"></i>&nbsp;&nbsp;Schedule a Vehicle</span>
+      </h3>
+      <div class="col-sm-12" style="height:40vh;">
+        <form class="form-validation ng-pristine ng-invalid ng-invalid-required ng-valid-email ng-valid-url" name="form">
+          <div class="modal-body" style="overflow:hidden"> 
+            <table class="table table-bordered cf" style="border:none !important;">
+                <thead >
+                  <tr>
+                    <th class="columnTitle" style="width:6%;">Sl</th>
+                    <th class="columnTitle" style="width:25%;">Event</th>       
+                    <th class="columnTitle" style="width:16%;">Vehicle</th>
+                    <th class="columnTitle" style="width:20%;">Email</th>       
+                    <th class="columnTitle" style="width:25%;">Date</th>
+                    <th class="columnTitle" style="width:6%;"></th>
+                  </tr>
+                </thead>
+            </table>
+            <div style="height:144px !important;overflow-y:auto; ">
+              <table class="table table-bordered cf" style="border:none !important;">            
+                <tbody style="background-color:#fffffd;" > 
+                  <tr ng-repeat="schedule in schedules | filter:searchSchedules">
+                    <td style="padding-left: 12px !important; width:6%;">{{$index+1}}</td>
+                    <td style="padding-left: 12px !important; width:25%;">{{schedule.scheduling_event | limitTo:12 }} 
+                      <span ng-if="schedule.scheduling_event.length>12">...</span>
+                    </td>    
+                    <td style="padding-left: 12px !important; width:16%;">{{schedule.obj_name | limitTo:6}}
+                      <span ng-if="schedule.obj_name.length>6">...</span>
+                    </td>
+                    <td style="padding-left: 12px !important; width:20%;">{{schedule.scheduling_email | limitTo:7}}
+                      <span ng-if="schedule.scheduling_email.length>7">...</span>
+                    </td>    
+                    <td style="padding-left: 12px !important; width:25%;">{{schedule.scheduling_date}}</td>
+                   
+
+                    <td ng-if="schedule.sendemail_flag==0" style="padding: 5px !important; width:6%;">
+                      <button type="button" class="btn btn-info" ng-click="getSingleSchedule(schedule.scheduling_id)">
+                        <i class="fa fa-eye" aria-hidden="true"></i>
+                      </button>
+                    </td>
+
+                      <td ng-if="schedule.sendemail_flag==1" style="padding: 5px !important; width:6%;">
+                      <button type="button" class="btn btn-info">
+                        <i class="fa fa-check" aria-hidden="true"></i>
+                      </button>
+                    </td>
+
+
+                    
+
+
+
+
+                  </tr>   
+                </tbody>
+              </table>
+              <span ng-if="schedules.length==0">No Schedules.</span>
+            </div>
+            <div class="col-sm-12" style="margin-top: 10px;">
+              <button style="padding:6px;float:right;" type="submit" class="btn btn-info"  data-toggle="modal" ng-click="addNewSchedule()" data-target="#addScheduling">Add Scheduling</button>
+              <button type="button" class="btn btn-danger ttip" ng-click="getAllSchedules()" title="Refresh" style="padding:6px 12px !important;margin-right:5px;float:right;">
+                <i class="fa fa-refresh" style="color:#333;" aria-hidden="true"></i> 
+              </button>
+            </div>
+            <div class="col-sm-12 nopadding bottom-search">
+              <div class="col-sm-9 nopadding">
+                <div class="input-group input-widget" style="width:100%">
+                  <input style="border-radius: 15px; width: 98%; margin-left: 19px; margin-top: -27px;" ng-model="searchSchedules" placeholder="Search..." class="form-control searchbox ng-pristine ng-untouched ng-valid" aria-invalid="false" type="text">
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div> 
+  </div>
+  <div class="right-wrapper" style="margin:0px 8px 0 7px;padding:0; width: 95%" ng-show="liveSchedulingFlag">
+    <div class="modal fade" id="addScheduling" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+      <div class="modal-dialog" style="width:300px !important;" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">Scheduling</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <form class="form-validation" name="SchedulingModalform">
+            <div class="modal-body" style="overflow:hidden">
+              <div class="col-sm-12">
+                <div class="col-sm-12">
+                  <label class="col-sm-3 control-label">Event</label>
+                  <div class="col-sm-12" >
+                    <input class="form-control" type="text" ng-model="schedule.scheduling_event">
+                  </div>   
+                  <label class="col-sm-3 control-label">Email</label>
+                  <div class="col-sm-12" >
+                    <input required class="form-control" type="email" ng-model="schedule.scheduling_email">
+                  </div>  
+                  <label class="col-sm-9 control-label">Select Vehicle</label>
+                  <div class="col-sm-12" >
+                    <div class="col-sm-9" >
+                      <select style="padding: 1px;  margin-left: -10px; width: 129px;" class="form-control" ng-model="schedule.scheduling_vehicle_device_id" >
+                        <option ng-repeat="vehicle in Vehicles"      value="{{vehicle.obj_device_id}}">{{vehicle.obj_name}}</option>
+                      </select>
+                    </div>
+                    <div class="col-sm-3" >
+                      <button type="button" class="btn btn-grey " ng-click="getAllSchedules()" style="padding:6px 12px !important;margin-left:-7px;">
+                        <i class="fa fa-refresh" style="color:#333;" aria-hidden="true"></i> 
+                      </button>
+                    </div>
+                  </div>
+                  <label class="col-sm-6 control-label">Date</label>
+                  <div class="col-sm-12" >
+                    <div class="col-md-12 paddingnone">
+                      <div  id="datetimepicker1256" class="input-group date" >
+                        <input class="form-control" id="dateSchedule"  data-format="yyyy-MM-dd hh:mm:ss" type="text" ng-model="schedule.scheduling_date">
+                        <span class="input-group-addon add-on" style="display:table-cell; ">
+                          <i style="font-style:normal;" data-time-icon="entypo-clock" data-date-icon="entypo-calendar">
+                          </i>
+                        </span>
+                      </div>
+                    </div>
+                  </div> 
+                  <label class="col-sm-6 control-label">Reminder</label>
+                  <div class="col-sm-12">
+                    <select style="width: 100%; float: left;" class="form-control" ng-model="schedule.scheduling_interval" >
+                      <option value="1">1 Hour</option>
+                      <option value="12">12 Hours</option>
+                      <option value="24">24 Hours</option>
+                    </select>
+                  </div> 
+                </div>
+              </div>  
+            </div>
+            <div class="modal-footer">
+              <button type="submit" class="btn btn-success" ng-disabled='SchedulingModalform.$invalid' style="padding:6px;" ng-click="submitSchedulingForm()">Submit</button>       
+              <button style=" width:53px; padding:5px;"  class="btn btn-danger" ng-click="deleteSchedule(schedule.scheduling_id)" ng-show="deleteScheduleButton">Delete</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="row">
+        <h3 style="padding: 8px; margin-top: 12px; margin-bottom: 0px;">
+          <span><i class="fontawesome-search"></i>&nbsp;&nbsp;Find nearby Vehicle</span>
+        </h3>
+        <div class="modal-body">
+          <div class="searchobjects col-sm-12 " >
+            <div class="col-sm-4">
+              <input type="radio" id="pois" ng-model="selectedPOI"  value="POI" ng-change="selectedForSearch(selectedPOI)" >POI 
+              <label for="pois"><span></span></label>
+            </div>
+            <div class="col-sm-4">
+              <input type="radio" id="adres" ng-model="selectedPOI" value="ADDRESS" ng-change="selectedForSearch(selectedPOI)">ADDRESS
+              <label for="adres"><span></span></label>
+            </div>  
+            <div class="col-sm-4">
+              <input type="radio" id="polygon" ng-model="selectedPOI" value="POLYGON" ng-change="selectedForSearch(selectedPOI)">POLYGON
+              <label for="polygon"><span></span></label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="modal-body">
+          <div class="searchNearestVehicle"  ng-show="searchByPOIFlag">
+              <select style="padding:1px !important;margin-bottom:7px;" class="form-control" ng-model="searchPOI" ng-change="SearchVehicles(searchPOI)">
+                <option  ng-repeat="poi in POIs" value="{{poi.gz_points}}" >{{poi.gz_name}}</option>
+              </select>      
+          </div>
+          <div class="searchNearestVehicle"  ng-show="searchByPolygonFlag"> 
+            <select style="padding:1px !important;margin-bottom:7px;" class="form-control" ng-model="searchPolygon" ng-change="SearchVehicles(searchPolygon)">
+              <option  ng-repeat="zones in polygons" value="{{zones.gz_points}}" >{{zones.gz_name}}</option>
+            </select>
+          </div>
+          <div class="searchNearestVehicle" ng-show="searchByAddressFlag">
+              <input style="color:black;width: 100%;padding: 5px !important;margin-bottom:7px;" id="pac-input" ng-model="Addressmodel" class="controls" type="text" placeholder="Enter a location">
+          </div>
+          <div style="width: 95%; margin: 10px;">
+            <span style="margin-top:8px !important; color:#000;" class="label label-chat">Search Results</span>
+            <div class="panel panel-default" ng-controller="NavigationCtrl"  ng-show="SearchResults.length>0" >
+              <div class="panel-body" style="margin-top:9px;">
+                <table id="responsive-example-table " class="table large-only">
+                  <tbody class="skin skin-flat">  
+                    <tr class=" list" ng-repeat="result in SearchResults"   >
+                      <td style="width=100%; border:0">
+                        <a aria-controls="profile" role="tab" data-toggle="tab" style="cursor:pointer" ng-click="getVehicleDetails(result.obj_id,result.obj_device_id,result.obj_id,result.obj_name)"  >
+                         <img src="assets/img/round_icon.png" > <b class="vehname">{{result.obj_name |limitTo:21 }} </b>
+                          <div class="datetime"></div>
+                        </a><br>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="panel panel-default"   ng-show="SearchResults.length==0" >
+              <div class="panel-body" style="margin-top:9px;">
+                <table id="responsive-example-table " class="table large-only">
+                  <tbody class="skin skin-flat">  
+                    <tr class=" list">
+                      <td style="width=100%;">
+                        <a aria-controls="profile" role="tab" data-toggle="tab">
+                          <b class="vehname">No Vehicles </b>
+                          <div class="datetime"></div>
+                        </a><br>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> 
+
+
+</div>
+
+<!-- MAIN EFFECT -->
+<script type="text/javascript" src="assets/js/main.js"></script>
+<script type="text/javascript" src="assets/js/app.js"></script>
+<script type="text/javascript" src="assets/js/iCheck/jquery.icheck.js"></script>
+<script type="text/javascript" src="assets/js/switch/bootstrap-switch.js"></script>
+<script type="text/javascript" src="assets/js/pnotify/jquery.pnotify.min.js"></script>
+
+<script type="text/javascript">
+var height = $(window).height();
+var screenheight = height;
+
+var main_tab_height = height-80;
+var tab_content_inner_height = height-285;
+
+$("#heightscrollset").height(screenheight);
+$("#heightscrollset").css("overflow","hidden");
+$("#paper-middle").height(main_tab_height);
+$(".main_tab").height(main_tab_height);
+$(".tab_content_inner").height(tab_content_inner_height);
+
+$('body').delay(350).css({
+  'overflow': 'hidden'
+});
+
+    $('#status').delay(1350).fadeOut(); // will first fade out the loading animation
+    $('#preloader').delay(1350).fadeOut(); // will fade out the white DIV that covers the website.
+
+
+
+      $('#skin-select').animate({ left:0 }, 100); 
+      $('.wrap-fluid').css({"width":"auto","margin-left":"540px"});
+      $('.navbar').css({"margin-left":"530px"});
+
+      $('#skin-select li').css({"text-align":"left"});
+
+    </script> 
+
+
+
+  <script type="text/javascript">
+
+      $(window).load(function () {
+        var height = $(window).height();
+        var screenheight = height;
+
+        var main_tab_height = height-70;
+        var tab_content_inner_height1 = height-220;
+        var tab_content_inner_height2 = height-430;
+        var tab_content_inner_height3 = height-520;
+        var bevel_height = height-80;
+        var strpeless_height = height-540;
+
+        $("#heightscrollset").height(screenheight);
+        $("#heightscrollset").css("overflow","hidden");
+        $("#paper-middle").height(main_tab_height);
+        $(".main_tab").height(main_tab_height);
+        $("#tab_content_inner1").height(tab_content_inner_height1);
+        $("#tab_content_inner2").height(tab_content_inner_height2);
+        $("#tab_content_inner3").height(tab_content_inner_height3);
+        $(".bevel").height(bevel_height);
+        //$("#tab_content_inner2").customScrollbar();
+
+      });
+
+      function makeActive($this){
+
+        if($($this).is(':checked'))
+          $($this).parent().parent().addClass('veh_selected');
+        else
+          $($this).parent().parent().removeClass('veh_selected');
+      }
+
+  </script>
+
+  <script type="text/javascript">
+
+    function openRightSide()
+    {
+
+      $( ".toggle-left" ).trigger( "click" );  
+      //$(".sb-slidebar").css("display", "block");
+      /* $(".sb-slidebar").show();*/
+    }
+
+  </script>
+
+
+
+  <script type="text/javascript">
+    $('#datetimepicker1256').datetimepicker({
+      language: 'pt-BR'
+
+    });
+
+    $('#datetimepicker125').datetimepicker({
+      language: 'pt-BR'
+
+    });
+
+
+    $('#dp1').datepicker()
+    $('#dpYears').datepicker();
+    $('#timepicker1').timepicker();
+    $('#t1').clockface();
+    $('#t2').clockface({
+      format: 'HH:mm',
+      trigger: 'manual'
+    });
+
+    $('#toggle-btn').click(function(e) {
+      e.stopPropagation();
+      $('#t2').clockface('toggle');
+    });
+    $('.btn').tooltip({
+      "margin-top": "50px"
+    });
+
+  </script>
+
+

@@ -1,0 +1,61 @@
+<div id="wrapper">
+    <!-- Page Content -->
+    <div id="page-content-wrapper" class="main_div">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12 col-sm-12 col-xs-12 headersec_main">
+                    <div class="leftbar" >
+                        <a ui-sref="dashboard" id="menu-toggle"><i class="fa fa-arrow-left bckbtn" aria-hidden="true"></i></a>
+                    </div>
+                    <div class="haderdiv_inner">
+                        <div class="header_sec">Vehicles - {{currentPage}}</div>                
+                    </div>
+                </div>
+                <div class="col-md-12 col-sm-12 col-xs-12 first_sec_vechicle vechicles_page" ng-init="getVehiclesList()">
+                    <div class="input-group stylish-input-group">
+                        <input type="text" class="form-control"   placeholder="Search Vechicle" ng-model="search">
+                        <span class="input-group-addon">
+                            <button type="submit">
+                                <span class="glyphicon glyphicon-search"></span>
+                            </button>  
+                        </span>
+                    </div>  
+                    <ul class="vechicle_list" ng-repeat="group in groups">
+
+                        <li ng-show="group.vehicles.ran.length > 0">
+
+                            <input type="checkbox" ng-model="groupId" id="group_{{group.group.obj_group_id}}" ng-true-value="{{group.group.obj_group_id}}" ng-false-value="0" ng-click="checkAllVehicles(groupId,group.group.obj_group_id)">  
+                            <label for="group_{{group.group.obj_group_id}}"><span></span></label>
+
+                            <div class="vechicle_list_info">
+                              <h5>{{group.group.obj_group_name | limitTo:20}}</h5>
+                            </div>                            
+                        </li>        
+
+                            <li ng-repeat="vehicle in group.vehicles.ran | filter :search">
+                                <a ng-click="goToNextPage(vehicle.obj_id,vehicle.obj_device_id,vehicle.obj_name,0,0)">
+                                    <div class="car_icon idle_ico">&nbsp</div>
+                                    <div class="vechicle_list_info">
+                                        <h5>{{vehicle.obj_name | limitTo:20}}</h5>
+                                        <p ng-if="vehicle.track_vehicles_status == 'Moving'">Moving at {{vehicle.track_vehicles_veh_speed}}km/Hr&nbsp; - &nbsp;{{vehicle.duration}}</p>
+                                        <p ng-if="vehicle.track_vehicles_status != 'Moving'">{{vehicle.track_vehicles_status}}&nbsp;{{vehicle.duration}}</p>
+                                    </div>
+                                </a>
+                                
+                            </li>               
+                    </ul>   
+                </div>
+                <div class="col-lg-12 col-sm-12 col-xs-12 paddingnone footersec">
+                    <ul>
+                        <li><a ui-sref="dashboard"><img src="images/icn_home.png" style="width:30px"></a></li>
+                       <li><a ng-click="goToPage('summary')"><img src="images/summary.svg"   style="width:30px"></a></li>
+                        <li><a ng-click="refresh()"><img src="images/icn_refresh.png" style="width:30px"></a></li>
+                        <li><a ui-sref="alert"><img src="images/icn_notification.png" style="width:30px"></a></li>
+                    </ul>
+                </div>
+            </div>   
+        </div>
+    </div><!-- /#page-content-wrapper -->
+</div><!-- /#wrapper -->
+
+   

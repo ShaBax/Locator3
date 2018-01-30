@@ -1,0 +1,239 @@
+<div id="skin-select" data-ng-controller="NavigationCtrl"  >
+    <div class="logo mainlogo">
+
+        <img class="locatorlogo" src="assets/img/logo.png">
+        <ul class="nav navbar-nav notification_bar">
+
+            
+
+
+ 
+
+
+         <li class="dropdown">
+            <a data-toggle="modal" data-target="#playVideo">
+
+               <i style="font-size:20px;" class="fa fa-video-camera ttip" title="Video tutorial" aria-hidden="true"></i>
+ 
+           </a>
+       </li>
+
+
+            <li class="dropdown">
+                <a data-toggle="dropdown" class="dropdown-toggle" ng-click="getSettingsNotfnsHeader()">
+                   <!-- <i style="font-size:20px;" class="icon-conversation ttip" title="Priority alerts"></i>-->
+                    <i style="font-size:20px;" class="fa fa-exclamation-triangle ttip" title="Priority alerts" aria-hidden="true"></i>
+
+
+                    <div class="noft-red">{{headerSettingsHighNotfns.length}}</div>
+                </a>
+                <ul style="margin: 11px 0 0 9px;max-height:300px;overflow-y: scroll;"   role="menu" class="dropdown-menu dropdown-wrap" ng-if="headerSettingsHighNotfns.length >0">
+                    <li ng-repeat="highNotfn in headerSettingsHighNotfns">
+                        <a ng-if="highNotfn.push_notification_type=='speed'"> 
+                            <i style="color:black;" class="fa fa-road " aria-hidden="true"  ></i>
+                            <span>{{highNotfn.obj_name}}&nbsp;-&nbsp;{{highNotfn.push_notification_content}}</span>
+                        </a>
+                        
+
+                        <a ng-if="highNotfn.push_notification_type=='ignition'"> 
+                          <i style="color:black;" class="fa fa-power-off" aria-hidden="true"></i>
+
+                          <span>{{highNotfn.obj_name}}&nbsp;-&nbsp;{{highNotfn.push_notification_content}}</span>
+                      </a>
+                    </li>
+                    <li class="divider"></li>
+                        <button class="btn btn-gray" ng-click="clearNotifications('high')" style="float: right;margin: 5px 15px;">Clear</button>
+                    <li>
+                       <!-- <div ng-click="notifyUser()">See All Notification</div>-->
+                    </li>
+                </ul>
+            </li>
+
+
+            <li>
+                <a data-toggle="dropdown" class="dropdown-toggle" ng-click="getSettingsNotfnsHeader()">
+                   <!-- <i style="font-size:19px;" class="icon-warning tooltitle ttip" title="Normal alerts" ></i>-->
+                    <i class="fa fa-exclamation-circle ttip" title="Normal alerts"   ></i>
+
+                    <div class="noft-green">{{headerSettingsNormalNotfns.length}}</div>
+                </a>
+                <ul style="margin: 12px 0 0 0;max-height:300px;overflow-y: scroll;" role="menu" class="dropdown-menu dropdown-wrap" ng-if="headerSettingsNormalNotfns.length >0">
+                    <li ng-repeat="normalNotfn in headerSettingsNormalNotfns">
+                        <a ng-if="normalNotfn.push_notification_type=='speed'">
+                          <i style="color:black;" class="fa fa-road" aria-hidden="true"></i>
+                            <span>{{normalNotfn.obj_name}}&nbsp;-&nbsp;{{normalNotfn.push_notification_content}}</span>
+                        </a>
+                         <a ng-if="normalNotfn.push_notification_type=='ignition'">
+                         <i style="color:black;" class="fa fa-power-off" aria-hidden="true"></i>
+                            <span>{{normalNotfn.obj_name}}&nbsp;-&nbsp;{{normalNotfn.push_notification_content}}</span>
+                        </a>
+                    </li>
+                    <li class="divider"></li>
+                    <button class="btn btn-gray" style="float: right;margin: 5px 15px;" ng-click="clearNotifications('normal')">Clear</button> 
+                    <li>
+                       <!-- <div>See All Notification</div>-->
+                    </li>
+                </ul>
+            </li>
+            <!--<li>
+                <a href="#"><i data-toggle="tooltip" data-placement="bottom" title="Help" style="font-size:20px;" class="icon-help tooltitle"></i>
+                </a>
+            </li>-->
+
+        </ul>  
+    </div>
+
+    <a id="toggle">
+        <span class="entypo-menu"></span>
+    </a>
+
+    <div class="skin-part">
+        <div id="tree-wrap">
+            <div class="side-bar">
+
+                <div class="col-xs-3 paddingnone" > <!-- required for floating -->
+                  <!-- Nav tabs -->
+                    <ul class=" tabs-left topnav menu-left-nest"><!-- 'tabs-right' for right tabs -->
+                         
+                      
+                     <li ng-class="{'active' : selectedSideButton == 'Analytics'}">
+                        <a ng-click="sideButtonClick('Analytics')" href="/#tabAnalytics" data-toggle="tab">
+                            <img style="width: 29px; margin: 8px 27px 10px 41px;" src="assets/img/left_icons/dashboard.svg">   
+                            <p translate="aside.nav.DASHBOARD" >Dashboard</p>
+                        </a>
+                    </li>
+
+                        <li ng-class="{'active' : selectedSideButton == 'Online'}">
+                            <a ng-click="sideButtonClick('Online')" href="/#tabOnline" data-toggle="tab">
+                              <!--  <i class="fa fa-globe" aria-hidden="true"></i> -->
+                                  <img style="width: 29px; margin: 8px 27px 10px 41px;" src="assets/img/left_icons/live.svg">  
+                                <p translate="aside.nav.LIVE">Live</p>
+                            </a> 
+                        </li>
+                        <li ng-class="{'active' : selectedSideButton == 'History'}">
+                            <a  ng-click="sideButtonClick('History')" href="/#tabHistory" data-toggle="tab">
+                               <!-- <i class="fa fa-dot-circle-o" aria-hidden="true"></i> -->
+                                 <img style="width: 29px; margin: 8px 27px 10px 41px;" src="assets/img/left_icons/trips.svg ">  
+
+                                <p translate="aside.nav.TRIPS">Trips</p>
+                            </a>
+                        </li>
+                        <li ng-class="{'active' : selectedSideButton == 'Report'}" >
+                            <a ng-click="sideButtonClick('Report')" href="/#tabReports" data-toggle="tab">
+                               <!-- <i class="fa fa-file-text" aria-hidden="true"></i> -->
+                                  <img style="width: 29px; margin: 8px 27px 10px 41px;" src="assets/img/left_icons/reports.svg ">  
+
+                                <p translate="aside.nav.REPORTS" >Reports</p>
+                            </a>
+                        </li>
+                        <!-- <li>
+                            <a  ng-click="sideButtonClick('Logistics')" href="/#tabLogistics" data-toggle="tab"><i class="fa fa-truck" aria-hidden="true"></i> 
+                                <p>Tasks</p>
+                            </a>
+                        </li> -->
+                       
+
+                         <li ng-class="{'active' : selectedSideButton == 'Maintanance'}">
+                           <a ng-click="sideButtonClick('Maintanance')" href="/#tabMaintanance" data-toggle="tab">
+                               <img style="width: 29px; margin: 8px 27px 10px 41px;" src="assets/img/left_icons/maintenance.svg  ">  
+                                <p translate="aside.nav.FLEET">Fleet Manager</p>
+                            </a>
+                        </li>
+                        <li ng-class="{'active' : selectedSideButton == 'Zone'}">
+                            <a ng-click="sideButtonClick('Zone')"  href="/#tabZone" data-toggle="tab">
+                                <!--<i class="fa fa-street-view" aria-hidden="true"></i> -->
+                                <img style="width: 29px; margin: 8px 27px 10px 41px;" src="assets/img/left_icons/poi.svg">  
+                                <p translate="aside.nav.ZONE">Zone & POIs</p>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-xs-9 padding-leftnone">
+                    <!-- Tab panes -->
+                    <div class="tab-content main_tab">
+
+                        <div class="tabLoader"></div>
+                        <div class="tab-pane " id="tabAnalytics"><div data-ng-include=" 'tpl/blocks/tabs/tabDashboard.html' "></div></div>
+                         <div class="tab-pane active"  id="tabOnline"><div data-ng-include=" 'tpl/blocks/tabs/tabOnline.html?v=1254' "></div></div>
+                        <div class="tab-pane" id="tabHistory"><div data-ng-include=" 'tpl/blocks/tabs/tabHistory.html' "></div></div>
+                        <div class="tab-pane" id="tabReports"><div data-ng-include=" 'tpl/blocks/tabs/tabReports.html' "></div></div>
+                        <!-- <div class="tab-pane" id="tabReports">3</div>-->
+                         <!--<div class="tab-pane" id="tabLogistics">4</div> -->
+
+                        <div class="tab-pane" id="tabMaintanance"><div data-ng-include=" 'tpl/blocks/tabs/tabMaintenance.html' "></div></div>
+
+
+
+                        
+                        <div class="tab-pane" id="tabZone"><div data-ng-include=" 'tpl/blocks/tabs/tabZone.html' "></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="modal fade" id="playVideo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+    <div class="modal-dialog" style="width:650px !important;max-height:500px !important;"  role="document">
+        <div class="modal-content" >
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Locator Video Tutorial </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            
+<div style="padding: 3px 4px;">
+
+   <!-- <iframe width="640" height="360" src="https://www.youtube.com/embed/LQCEbBuH5Xw" frameborder="0" allowfullscreen></iframe>-->
+
+<script>
+$('#playVideo').on('hidden.bs.modal', function (e) {
+  // do something...
+  
+  $('#video').attr("src", $("#video").attr("src"));
+});
+</script>
+
+ 
+
+    <iframe id="video" src="https://player.vimeo.com/video/232383916?title=0&byline=0&portrait=0" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+
+
+<!--
+    <iframe src="https://player.vimeo.com/video/232383916" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+<p><a href="https://vimeo.com/232383916">Tutorial</a> from <a target="_blank" href="https://vimeo.com/user31700791">shamsudheen</a> on <a href="https://vimeo.com">Vimeo</a>.</p>
+
+-->
+
+ 
+            </div>
+                
+                 
+            
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+<script type="text/javascript">
+function showTabLoader()
+{
+
+    $(".tabLoader").show();
+}
+function hideTabLoader()
+{
+    $(".tabLoader").hide();
+}
+</script>
+ 

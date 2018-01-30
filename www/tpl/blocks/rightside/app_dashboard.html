@@ -1,0 +1,340 @@
+<div class="row" style="background-color:#f5f5f5">
+  <div id="paper-top" style="margin-top:18px !important;">
+    <div class="col-sm-3">
+      <h2 class="tittle-content-header" style="margin:-4px 0 0 5px;back">
+        <i class="fa fa-dashboard"></i> 
+        <span>Dashboard
+        </span>
+      </h2>
+    </div>
+    <div class="col-sm-6">
+      <!-- <div class="devider-vertical visible-lg"></div>
+        <div class="tittle-middle-header">
+        <div class="alert">
+          <button type="button" class="close" data-dismiss="alert">×</button>
+          <span class="tittle-alert entypo-info-circled"></span>
+        Welcome back,&nbsp;
+          <strong>Dave mattew!</strong> 
+        </div>
+      </div>-->
+    </div>
+    <div class="col-sm-3">
+      <div class="devider-vertical visible-lg"></div>
+      <div class="btn-group btn-wigdet pull-right visible-lg">
+        <div class="widget_btn">{{timeInterval}}</div>
+        <button data-toggle="dropdown" class="widget_btn dropdown-toggle" type="button" style="padding: 6px 12px !important;">
+          <span class="caret"></span>
+          <span class="sr-only">Toggle Dropdown</span>
+        </button>
+        <ul role="menu" class="dropdown-menu">
+          <li>
+            <a ng-click="getDetails('today')"><span class="entypo-calendar margin-iconic"></span>Today</a>
+          </li>
+          <li>
+            <a ng-click="getDetails('yesterday')"><span class="entypo-calendar margin-iconic"></span>Yesterday</a>
+          </li>
+          <li>
+            <a ng-click="getDetails('lastweek')"><span class="entypo-calendar margin-iconic"></span>Last Week</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="content-wrap">
+  <div class="row">
+    <div class="col-sm-12 vechicle_info">
+      <div class="col-sm-4 vechicle_info   ">
+        <div class="vechicle_info_inner">
+          <div class="col-md-12 car_name" style="padding: 0px; margin-top: 5px;">
+            <div class="col-md-2 " style="padding: 0px; margin-top: 10px;"><img src="assets/img/round_icon.png"></div>           
+            <div class="col-md-10" style="padding: 0px 0px 0px 12px;"><h2>{{vehicledtls.obj_name  |limitTo:15}}</h2>
+              <p style="font-size:11px;">{{dashMapTitle |limitTo:45}}<span ng-if="dashMapTitle.length>45">...</span></p >
+            </div>
+          </div>
+          <div class="col-md-12 car_table">
+            <table>
+              <!--<tr><td>Licence Plate</td><td>: {{vehicledtls.obj_vehicle_number}}</td></tr>--> 
+              <tr><td>Vehicle Type</td><td>: {{vehicledtls.vehicle_type_name}}</td></tr> 
+              <tr><td>Driver</td><td>: {{vehicledtls.driver_name}}</td></tr> 
+              <tr>
+                <td>Group</td>
+                <td ng-if="vehicledtls.obj_group_name!= null ">: {{vehicledtls.obj_group_name}}</td>
+                <td ng-if="vehicledtls.obj_group_name== null ">: {{organisationName}}</td>
+              </tr> 
+              <tr><td>Last Updated</td><td>: {{lastupdated}}</td></tr> 
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-3 vechicle_info padding_left" style="border-left: 1px solid #ccc">
+        <div id="graph" ng-show="showGraph" style="margin: 3% auto auto; text-align:center;width:22vh; "></div>
+        <div ng-show="!showGraph" style="margin:75px 30px;">No data to show for the selected time </div>
+      </div>
+      <div class="col-sm-5 vechicle_info paddingnone"> 
+        <ng-map center="{{dashMapCenter}}" id="dashboardMap" zoom="13" style="height:193px; width:100%" >
+          <marker position="{{dashMapCenter}}"  animation="DROP" title="{{dashMapTitle}}" label="" icon="{{dashMapMarkerIcon}}"></marker>     
+        </ng-map>
+      </div>
+    </div>
+    <div class="col-md-12" style="background: #e8e8e8;">
+      <div class="col-sm-3 padding105">
+        <div class=" member" id="" >
+          <div class="headline " >
+            <h3>
+              <span style="background-color: #2196f3;">&#160;&#160;Distance Travelled</span>
+            </h3>
+          </div>
+          <div class="value red_c" style="margin:34px auto 0;font:27px Open Sans;">
+            <span style="top:0;"><i class="fa fa-road" aria-hidden="true"></i></span>{{details.distancetravelled[0].totalmileage ? details.distancetravelled[0].totalmileage : 0 | number:2}}<b>km</b>
+          </div>
+          <div class="progress-tinny">
+            <div style="width: 50%" class="bar"></div>
+          </div>
+          <div class="profit-line">
+            <span  class="entypo-gauge" aria-hidden="true"></span>&#160;Maximum Speed :&nbsp;{{details.distancetravelled[0].maxSpeed  ? details.distancetravelled[0].maxSpeed : 0 }}
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-3 padding105">
+        <div class=" member" id="" >
+          <div class="headline ">
+            <h3>
+              <span style="background-color: #4caf50;">&#160;&#160;Moving Time</span>
+            </h3>
+          </div>
+          <div class="value green_c" style="margin:34px auto 0;font:27px Open Sans;">
+            <span style="top:0;"><i class="fa fa-clock-o" aria-hidden="true"></i></span>{{details.timemoving}}<b></b>
+          </div>
+          <div class="progress-tinny">
+            <div style="width: 50%" class="bar"></div>
+          </div>
+          <div class="profit-line">
+            <span class="fa fa-car"></span>&#160;Number of Trips :&nbsp;{{details.totaltrips}}
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-3 padding105">
+        <div class=" member" id=""  >
+          <div class="headline ">
+            <h3>
+              <span style="background-color: #f44336;">&#160;&#160;Parking Time</span>
+            </h3>
+          </div>
+          <div class="value red_c" style="margin:34px auto 0;font:27px Open Sans;">
+            <span style="top:0;"><i class="fa fa-clock-o" aria-hidden="true"></i></span>{{details.parkingTime}}<b></b>
+          </div>
+          <div class="progress-tinny">
+            <div style="width: 50%" class="bar"></div>
+          </div>
+          <div class="profit-line">
+            <span class="fa fa-hand-paper-o" aria-hidden="true"></span>&#160;Number of Stops :&nbsp;{{details.totalStops}}
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-3 padding105">
+        <div class=" member" id=""  >
+          <div class="headline ">
+            <h3>
+              <span style="background-color: orange;">&#160;&#160;Idling Time</span>
+            </h3>
+          </div>
+          <div class="value blue_c" style="margin:34px auto 0;font:27px Open Sans;">
+            <span style="top:0;"><i class="fa fa-clock-o" aria-hidden="true"></i></span>{{details.idlingTime}}<b></b>
+          </div>
+          <div class="progress-tinny">
+            <div style="width: 50%" class="bar"></div>
+          </div>
+          <div class="profit-line">
+            <span class="fa fa-eercast" aria-hidden="true"></span>&#160;Number of Idling :&nbsp;{{details.totalIdling}}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-12  appDashboardList" style="background: #e8e8e8; ">
+    <div class="row">
+      <div class="col-sm-12 " style="padding:0">
+        <div id="site" class="body-nest" >
+          <ul class="nav nav-tabs body-nestmain" role="tablist">
+            <li role="presentation" style="width:25%" class="active"><a href="/#ser_rem" aria-controls="home" role="tab" data-toggle="tab">Service Reminder</a></li>
+            <li role="presentation" style="width:25%"><a   href="/#doc_rem" aria-controls="profile" role="tab" data-toggle="tab">Document Reminder</a></li>
+            <li role="presentation" style="width:25%" ><a   href="/#fuel_expen" aria-controls="home" role="tab" data-toggle="tab">  Fuel Expense  </a></li>
+            <li role="presentation" style="width:25%"><a   href="/#services" aria-controls="profile" role="tab" data-toggle="tab"> Services</a></li>
+          </ul>
+          <!-- Tab panes -->
+          <div class="tab-content">
+            <div role="tabpanel" class="tab-pane active" id="ser_rem" style="overflow-y:scroll;"  >
+              <table class="table large-only strpeless">
+                <thead class="cf" ng-if="latestRemainders.length!=0">
+                  <tr>
+                    <th>Sl</th>
+                    <th class="numeric">Reminder Name</th>
+                    <th class="numeric">Reminder Due Date</th>
+                    <th class="numeric">Targetted Odometer</th>
+                    <th class="numeric">Comments</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr class=" tabs-left topnav menu-left-nest" ng-repeat="reminder in latestRemainders"  href="/#tabMaintanance" ng-click="gotoFleetManager(reminder.remainder_id,'reminder')" data-toggle="tab"> 
+                    <td>{{$index+1}}</td>
+                    <td class="numeric">{{reminder.remainder_service_name | limitTo:15}}&nbsp;
+                      <span ng-if="reminder.remainder_service_name.length>15">...</span> </td>
+                      <td class="numeric">{{reminder.remainder_due_date | limitTo:10}} &nbsp;
+                      </td>
+                      <td class="numeric">{{reminder.remainder_targetted_odometer | limitTo:15}} &nbsp;
+                       <span ng-if="reminder.remainder_targetted_odometer.length>15">...</span>
+                     </td>
+                     <td class="numeric">{{reminder.remainder_comments | limitTo:15}}  &nbsp;
+                       <span ng-if="reminder.remainder_comments.length>15">...</span>
+                     </td>
+                  </tr>
+                  <tr>
+                    <td ng-if="latestRemainders.length==0" > No data to show</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>       
+            <div role="tabpanel" class="tab-pane" id="doc_rem" style="overflow-y:scroll;">
+              <table class="table large-only strpeless">
+                <thead class="cf" ng-if="latestDocuments.length!=0" >
+                  <tr>
+                    <th>Sl No</th>                 
+                    <th class="numeric">Dcoument Name</th>
+                    <th class="numeric">Expiry Date</th>
+                    <th class="numeric">Reminder Interval</th>
+                    <th class="numeric">Type</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr ng-repeat="doc in latestDocuments" href="/#tabMaintanance" ng-click="gotoFleetManager(doc.document_id,'document')" data-toggle="tab" >
+                    <td>{{$index+1}}</td>                   
+                    <td class="numeric">{{doc.document_name | limitTo:15}}&nbsp;
+                      <span ng-if="doc.document_name.length>15">...</span>
+                    </td>
+                    <td class="numeric">{{doc.document_expiry_date | limitTo:10 }}&nbsp;                      </td>
+                    <td ng-if="doc.document_remainder_interval==1">1 Day </td>
+                    <td ng-if="doc.document_remainder_interval==7">1 Week </td>
+                    <td ng-if="doc.document_remainder_interval==14">2 Week </td>
+                    <td ng-if="doc.document_remainder_interval==30">1 Month </td>
+                    <td class="numeric">{{doc.document_type | limitTo:15 }}&nbsp;
+                      <span ng-if="doc.document_type.length>15">...</span>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td ng-if="latestDocuments.length==0">No data to show</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+             <!-- <div ng-if="latestDocuments.length==0 ">
+               <tr >
+                No data to show{{latestDocuments.length}}
+              </tr>
+            </div>-->
+            <div role="tabpanel" class="tab-pane" id="fuel_expen" style="overflow-y:scroll;">
+              <table  class="table large-only strpeless">
+                <thead class="cf" ng-if="latestFuel.length!=0 ">
+                  <tr>
+                    <th>Sl no</th>
+                    <th class="numeric">Driver</th>
+                    <th class="numeric">Type</th>
+                    <th class="numeric">Date</th>
+                    <th class="numeric">Quantity</th>
+                    <th class="numeric">Amount</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr ng-repeat="fuel in latestFuel" href="/#tabMaintanance" ng-click="gotoFleetManager(fuel.fuel_id,'fuel')" data-toggle="tab">
+                    <td>{{$index+1}}</td>
+                    <td class="numeric" >{{fuel.driver_name | limitTo:15}}
+                      <span ng-if="fuel.driver_name.length>15">...</span>
+                    </td>
+                    <td class="numeric">{{fuel.fuel_type}}</td>
+                    <td class="numeric">{{fuel.fuel_date | limitTo:10}}</td>
+                    <td class="numeric">{{fuel.fuel_quantity}}</td>
+                    <td class="numeric" style="text-align : end;">{{fuel.fuel_amount}}</td>
+                  </tr>
+                  <tr>
+                    <td  ng-if="latestFuel.length==0">
+                      No data to show
+                    </td>
+                  </tr>        
+                </tbody>
+              </table>
+            </div>         
+            <div role="tabpanel" class="tab-pane" id="services" style="overflow-y:scroll;">
+              <table class="table large-only strpeless">
+                <thead class="cf">
+                  <tr  ng-if="latestServices.length!=0 " >
+                    <th>Sl No</th>
+                    <th class="numeric">Service Name</th>
+                    <th class="numeric">Service Date</th>
+                    <th class="numeric">Service Cost</th>
+                    <th class="numeric">Odometer value</th>
+                    <th class="numeric">Total Cost</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr ng-repeat="service in latestServices" href="/#tabMaintanance" ng-click="gotoFleetManager(service.service_id,'service')" data-toggle="tab">
+                    <td>{{$index+1}}</td>
+                    <td class="numeric" >{{service.service_name | limitTo:15}}&nbsp;
+                      <span ng-if="service.service_name.length>15">...</span>
+                    </td>
+                    <td class="numeric">{{service.service_date | limitTo:10}}  </td>
+                    <td class="numeric">{{service.service_cost | limitTo:15}} <span ng-if="service.service_cost.length>15">...</span></td>
+                    <td class="numeric">{{service.service_odometer_value | limitTo:15}}
+                      <span ng-if="service.service_odometer_value.length>15">...</span>
+                    </td>
+                    <td class="numeric" style="text-align : end;">{{service.service_total_cost}}</td>
+                  </tr>
+                  <tr >
+                    <td ng-if="latestServices.length==0"> No data to show </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+
+<script type="text/javascript">
+
+
+
+
+  /*var graph =  angular.element(document.querySelector('[ng-controller="OnlineCtrl"]')).scope().graph;
+  
+  Morris.Donut({
+    element: 'graph',
+    data: graph,
+    backgroundColor: '#f2f2f2',
+    labelColor: '#1451a5',
+    colors: [
+
+    '#2196F3',
+    '#FF5722',
+    '#F44336'
+    ],
+    formatter: function (x) { return x + "%"}
+  });*/
+
+
+</script>
+
+<script type="text/javascript">
+var height = $(window).height();
+ 
+var appDashboardList_height = height-450;
+
+$(".appDashboardList").height(appDashboardList_height);
+//$(".appDashboardList").css("overflow-y","scroll");
+ 
+</script>
